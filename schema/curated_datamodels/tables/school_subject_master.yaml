@@ -1,0 +1,147 @@
+database: curated_datamodels
+table: school_subject_master
+description: Dimension/master table for school subject reference attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_subject_master/
+partitioned_by: bucket(32, subject_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_subject_master\n\
+  (\n    subject_pk                   BIGINT,\n    subject_code                 STRING,\n\
+  \    subject_name                 STRING,\n    subject_short_name           STRING,\n\
+  \    subject_category             STRING,\n    subject_type                 STRING,\n\
+  \    language_order               INT,\n    is_vocational_flag           STRING,\n\
+  \    is_skill_subject_flag        STRING,\n    min_class                    INT,\n\
+  \    max_class                    INT,\n    medium_id                    BIGINT,\n\
+  \    is_compulsory_flag           STRING,\n    board_code                   STRING,\n\
+  \    assessment_pattern           STRING,\n    marks_scheme                 STRING,\n\
+  \    credit_weight                DECIMAL(5,2),\n    subject_status            \
+  \   STRING,\n    grade_applicability_from     INT,\n    grade_applicability_to \
+  \      INT,\n    effective_from               DATE,\n    effective_to          \
+  \       DATE,\n    replaced_by_subject_pk       BIGINT,\n    created_date      \
+  \           TIMESTAMP,\n    created_by                   STRING,\n    updated_date\
+  \                 TIMESTAMP,\n    updated_by                   STRING\n)\nUSING\
+  \ ICEBERG\nPARTITIONED BY (bucket(32, subject_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_subject_master/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: subject_pk
+  type: BIGINT
+  nullable: true
+  description: Subject primary key.
+- name: subject_code
+  type: STRING
+  nullable: true
+  description: Subject code.
+- name: subject_name
+  type: STRING
+  nullable: true
+  description: Subject name.
+- name: subject_short_name
+  type: STRING
+  nullable: true
+  description: Subject short name.
+- name: subject_category
+  type: STRING
+  nullable: true
+  description: Subject category.
+- name: subject_type
+  type: STRING
+  nullable: true
+  description: Subject type.
+- name: language_order
+  type: INT
+  nullable: true
+  description: Language order.
+- name: is_vocational_flag
+  type: STRING
+  nullable: true
+  description: Is vocational flag.
+- name: is_skill_subject_flag
+  type: STRING
+  nullable: true
+  description: Is skill subject flag.
+- name: min_class
+  type: INT
+  nullable: true
+  description: Min class.
+- name: max_class
+  type: INT
+  nullable: true
+  description: Max class.
+- name: medium_id
+  type: BIGINT
+  nullable: true
+  description: Medium identifier.
+- name: is_compulsory_flag
+  type: STRING
+  nullable: true
+  description: Is compulsory flag.
+- name: board_code
+  type: STRING
+  nullable: true
+  description: Board code.
+- name: assessment_pattern
+  type: STRING
+  nullable: true
+  description: Assessment pattern.
+- name: marks_scheme
+  type: STRING
+  nullable: true
+  description: Marks scheme.
+- name: credit_weight
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Credit weight.
+- name: subject_status
+  type: STRING
+  nullable: true
+  description: Subject status.
+- name: grade_applicability_from
+  type: INT
+  nullable: true
+  description: Grade applicability from.
+- name: grade_applicability_to
+  type: INT
+  nullable: true
+  description: Grade applicability to.
+- name: effective_from
+  type: DATE
+  nullable: true
+  description: Effective from.
+- name: effective_to
+  type: DATE
+  nullable: true
+  description: Effective to.
+- name: replaced_by_subject_pk
+  type: BIGINT
+  nullable: true
+  description: Replaced by subject primary key.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- subject_pk
+- replaced_by_subject_pk
+relationships: []
+business_terms:
+- school analytics
+common_operations:
+- profile records in school_subject_master
+- join with related school and citizen dimensions

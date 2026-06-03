@@ -1,0 +1,85 @@
+Curated Datamodel MCP + Sample DB - Test Handoff
+================================================
+
+Context
+-------
+This laptop does not have Ollama or the required model running, so Milvus/RAG
+index rebuild and full agent chat testing were not completed here. The code has
+been written so another system with Ollama can pick up from this file.
+
+Use the project venv on the target system before installing or running anything.
+Do not use global/system Python for dependency installs.
+
+What changed
+------------
+- Old schema folder `schema/student_dropout_prediction/` was removed.
+- Active schema is now `schema/curated_datamodels/`.
+- Join metadata was added at:
+  `schema/curated_datamodels/joins/join_relations.yaml`
+- Local SQLite sample DB generation now comes from curated YAML via:
+  `create_schema.py`
+- `generate_data.py` delegates to `create_schema.py`.
+- `app.py` keeps the same API routes but queries curated tables internally.
+- LangGraph now starts at `llm_node`; retrieval is no longer forced every turn.
+- `retrive_schema_rag` is loaded as an LLM-selectable MCP tool together with
+  `execute_sql`.
+- Disabled Hive MCP stub added at:
+  `MCP/mcp_hive_execution.py`
+- `MCP/build_milvus_index.py` indexes curated table YAML plus join metadata.
+
+Target-system test steps
+------------------------
+1. Activate the target system venv.
+
+2. Install dependencies inside the venv only:
+   `python -m pip install -r requirements.txt`
+
+3. Ensure Ollama is running and these models are available:
+   - chat model from `.env`, currently `qwen3.5:9b`
+   - embedding model from `MCP/mcp_rag.yaml`, currently `nomic-embed-text`
+
+4. Regenerate curated sample SQLite DB:
+   `python create_schema.py`
+
+5. Rebuild Milvus Lite schema index:
+   `python MCP/build_milvus_index.py`
+
+6. Start the app:
+   `python -m uvicorn app:app --reload --host 127.0.0.1 --port 8000`
+
+7. Smoke-test endpoints:
+   - `GET /health`
+   - `GET /api/stats`
+   - `GET /api/students`
+   - `POST /ask` with a curated-schema question, for example:
+     "How many students are in the database?"
+
+Expected behavior
+-----------------
+- `database/schema.db` should contain 25 curated tables.
+- `/api/stats` should return existing dashboard keys:
+  `total_students`, `critical_risk`, `high_risk`, `dropped_out`,
+  `avg_gpa`, `avg_attendance`, `risk_distribution`, `status_distribution`.
+- MCP tool startup should show both:
+  - `retrive_schema_rag`
+  - `execute_sql`
+- The graph should not run a deterministic retrieval node before every request.
+  The LLM should decide whether to call `retrive_schema_rag`.
+
+Known local-machine limitations
+-------------------------------
+- Full RAG index rebuild was not possible here because Ollama was not running.
+- Full app startup/chat testing was not completed here for the same reason.
+- A Windows venv named `.venv-win` was created here because the existing `.venv`
+  appeared to be Linux-style. On the target system, use whichever project venv
+  is correct there.
+
+Files to inspect first if testing fails
+---------------------------------------
+- `my_agent/agent.py`
+- `my_agent/utils/nodes.py`
+- `my_agent/utils/tools.py`
+- `MCP/build_milvus_index.py`
+- `MCP/mcp_rag.yaml`
+- `create_schema.py`
+- `app.py`

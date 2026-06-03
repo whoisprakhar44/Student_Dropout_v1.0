@@ -1,0 +1,217 @@
+database: curated_datamodels
+table: mid_day_meal_serving_fact
+description: Fact table for mid day meal serving measures and events.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/
+partitioned_by: bucket(32, mid_day_meal_serving_fact_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.mid_day_meal_serving_fact\n\
+  (\n    mid_day_meal_serving_fact_id_pk   BIGINT,\n    citizen_school_id_fk     \
+  \         BIGINT,\n    date_key_id_fk                    BIGINT,\n    meal_type_id_fk\
+  \                   BIGINT,\n    nutrition_item_dim_key_fk         BIGINT,\n   \
+  \ scheme_key_id_fk                  BIGINT,\n    academic_year                 \
+  \    STRING,\n    mid_day_meal_serving_factor       DECIMAL(5,2),\n    vendor_id_fk\
+  \                      BIGINT,\n    indent_reference_number           STRING,\n\
+  \    inspection_reference_id           STRING,\n    students_enrolled_count    \
+  \       INT,\n    students_present_count            INT,\n    students_served_count\
+  \             INT,\n    students_not_served_count         INT,\n    students_eligible_count\
+  \           INT,\n    meal_served_flag                  STRING,\n    menu_item_count\
+  \                   INT,\n    calories_served                   DECIMAL(8,2),\n\
+  \    protein_grams_served              DECIMAL(8,2),\n    egg_served_count     \
+  \             INT,\n    milk_served_quantity_ml           INT,\n    meal_serving_start_time\
+  \           TIMESTAMP,\n    mid_day_meal_serving_factcol2     STRING,\n    cooked_on_site_flag\
+  \               STRING,\n    centralized_kitchen_flag          STRING,\n    fuel_type\
+  \                         STRING,\n    hygiene_compliant_flag            STRING,\n\
+  \    food_tasted_flag                  STRING,\n    teacher_supervised_flag    \
+  \       STRING,\n    medical_incident_reported_flag    STRING,\n    last_inspection_date\
+  \              DATE,\n    inspection_score                  DECIMAL(5,2),\n    inspection_remarks_code\
+  \           STRING,\n    geo_tagged_flag                   STRING,\n    photo_captured_flag\
+  \               STRING,\n    meal_not_served_reason_code       STRING,\n    supply_shortage_flag\
+  \              STRING,\n    created_date                      TIMESTAMP,\n    created_by\
+  \                        STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, mid_day_meal_serving_fact_id_pk))\n\
+  LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: mid_day_meal_serving_fact_id_pk
+  type: BIGINT
+  nullable: true
+  description: Mid day meal serving fact identifier primary key.
+- name: citizen_school_id_fk
+  type: BIGINT
+  nullable: true
+  description: Citizen school identifier foreign key.
+- name: date_key_id_fk
+  type: BIGINT
+  nullable: true
+  description: Date key identifier foreign key.
+- name: meal_type_id_fk
+  type: BIGINT
+  nullable: true
+  description: Meal type identifier foreign key.
+- name: nutrition_item_dim_key_fk
+  type: BIGINT
+  nullable: true
+  description: Nutrition item dim key foreign key.
+- name: scheme_key_id_fk
+  type: BIGINT
+  nullable: true
+  description: Scheme key identifier foreign key.
+- name: academic_year
+  type: STRING
+  nullable: true
+  description: Academic year.
+- name: mid_day_meal_serving_factor
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Mid day meal serving factor.
+- name: vendor_id_fk
+  type: BIGINT
+  nullable: true
+  description: Vendor identifier foreign key.
+- name: indent_reference_number
+  type: STRING
+  nullable: true
+  description: Indent reference number.
+- name: inspection_reference_id
+  type: STRING
+  nullable: true
+  description: Inspection reference identifier.
+- name: students_enrolled_count
+  type: INT
+  nullable: true
+  description: Students enrolled count.
+- name: students_present_count
+  type: INT
+  nullable: true
+  description: Students present count.
+- name: students_served_count
+  type: INT
+  nullable: true
+  description: Students served count.
+- name: students_not_served_count
+  type: INT
+  nullable: true
+  description: Students not served count.
+- name: students_eligible_count
+  type: INT
+  nullable: true
+  description: Students eligible count.
+- name: meal_served_flag
+  type: STRING
+  nullable: true
+  description: Meal served flag.
+- name: menu_item_count
+  type: INT
+  nullable: true
+  description: Menu item count.
+- name: calories_served
+  type: DECIMAL(8,2)
+  nullable: true
+  description: Calories served.
+- name: protein_grams_served
+  type: DECIMAL(8,2)
+  nullable: true
+  description: Protein grams served.
+- name: egg_served_count
+  type: INT
+  nullable: true
+  description: Egg served count.
+- name: milk_served_quantity_ml
+  type: INT
+  nullable: true
+  description: Milk served quantity ml.
+- name: meal_serving_start_time
+  type: TIMESTAMP
+  nullable: true
+  description: Meal serving start time.
+- name: mid_day_meal_serving_factcol2
+  type: STRING
+  nullable: true
+  description: Mid day meal serving factcol2.
+- name: cooked_on_site_flag
+  type: STRING
+  nullable: true
+  description: Cooked on site flag.
+- name: centralized_kitchen_flag
+  type: STRING
+  nullable: true
+  description: Centralized kitchen flag.
+- name: fuel_type
+  type: STRING
+  nullable: true
+  description: Fuel type.
+- name: hygiene_compliant_flag
+  type: STRING
+  nullable: true
+  description: Hygiene compliant flag.
+- name: food_tasted_flag
+  type: STRING
+  nullable: true
+  description: Food tasted flag.
+- name: teacher_supervised_flag
+  type: STRING
+  nullable: true
+  description: Teacher supervised flag.
+- name: medical_incident_reported_flag
+  type: STRING
+  nullable: true
+  description: Medical incident reported flag.
+- name: last_inspection_date
+  type: DATE
+  nullable: true
+  description: Last inspection date.
+- name: inspection_score
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Inspection score.
+- name: inspection_remarks_code
+  type: STRING
+  nullable: true
+  description: Inspection remarks code.
+- name: geo_tagged_flag
+  type: STRING
+  nullable: true
+  description: Geographic tagged flag.
+- name: photo_captured_flag
+  type: STRING
+  nullable: true
+  description: Photo captured flag.
+- name: meal_not_served_reason_code
+  type: STRING
+  nullable: true
+  description: Meal not served reason code.
+- name: supply_shortage_flag
+  type: STRING
+  nullable: true
+  description: Supply shortage flag.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+primary_key:
+- mid_day_meal_serving_fact_id_pk
+relationships:
+- mid_day_meal_serving_fact.citizen_school_id_fk is a foreign-key-style reference
+  to citizen_school_id.
+- mid_day_meal_serving_fact.date_key_id_fk is a foreign-key-style reference to date_key_id.
+- mid_day_meal_serving_fact.meal_type_id_fk is a foreign-key-style reference to meal_type_id.
+- mid_day_meal_serving_fact.nutrition_item_dim_key_fk is a foreign-key-style reference
+  to nutrition_item_dim_key.
+- mid_day_meal_serving_fact.scheme_key_id_fk is a foreign-key-style reference to scheme_key_id.
+- mid_day_meal_serving_fact.vendor_id_fk is a foreign-key-style reference to vendor_id.
+business_terms:
+- fact table
+- event and metric analysis
+- mid-day meal operations
+common_operations:
+- profile records in mid_day_meal_serving_fact
+- aggregate measures by academic year and linked dimensions

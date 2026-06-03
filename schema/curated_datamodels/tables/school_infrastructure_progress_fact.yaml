@@ -1,0 +1,237 @@
+database: curated_datamodels
+table: school_infrastructure_progress_fact
+description: Fact table for school infrastructure progress measures and events.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infrastructure_progress_fact/
+partitioned_by: bucket(32, school_infrastructure_progress_fact_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_infrastructure_progress_fact\n\
+  (\n    school_infrastructure_progress_fact_id_pk   BIGINT,\n    citizen_school_id_pk\
+  \                         BIGINT,\n    reporting_date_key_fk                   \
+  \     BIGINT,\n    infrastructure_component_id_fk               BIGINT,\n    infrastructure_category_id_fk\
+  \                BIGINT,\n    reporting_period_id_fk                       BIGINT,\n\
+  \    academic_year                                STRING,\n    scheme_id_fk    \
+  \                             BIGINT,\n    work_order_no                       \
+  \         STRING,\n    estimate_id                                  STRING,\n  \
+  \  total_units                                  INT,\n    functional_units     \
+  \                        INT,\n    non_functional_units                        \
+  \ INT,\n    under_construction_units                     INT,\n    planned_unit_count\
+  \                           INT,\n    completed_unit_count                     \
+  \    INT,\n    in_progress_unit_count                       INT,\n    pending_unit_count\
+  \                           INT,\n    physical_progress_percentage             \
+  \    DECIMAL(5,2),\n    financial_progress_percentage                DECIMAL(5,2),\n\
+  \    estimated_cost_amount                        DECIMAL(12,2),\n    sanctioned_amount\
+  \                            DECIMAL(12,2),\n    released_amount               \
+  \               DECIMAL(12,2),\n    utilized_amount                            \
+  \  DECIMAL(12,2),\n    balance_amount                               DECIMAL(12,2),\n\
+  \    work_status                                  STRING,\n    start_date      \
+  \                             DATE,\n    expected_completion_date              \
+  \       DATE,\n    actual_completion_date                       DATE,\n    delay_days\
+  \                                   INT,\n    delay_reason_code                \
+  \            STRING,\n    school_infrastructure_progress_factcol2      STRING,\n\
+  \    is_structurally_certified_flag               STRING,\n    is_safety_compliant_flag\
+  \                     STRING,\n    is_functional_flag                          \
+  \ STRING,\n    maintenance_required_flag                    STRING,\n    geo_tagged_flag\
+  \                              STRING,\n    geo_latitude                       \
+  \          DECIMAL(9,6),\n    geo_longitude                                DECIMAL(9,6),\n\
+  \    last_inspection_date                         DATE,\n    inspection_score  \
+  \                           DECIMAL(5,2),\n    inspection_remarks_code         \
+  \             STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, school_infrastructure_progress_fact_id_pk))\n\
+  LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infrastructure_progress_fact/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: school_infrastructure_progress_fact_id_pk
+  type: BIGINT
+  nullable: true
+  description: School infrastructure progress fact identifier primary key.
+- name: citizen_school_id_pk
+  type: BIGINT
+  nullable: true
+  description: Citizen school identifier primary key.
+- name: reporting_date_key_fk
+  type: BIGINT
+  nullable: true
+  description: Reporting date key foreign key.
+- name: infrastructure_component_id_fk
+  type: BIGINT
+  nullable: true
+  description: Infrastructure component identifier foreign key.
+- name: infrastructure_category_id_fk
+  type: BIGINT
+  nullable: true
+  description: Infrastructure category identifier foreign key.
+- name: reporting_period_id_fk
+  type: BIGINT
+  nullable: true
+  description: Reporting period identifier foreign key.
+- name: academic_year
+  type: STRING
+  nullable: true
+  description: Academic year.
+- name: scheme_id_fk
+  type: BIGINT
+  nullable: true
+  description: Scheme identifier foreign key.
+- name: work_order_no
+  type: STRING
+  nullable: true
+  description: Work order no.
+- name: estimate_id
+  type: STRING
+  nullable: true
+  description: Estimate identifier.
+- name: total_units
+  type: INT
+  nullable: true
+  description: Total units.
+- name: functional_units
+  type: INT
+  nullable: true
+  description: Functional units.
+- name: non_functional_units
+  type: INT
+  nullable: true
+  description: Non functional units.
+- name: under_construction_units
+  type: INT
+  nullable: true
+  description: Under construction units.
+- name: planned_unit_count
+  type: INT
+  nullable: true
+  description: Planned unit count.
+- name: completed_unit_count
+  type: INT
+  nullable: true
+  description: Completed unit count.
+- name: in_progress_unit_count
+  type: INT
+  nullable: true
+  description: In progress unit count.
+- name: pending_unit_count
+  type: INT
+  nullable: true
+  description: Pending unit count.
+- name: physical_progress_percentage
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Physical progress percentage.
+- name: financial_progress_percentage
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Financial progress percentage.
+- name: estimated_cost_amount
+  type: DECIMAL(12,2)
+  nullable: true
+  description: Estimated cost amount.
+- name: sanctioned_amount
+  type: DECIMAL(12,2)
+  nullable: true
+  description: Sanctioned amount.
+- name: released_amount
+  type: DECIMAL(12,2)
+  nullable: true
+  description: Released amount.
+- name: utilized_amount
+  type: DECIMAL(12,2)
+  nullable: true
+  description: Utilized amount.
+- name: balance_amount
+  type: DECIMAL(12,2)
+  nullable: true
+  description: Balance amount.
+- name: work_status
+  type: STRING
+  nullable: true
+  description: Work status.
+- name: start_date
+  type: DATE
+  nullable: true
+  description: Start date.
+- name: expected_completion_date
+  type: DATE
+  nullable: true
+  description: Expected completion date.
+- name: actual_completion_date
+  type: DATE
+  nullable: true
+  description: Actual completion date.
+- name: delay_days
+  type: INT
+  nullable: true
+  description: Delay days.
+- name: delay_reason_code
+  type: STRING
+  nullable: true
+  description: Delay reason code.
+- name: school_infrastructure_progress_factcol2
+  type: STRING
+  nullable: true
+  description: School infrastructure progress factcol2.
+- name: is_structurally_certified_flag
+  type: STRING
+  nullable: true
+  description: Is structurally certified flag.
+- name: is_safety_compliant_flag
+  type: STRING
+  nullable: true
+  description: Is safety compliant flag.
+- name: is_functional_flag
+  type: STRING
+  nullable: true
+  description: Is functional flag.
+- name: maintenance_required_flag
+  type: STRING
+  nullable: true
+  description: Maintenance required flag.
+- name: geo_tagged_flag
+  type: STRING
+  nullable: true
+  description: Geographic tagged flag.
+- name: geo_latitude
+  type: DECIMAL(9,6)
+  nullable: true
+  description: Geographic latitude.
+- name: geo_longitude
+  type: DECIMAL(9,6)
+  nullable: true
+  description: Geographic longitude.
+- name: last_inspection_date
+  type: DATE
+  nullable: true
+  description: Last inspection date.
+- name: inspection_score
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Inspection score.
+- name: inspection_remarks_code
+  type: STRING
+  nullable: true
+  description: Inspection remarks code.
+primary_key:
+- school_infrastructure_progress_fact_id_pk
+- citizen_school_id_pk
+relationships:
+- school_infrastructure_progress_fact.reporting_date_key_fk is a foreign-key-style
+  reference to reporting_date_key.
+- school_infrastructure_progress_fact.infrastructure_component_id_fk is a foreign-key-style
+  reference to infrastructure_component_id.
+- school_infrastructure_progress_fact.infrastructure_category_id_fk is a foreign-key-style
+  reference to infrastructure_category_id.
+- school_infrastructure_progress_fact.reporting_period_id_fk is a foreign-key-style
+  reference to reporting_period_id.
+- school_infrastructure_progress_fact.scheme_id_fk is a foreign-key-style reference
+  to scheme_id.
+business_terms:
+- fact table
+- event and metric analysis
+- school analytics
+common_operations:
+- profile records in school_infrastructure_progress_fact
+- aggregate measures by academic year and linked dimensions
+- join with related school and citizen dimensions

@@ -1,0 +1,92 @@
+database: curated_datamodels
+table: assessment_dim
+description: Dimension/master table for assessment reference attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/assessment_dim/
+partitioned_by: bucket(32, assessment_dim_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.assessment_dim\n\
+  (\n    assessment_dim_id_pk      BIGINT,\n    assessment_code           STRING,\n\
+  \    assessment_type           STRING,\n    assessment_name           STRING,\n\
+  \    board_code                STRING,\n    grade_scheme              STRING,\n\
+  \    is_summative              STRING,\n    is_active                 STRING,\n\
+  \    effective_start_date      DATE,\n    effective_end_date        DATE,\n    is_current\
+  \                STRING,\n    created_date              TIMESTAMP,\n    created_by\
+  \                STRING,\n    updated_date              TIMESTAMP,\n    updated_by\
+  \                STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, assessment_dim_id_pk))\n\
+  LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/assessment_dim/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: assessment_dim_id_pk
+  type: BIGINT
+  nullable: true
+  description: Assessment dim identifier primary key.
+- name: assessment_code
+  type: STRING
+  nullable: true
+  description: Assessment code.
+- name: assessment_type
+  type: STRING
+  nullable: true
+  description: Assessment type.
+- name: assessment_name
+  type: STRING
+  nullable: true
+  description: Assessment name.
+- name: board_code
+  type: STRING
+  nullable: true
+  description: Board code.
+- name: grade_scheme
+  type: STRING
+  nullable: true
+  description: Grade scheme.
+- name: is_summative
+  type: STRING
+  nullable: true
+  description: Is summative.
+- name: is_active
+  type: STRING
+  nullable: true
+  description: Is active.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- assessment_dim_id_pk
+relationships: []
+business_terms:
+- dimension table
+- reference lookup
+common_operations:
+- profile records in assessment_dim

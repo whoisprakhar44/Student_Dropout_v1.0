@@ -1,0 +1,138 @@
+database: curated_datamodels
+table: school_teacher_attendance_fact
+description: Fact table for school teacher attendance measures and events.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_teacher_attendance_fact/
+partitioned_by: bucket(32, school_teacher_attendance_fact_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_teacher_attendance_fact\n\
+  (\n    school_teacher_attendance_fact_id_pk   BIGINT,\n    citizen_school_teacher_id_fk\
+  \            BIGINT,\n    citizen_student_id_fk                   BIGINT,\n    attendance_date_key_id_fk\
+  \               BIGINT,\n    academic_year                           STRING,\n \
+  \   present_flag                            STRING,\n    attendance_count      \
+  \                  INT,\n    on_leave_flag                           STRING,\n \
+  \   on_duty_flag                            STRING,\n    late_flag             \
+  \                  STRING,\n    leave_type                              STRING,\n\
+  \    approved_leave_flag                     STRING,\n    attendance_source    \
+  \                   STRING,\n    capture_timestamp                       TIMESTAMP,\n\
+  \    attendance_status_code                  STRING,\n    capture_source       \
+  \                   STRING,\n    image_available_flag                   STRING,\n\
+  \    approval_status_code                   STRING,\n    approval_role         \
+  \                  STRING,\n    approval_timestamp                      TIMESTAMP,\n\
+  \    created_date                            TIMESTAMP,\n    created_by        \
+  \                      STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, school_teacher_attendance_fact_id_pk))\n\
+  LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_teacher_attendance_fact/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: school_teacher_attendance_fact_id_pk
+  type: BIGINT
+  nullable: true
+  description: School teacher attendance fact identifier primary key.
+- name: citizen_school_teacher_id_fk
+  type: BIGINT
+  nullable: true
+  description: Citizen school teacher identifier foreign key.
+- name: citizen_student_id_fk
+  type: BIGINT
+  nullable: true
+  description: Citizen student identifier foreign key.
+- name: attendance_date_key_id_fk
+  type: BIGINT
+  nullable: true
+  description: Attendance date key identifier foreign key.
+- name: academic_year
+  type: STRING
+  nullable: true
+  description: Academic year.
+- name: present_flag
+  type: STRING
+  nullable: true
+  description: Present flag.
+- name: attendance_count
+  type: INT
+  nullable: true
+  description: Attendance count.
+- name: on_leave_flag
+  type: STRING
+  nullable: true
+  description: On leave flag.
+- name: on_duty_flag
+  type: STRING
+  nullable: true
+  description: On duty flag.
+- name: late_flag
+  type: STRING
+  nullable: true
+  description: Late flag.
+- name: leave_type
+  type: STRING
+  nullable: true
+  description: Leave type.
+- name: approved_leave_flag
+  type: STRING
+  nullable: true
+  description: Approved leave flag.
+- name: attendance_source
+  type: STRING
+  nullable: true
+  description: Attendance source.
+- name: capture_timestamp
+  type: TIMESTAMP
+  nullable: true
+  description: Capture timestamp.
+- name: attendance_status_code
+  type: STRING
+  nullable: true
+  description: Attendance status code.
+- name: capture_source
+  type: STRING
+  nullable: true
+  description: Capture source.
+- name: image_available_flag
+  type: STRING
+  nullable: true
+  description: Image available flag.
+- name: approval_status_code
+  type: STRING
+  nullable: true
+  description: Approval status code.
+- name: approval_role
+  type: STRING
+  nullable: true
+  description: Approval role.
+- name: approval_timestamp
+  type: TIMESTAMP
+  nullable: true
+  description: Approval timestamp.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+primary_key:
+- school_teacher_attendance_fact_id_pk
+relationships:
+- school_teacher_attendance_fact.citizen_school_teacher_id_fk is a foreign-key-style
+  reference to citizen_school_teacher_id.
+- school_teacher_attendance_fact.citizen_student_id_fk is a foreign-key-style reference
+  to citizen_student_id.
+- school_teacher_attendance_fact.attendance_date_key_id_fk is a foreign-key-style
+  reference to attendance_date_key_id.
+business_terms:
+- fact table
+- event and metric analysis
+- school analytics
+- attendance tracking
+common_operations:
+- profile records in school_teacher_attendance_fact
+- aggregate measures by academic year and linked dimensions
+- join with related school and citizen dimensions
+- analyze present, absent, and attendance status trends

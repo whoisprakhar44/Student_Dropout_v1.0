@@ -1,0 +1,356 @@
+STUDENT DROPOUT RISK MONITORING SYSTEM
+Project Progress Presentation
+
+Prepared for: Project Review
+Version: 1.0
+Date: 02 June 2026
+
+======================================================================
+SLIDE 1: TITLE SLIDE
+======================================================================
+
+STUDENT DROPOUT RISK MONITORING SYSTEM
+
+Full-Stack Analytics Dashboard with Curated School Data Model
+and AI-Assisted Database Querying
+
+Project Progress Review
+
+
+======================================================================
+SLIDE 2: PROJECT OBJECTIVE
+======================================================================
+
+Objective
+
+To develop an integrated system that supports early identification of
+students at risk of dropping out by combining:
+
+- Student-level academic and attendance data
+- School-level operational data
+- Risk scoring and dashboard analytics
+- Detailed student profiles and intervention guidance
+- Natural-language querying of the curated school database
+
+Expected Outcome
+
+Enable education stakeholders to identify risk patterns, review student
+details, and make data-informed intervention decisions.
+
+
+======================================================================
+SLIDE 3: SOLUTION OVERVIEW
+======================================================================
+
+The current solution is a local full-stack application with the following
+components:
+
+- Web dashboard for monitoring student risk indicators
+- FastAPI backend for application services and REST APIs
+- SQLite database populated with representative sample data
+- Curated YAML-based school data model
+- LangGraph agent for natural-language query orchestration
+- MCP tools for schema retrieval and read-only SQL execution
+- Milvus Lite vector store for schema retrieval support
+
+Primary Use Cases
+
+- Monitor overall student risk distribution
+- Browse and review individual student records
+- Analyze attendance and academic performance
+- Query school data using natural-language questions
+
+
+======================================================================
+SLIDE 4: WORK COMPLETED - APPLICATION LAYER
+======================================================================
+
+Frontend Dashboard
+
+- Integrated dashboard interface with the backend APIs
+- Enabled login, registration, and logout flows for demonstration
+- Connected dashboard statistics to database queries
+- Added student listing with pagination
+- Added student detail modal with risk factors and interventions
+- Included responsive layout and light/dark theme support
+
+Backend Services
+
+- Implemented FastAPI application and static file serving
+- Added CORS middleware for frontend-backend communication
+- Added database initialization during application startup
+- Implemented error handling for backend operations
+- Added health endpoint for application and model readiness checks
+
+
+======================================================================
+SLIDE 5: WORK COMPLETED - API CAPABILITIES
+======================================================================
+
+Authentication APIs
+
+- POST /api/login
+- POST /api/register
+- GET  /api/me
+- POST /api/logout
+
+Dashboard and Student APIs
+
+- GET /api/stats
+- GET /api/students
+- GET /api/students/{student_id}
+
+Chat and Query APIs
+
+- POST /api/chat/start
+- POST /api/chat/feedback
+- POST /api/chat/approve
+- GET  /api/chat/history
+- POST /ask
+
+System API
+
+- GET /health
+
+
+======================================================================
+SLIDE 6: DATA MODEL EVOLUTION
+======================================================================
+
+Initial Integration Phase
+
+- Established a dropout-monitoring prototype with student, school,
+  attendance, academic, socio-economic, family, and dropout data.
+- Connected the dashboard to database-backed APIs.
+- Added representative synthetic records for demonstration.
+
+Current Curated Data Model
+
+- Migrated the active database generation process to curated YAML schemas.
+- Expanded the active SQLite database to 25 curated tables.
+- Added structured join metadata for cross-table queries.
+- Retained dashboard compatibility while querying curated tables internally.
+
+The current structure provides a broader foundation for school analytics,
+not only student dropout monitoring.
+
+
+======================================================================
+SLIDE 7: VERIFIED DATABASE STATUS
+======================================================================
+
+The following metrics were verified directly from the current local
+SQLite database:
+
+- Curated database tables:               25
+- Student records:                    1,000
+- School records:                        50
+- Student attendance fact records:    9,000
+- Academic performance fact records:  3,000
+
+Data Coverage Includes
+
+- Students and schools
+- Student and teacher attendance
+- Academic performance
+- School infrastructure progress
+- Meal and nutrition information
+- Scheme benefits
+- Reference dimensions and join metadata
+
+
+======================================================================
+SLIDE 8: RISK MONITORING CAPABILITIES
+======================================================================
+
+The dashboard supports student-level risk assessment using multiple
+indicators:
+
+- Attendance percentage
+- Academic performance
+- Chronic absence patterns
+- Socio-economic conditions
+- Student status information
+
+Available Monitoring Outputs
+
+- Total student count
+- Critical-risk and high-risk student counts
+- Dropout count
+- Average attendance
+- Average academic performance
+- Risk distribution
+- Current student status distribution
+- Student-level contributing factors
+- Recommended intervention actions
+
+
+======================================================================
+SLIDE 9: AI-ASSISTED QUERY ARCHITECTURE
+======================================================================
+
+Natural-Language Query Flow
+
+User Question
+     |
+     v
+Web Interface / POST /ask
+     |
+     v
+LangGraph Agent
+     |
+     +--> MCP Schema Retrieval Tool
+     |    Retrieves relevant curated table definitions and joins
+     |
+     +--> MCP SQL Execution Tool
+          Executes read-only SQLite SELECT queries
+     |
+     v
+Structured Answer Returned to the User
+
+Key Improvement
+
+The language model can decide when schema retrieval is required.
+Retrieval is no longer forced before every query.
+
+
+======================================================================
+SLIDE 10: TECHNICAL ARCHITECTURE
+======================================================================
+
+Presentation Layer
+
+- HTML, CSS, and JavaScript dashboard
+- Chart.js for visual analytics
+
+Application Layer
+
+- FastAPI REST API
+- Static asset hosting
+- Request validation with Pydantic
+- In-memory demonstration sessions
+
+Data Layer
+
+- SQLite local database
+- Curated YAML schemas
+- Automated schema creation and sample data generation
+
+AI and Tooling Layer
+
+- LangGraph agent workflow
+- Ollama chat model integration
+- MCP schema retrieval tool
+- MCP SQL execution tool
+- Milvus Lite schema index
+- Disabled Hive MCP stub for future integration
+
+
+======================================================================
+SLIDE 11: CURRENT VALIDATION STATUS
+======================================================================
+
+Completed and Verified Locally
+
+- Current SQLite database contains 25 curated tables
+- Database includes 1,000 student records and 50 schools
+- Attendance and academic fact data are populated
+- FastAPI routes are implemented in the application
+- Dashboard compatibility is retained
+- MCP schema retrieval and SQL execution modules are implemented
+- Documentation and target-system handoff steps are available
+
+Pending Environment-Dependent Validation
+
+- Full Ollama-backed chat validation
+- Milvus Lite schema-index rebuild with the configured embedding model
+- End-to-end testing of natural-language questions through POST /ask
+
+Reason
+
+The local machine used for the latest handoff did not have the required
+Ollama model service running.
+
+
+======================================================================
+SLIDE 12: CURRENT LIMITATIONS
+======================================================================
+
+The present version is suitable for demonstration and further development.
+The following items remain before production deployment:
+
+- Authentication is configured for demonstration use only
+- Sessions are stored in memory
+- SQLite is intended for local testing and prototyping
+- Ollama and embedding models must be available for AI-assisted querying
+- Production security controls are not yet implemented
+- HTTPS, rate limiting, audit logging, and deployment monitoring are pending
+- Hive execution is included only as a disabled future-integration stub
+
+
+======================================================================
+SLIDE 13: NEXT STEPS
+======================================================================
+
+Immediate Next Steps
+
+1. Configure the target environment with Ollama and required models.
+2. Rebuild the Milvus Lite schema index.
+3. Run end-to-end tests for dashboard APIs and natural-language queries.
+4. Validate representative stakeholder questions against the curated schema.
+5. Refine risk-scoring logic using domain-reviewed rules or historical data.
+
+Future Enhancements
+
+- Implement secure authentication and role-based access control
+- Add persistent sessions and audit trails
+- Move from SQLite to an enterprise database
+- Activate Hive integration when the backend environment is available
+- Add deployment monitoring, security review, and performance testing
+
+
+======================================================================
+SLIDE 14: CONCLUSION
+======================================================================
+
+Project Progress Summary
+
+- A functional full-stack dropout-risk monitoring dashboard has been built.
+- The active database has evolved into a 25-table curated school data model.
+- The local database is populated with verified representative records.
+- REST APIs support dashboard statistics and student-level review.
+- AI-assisted querying has been structured using LangGraph and MCP tools.
+- The remaining work is focused on target-environment validation,
+  production hardening, and deployment readiness.
+
+Overall Status
+
+CORE IMPLEMENTATION COMPLETED
+TARGET-ENVIRONMENT AI VALIDATION IN PROGRESS
+
+
+======================================================================
+OPTIONAL SLIDE 15: DEMONSTRATION FLOW
+======================================================================
+
+Suggested Demonstration Sequence
+
+1. Open the dashboard and log in using demonstration credentials.
+2. Review the overall statistics and risk distribution.
+3. Open the student list and inspect an at-risk student profile.
+4. Review the student's contributing factors and suggested intervention.
+5. Submit a natural-language question through the AI query interface.
+6. Explain how schema retrieval and read-only SQL execution support the answer.
+
+
+======================================================================
+PRESENTER NOTES
+======================================================================
+
+- Keep the presentation focused on completed work and verified outcomes.
+- Do not state that AI chat validation is complete until Ollama and the
+  configured models have been tested on the target machine.
+- Use Slides 1-14 for a formal review.
+- Use Slide 15 only when a live demonstration is planned.
+- Recommended presentation duration: 10-12 minutes.
+

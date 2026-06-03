@@ -1,0 +1,108 @@
+database: curated_datamodels
+table: school_scheme_master
+description: Dimension/master table for school scheme reference attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_scheme_master/
+partitioned_by: bucket(32, school_scheme_dim_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_scheme_master\n\
+  (\n    school_scheme_dim_id_pk    BIGINT,\n    scheme_code                STRING,\n\
+  \    scheme_name                STRING,\n    scheme_category             STRING,\n\
+  \    applicable_level            STRING,\n    delivery_mode               STRING,\n\
+  \    funding_dept                STRING,\n    start_date                  DATE,\n\
+  \    end_date                    DATE,\n    scheme_status               STRING,\n\
+  \    effective_from              DATE,\n    effective_to                DATE,\n\
+  \    is_current                  STRING,\n    is_active                   STRING,\n\
+  \    created_date                TIMESTAMP,\n    created_by                  STRING,\n\
+  \    updated_date                TIMESTAMP,\n    updated_by                  STRING\n\
+  )\nUSING ICEBERG\nPARTITIONED BY (bucket(32, school_scheme_dim_id_pk))\nLOCATION\
+  \ 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_scheme_master/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: school_scheme_dim_id_pk
+  type: BIGINT
+  nullable: true
+  description: School scheme dim identifier primary key.
+- name: scheme_code
+  type: STRING
+  nullable: true
+  description: Scheme code.
+- name: scheme_name
+  type: STRING
+  nullable: true
+  description: Scheme name.
+- name: scheme_category
+  type: STRING
+  nullable: true
+  description: Scheme category.
+- name: applicable_level
+  type: STRING
+  nullable: true
+  description: Applicable level.
+- name: delivery_mode
+  type: STRING
+  nullable: true
+  description: Delivery mode.
+- name: funding_dept
+  type: STRING
+  nullable: true
+  description: Funding dept.
+- name: start_date
+  type: DATE
+  nullable: true
+  description: Start date.
+- name: end_date
+  type: DATE
+  nullable: true
+  description: End date.
+- name: scheme_status
+  type: STRING
+  nullable: true
+  description: Scheme status.
+- name: effective_from
+  type: DATE
+  nullable: true
+  description: Effective from.
+- name: effective_to
+  type: DATE
+  nullable: true
+  description: Effective to.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: is_active
+  type: STRING
+  nullable: true
+  description: Is active.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- school_scheme_dim_id_pk
+relationships: []
+business_terms:
+- school analytics
+- scheme benefit delivery
+common_operations:
+- profile records in school_scheme_master
+- join with related school and citizen dimensions
+- track eligibility, sanction, delivery, and payment status

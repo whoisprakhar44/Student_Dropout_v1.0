@@ -1,0 +1,85 @@
+database: curated_datamodels
+table: student_class_dim
+description: Dimension/master table for student class reference attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/student_class_dim/
+partitioned_by: bucket(32, student_class_dim_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.student_class_dim\n\
+  (\n    student_class_dim_id_pk   BIGINT,\n    class_code                STRING,\n\
+  \    class_name                STRING,\n    education_stage           STRING,\n\
+  \    min_age                   INT,\n    max_age                   INT,\n    is_active\
+  \                 STRING,\n    effective_start_date      DATE,\n    effective_end_date\
+  \        DATE,\n    created_date              TIMESTAMP,\n    created_by       \
+  \         STRING,\n    updated_date              TIMESTAMP,\n    updated_by    \
+  \            STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, student_class_dim_id_pk))\n\
+  LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/student_class_dim/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: student_class_dim_id_pk
+  type: BIGINT
+  nullable: true
+  description: Student class dim identifier primary key.
+- name: class_code
+  type: STRING
+  nullable: true
+  description: Class code.
+- name: class_name
+  type: STRING
+  nullable: true
+  description: Class name.
+- name: education_stage
+  type: STRING
+  nullable: true
+  description: Education stage.
+- name: min_age
+  type: INT
+  nullable: true
+  description: Min age.
+- name: max_age
+  type: INT
+  nullable: true
+  description: Max age.
+- name: is_active
+  type: STRING
+  nullable: true
+  description: Is active.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- student_class_dim_id_pk
+relationships: []
+business_terms:
+- dimension table
+- reference lookup
+- student analytics
+common_operations:
+- profile records in student_class_dim
+- join with related school and citizen dimensions

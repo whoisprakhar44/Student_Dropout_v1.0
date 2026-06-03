@@ -1,0 +1,15 @@
+langgraph
+langchain-core
+langchain-ollama
+langchain-mcp-adapters
+python-dotenv
+fastapi
+uvicorn
+pydantic
+pymilvus[milvus_lite]
+milvus-lite
+pyyaml
+requests
+sqlalchemy
+mcp
+mysql-connector-python

@@ -1,0 +1,42 @@
+database: curated_datamodels
+table: school_medium
+description: Curated table containing school medium attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_medium/
+partitioned_by: bucket(32, school_medium_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_medium\n(\n\
+  \    school_medium_pk      BIGINT,\n    medium_code           STRING,\n    medium_name\
+  \           STRING,\n    language_family       STRING\n)\nUSING ICEBERG\nPARTITIONED\
+  \ BY (bucket(32, school_medium_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_medium/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: school_medium_pk
+  type: BIGINT
+  nullable: true
+  description: School medium primary key.
+- name: medium_code
+  type: STRING
+  nullable: true
+  description: Medium code.
+- name: medium_name
+  type: STRING
+  nullable: true
+  description: Medium name.
+- name: language_family
+  type: STRING
+  nullable: true
+  description: Language family.
+primary_key:
+- school_medium_pk
+relationships: []
+business_terms:
+- school analytics
+common_operations:
+- profile records in school_medium
+- join with related school and citizen dimensions

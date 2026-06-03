@@ -1,0 +1,3358 @@
+# =============================================================================
+# Curated School Data Models - PySpark/Iceberg Metadata
+# =============================================================================
+
+database: curated_datamodels
+description: >
+  Curated Iceberg data model for school, student, teacher, attendance, assessment,
+  meals, infrastructure, schemes, and benefits analytics.
+
+# -----------------------------------------------------------------------------
+# Table: citizen_student
+# -----------------------------------------------------------------------------
+- table: citizen_student
+  description: Curated table containing citizen student attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_student/
+  partitioned_by: bucket(32, citizen_master_fk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_student\n\
+    (\n    citizen_student_pk        BIGINT,\n    citizen_school_fk         BIGINT,\n\
+    \    citizen_master_fk         BIGINT,\n    student_subject_fk        BIGINT,\n\
+    \    student_aadhaar_id        STRING,\n    student_name              STRING,\n\
+    \    gender                    STRING,\n    surname                   STRING,\n\
+    \    mother_tongue             STRING,\n    date_of_birth             DATE,\n\
+    \    social_category           STRING,\n    minority_status           STRING,\n\
+    \    disability_flag           STRING,\n    disability_percentage     DECIMAL(5,2),\n\
+    \    admission_flag            STRING,\n    current_grade             STRING,\n\
+    \    medium_key                STRING,\n    is_current                STRING,\n\
+    \    mother_aadhaar_id         STRING,\n    father_aadhaar_id         STRING,\n\
+    \    is_current_flag           STRING,\n    primary_mobile_no         STRING,\n\
+    \    secondary_mobile_no       STRING,\n    email_id                  STRING,\n\
+    \    address                   STRING,\n    pincode                   STRING,\n\
+    \    effective_start_date      DATE,\n    effective_end_date        DATE,\n  \
+    \  created_date              TIMESTAMP,\n    created_by                STRING,\n\
+    \    updated_date              TIMESTAMP,\n    updated_by                STRING\n\
+    )\nUSING ICEBERG\nPARTITIONED BY (bucket(32, citizen_master_fk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_student/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: citizen_student_pk
+    type: BIGINT
+    nullable: true
+    description: Citizen student primary key.
+  - name: citizen_school_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen school foreign key.
+  - name: citizen_master_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen master foreign key.
+  - name: student_subject_fk
+    type: BIGINT
+    nullable: true
+    description: Student subject foreign key.
+  - name: student_aadhaar_id
+    type: STRING
+    nullable: true
+    description: Student aadhaar identifier.
+  - name: student_name
+    type: STRING
+    nullable: true
+    description: Student name.
+  - name: gender
+    type: STRING
+    nullable: true
+    description: Gender.
+  - name: surname
+    type: STRING
+    nullable: true
+    description: Surname.
+  - name: mother_tongue
+    type: STRING
+    nullable: true
+    description: Mother tongue.
+  - name: date_of_birth
+    type: DATE
+    nullable: true
+    description: Date of birth.
+  - name: social_category
+    type: STRING
+    nullable: true
+    description: Social category.
+  - name: minority_status
+    type: STRING
+    nullable: true
+    description: Minority status.
+  - name: disability_flag
+    type: STRING
+    nullable: true
+    description: Disability flag.
+  - name: disability_percentage
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Disability percentage.
+  - name: admission_flag
+    type: STRING
+    nullable: true
+    description: Admission flag.
+  - name: current_grade
+    type: STRING
+    nullable: true
+    description: Current grade.
+  - name: medium_key
+    type: STRING
+    nullable: true
+    description: Medium key.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: mother_aadhaar_id
+    type: STRING
+    nullable: true
+    description: Mother aadhaar identifier.
+  - name: father_aadhaar_id
+    type: STRING
+    nullable: true
+    description: Father aadhaar identifier.
+  - name: is_current_flag
+    type: STRING
+    nullable: true
+    description: Is current flag.
+  - name: primary_mobile_no
+    type: STRING
+    nullable: true
+    description: Primary mobile no.
+  - name: secondary_mobile_no
+    type: STRING
+    nullable: true
+    description: Secondary mobile no.
+  - name: email_id
+    type: STRING
+    nullable: true
+    description: Email identifier.
+  - name: address
+    type: STRING
+    nullable: true
+    description: Address.
+  - name: pincode
+    type: STRING
+    nullable: true
+    description: Pincode.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - citizen_student_pk
+  relationships:
+  - citizen_student.citizen_school_fk is a foreign-key-style reference to citizen_school.
+  - citizen_student.citizen_master_fk is a foreign-key-style reference to citizen_master.
+  - citizen_student.student_subject_fk is a foreign-key-style reference to student_subject.
+  business_terms:
+  - student analytics
+  common_operations:
+  - profile records in citizen_student
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_subject_master
+# -----------------------------------------------------------------------------
+- table: school_subject_master
+  description: Dimension/master table for school subject reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_subject_master/
+  partitioned_by: bucket(32, subject_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_subject_master\n\
+    (\n    subject_pk                   BIGINT,\n    subject_code                \
+    \ STRING,\n    subject_name                 STRING,\n    subject_short_name  \
+    \         STRING,\n    subject_category             STRING,\n    subject_type\
+    \                 STRING,\n    language_order               INT,\n    is_vocational_flag\
+    \           STRING,\n    is_skill_subject_flag        STRING,\n    min_class \
+    \                   INT,\n    max_class                    INT,\n    medium_id\
+    \                    BIGINT,\n    is_compulsory_flag           STRING,\n    board_code\
+    \                   STRING,\n    assessment_pattern           STRING,\n    marks_scheme\
+    \                 STRING,\n    credit_weight                DECIMAL(5,2),\n  \
+    \  subject_status               STRING,\n    grade_applicability_from     INT,\n\
+    \    grade_applicability_to       INT,\n    effective_from               DATE,\n\
+    \    effective_to                 DATE,\n    replaced_by_subject_pk       BIGINT,\n\
+    \    created_date                 TIMESTAMP,\n    created_by                 \
+    \  STRING,\n    updated_date                 TIMESTAMP,\n    updated_by      \
+    \             STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, subject_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_subject_master/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: subject_pk
+    type: BIGINT
+    nullable: true
+    description: Subject primary key.
+  - name: subject_code
+    type: STRING
+    nullable: true
+    description: Subject code.
+  - name: subject_name
+    type: STRING
+    nullable: true
+    description: Subject name.
+  - name: subject_short_name
+    type: STRING
+    nullable: true
+    description: Subject short name.
+  - name: subject_category
+    type: STRING
+    nullable: true
+    description: Subject category.
+  - name: subject_type
+    type: STRING
+    nullable: true
+    description: Subject type.
+  - name: language_order
+    type: INT
+    nullable: true
+    description: Language order.
+  - name: is_vocational_flag
+    type: STRING
+    nullable: true
+    description: Is vocational flag.
+  - name: is_skill_subject_flag
+    type: STRING
+    nullable: true
+    description: Is skill subject flag.
+  - name: min_class
+    type: INT
+    nullable: true
+    description: Min class.
+  - name: max_class
+    type: INT
+    nullable: true
+    description: Max class.
+  - name: medium_id
+    type: BIGINT
+    nullable: true
+    description: Medium identifier.
+  - name: is_compulsory_flag
+    type: STRING
+    nullable: true
+    description: Is compulsory flag.
+  - name: board_code
+    type: STRING
+    nullable: true
+    description: Board code.
+  - name: assessment_pattern
+    type: STRING
+    nullable: true
+    description: Assessment pattern.
+  - name: marks_scheme
+    type: STRING
+    nullable: true
+    description: Marks scheme.
+  - name: credit_weight
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Credit weight.
+  - name: subject_status
+    type: STRING
+    nullable: true
+    description: Subject status.
+  - name: grade_applicability_from
+    type: INT
+    nullable: true
+    description: Grade applicability from.
+  - name: grade_applicability_to
+    type: INT
+    nullable: true
+    description: Grade applicability to.
+  - name: effective_from
+    type: DATE
+    nullable: true
+    description: Effective from.
+  - name: effective_to
+    type: DATE
+    nullable: true
+    description: Effective to.
+  - name: replaced_by_subject_pk
+    type: BIGINT
+    nullable: true
+    description: Replaced by subject primary key.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - subject_pk
+  - replaced_by_subject_pk
+  relationships: []
+  business_terms:
+  - school analytics
+  common_operations:
+  - profile records in school_subject_master
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_medium
+# -----------------------------------------------------------------------------
+- table: school_medium
+  description: Curated table containing school medium attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_medium/
+  partitioned_by: bucket(32, school_medium_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_medium\n\
+    (\n    school_medium_pk      BIGINT,\n    medium_code           STRING,\n    medium_name\
+    \           STRING,\n    language_family       STRING\n)\nUSING ICEBERG\nPARTITIONED\
+    \ BY (bucket(32, school_medium_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_medium/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_medium_pk
+    type: BIGINT
+    nullable: true
+    description: School medium primary key.
+  - name: medium_code
+    type: STRING
+    nullable: true
+    description: Medium code.
+  - name: medium_name
+    type: STRING
+    nullable: true
+    description: Medium name.
+  - name: language_family
+    type: STRING
+    nullable: true
+    description: Language family.
+  primary_key:
+  - school_medium_pk
+  relationships: []
+  business_terms:
+  - school analytics
+  common_operations:
+  - profile records in school_medium
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: citizen_school
+# -----------------------------------------------------------------------------
+- table: citizen_school
+  description: Curated table containing citizen school attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school/
+  partitioned_by: bucket(32, citizen_school_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_school\n\
+    (\n    citizen_school_id_pk           BIGINT,\n    school_medium_id_fk       \
+    \     BIGINT,\n    school_teacher_id_fk           BIGINT,\n    school_category_id_fk\
+    \          BIGINT,\n    school_management_id_fk        BIGINT,\n    school_dept_code\
+    \               STRING,\n    school_udise_code              STRING,\n    school_name\
+    \                    STRING,\n    school_address                 STRING,\n   \
+    \ district_name                  STRING,\n    district_lgd_code              STRING,\n\
+    \    mandal_name                    STRING,\n    mandal_lgd_code             \
+    \   STRING,\n    village_name                   STRING,\n    village_lgd_code\
+    \               STRING,\n    urban_rural_flag               STRING,\n    latitude\
+    \                       DECIMAL(9,6),\n    longitude                      DECIMAL(9,6),\n\
+    \    school_pincode                 STRING,\n    functional_status           \
+    \   STRING,\n    academic_year_opened           STRING,\n    min_class       \
+    \               INT,\n    max_class                      INT,\n    pre_primary_flag\
+    \               STRING,\n    vocational_flag                STRING,\n    building_status\
+    \                STRING,\n    electricity_availability_flag  STRING,\n    drinking_water_availability_flag\
+    \ STRING,\n    toilet_boys_flag               STRING,\n    toilet_girls_flag \
+    \             STRING,\n    ict_enabled_flag               STRING,\n    playground_flag\
+    \                STRING,\n    head_master_name               STRING,\n    head_master_mobile\
+    \             STRING,\n    school_contact_no              STRING,\n    school_email_id\
+    \                STRING,\n    noc_required_flag              STRING,\n    noc_available_flag\
+    \             STRING,\n    fire_safety_flag               STRING,\n    health_safety_flag\
+    \             STRING,\n    effective_start_date           DATE,\n    effective_end_date\
+    \             DATE,\n    is_current                     STRING,\n    created_date\
+    \                   TIMESTAMP,\n    created_by                     STRING,\n \
+    \   updated_date                   TIMESTAMP,\n    updated_by                \
+    \     STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, citizen_school_id_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: citizen_school_id_pk
+    type: BIGINT
+    nullable: true
+    description: Citizen school identifier primary key.
+  - name: school_medium_id_fk
+    type: BIGINT
+    nullable: true
+    description: School medium identifier foreign key.
+  - name: school_teacher_id_fk
+    type: BIGINT
+    nullable: true
+    description: School teacher identifier foreign key.
+  - name: school_category_id_fk
+    type: BIGINT
+    nullable: true
+    description: School category identifier foreign key.
+  - name: school_management_id_fk
+    type: BIGINT
+    nullable: true
+    description: School management identifier foreign key.
+  - name: school_dept_code
+    type: STRING
+    nullable: true
+    description: School dept code.
+  - name: school_udise_code
+    type: STRING
+    nullable: true
+    description: School udise code.
+  - name: school_name
+    type: STRING
+    nullable: true
+    description: School name.
+  - name: school_address
+    type: STRING
+    nullable: true
+    description: School address.
+  - name: district_name
+    type: STRING
+    nullable: true
+    description: District name.
+  - name: district_lgd_code
+    type: STRING
+    nullable: true
+    description: District lgd code.
+  - name: mandal_name
+    type: STRING
+    nullable: true
+    description: Mandal name.
+  - name: mandal_lgd_code
+    type: STRING
+    nullable: true
+    description: Mandal lgd code.
+  - name: village_name
+    type: STRING
+    nullable: true
+    description: Village name.
+  - name: village_lgd_code
+    type: STRING
+    nullable: true
+    description: Village lgd code.
+  - name: urban_rural_flag
+    type: STRING
+    nullable: true
+    description: Urban rural flag.
+  - name: latitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Latitude.
+  - name: longitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Longitude.
+  - name: school_pincode
+    type: STRING
+    nullable: true
+    description: School pincode.
+  - name: functional_status
+    type: STRING
+    nullable: true
+    description: Functional status.
+  - name: academic_year_opened
+    type: STRING
+    nullable: true
+    description: Academic year opened.
+  - name: min_class
+    type: INT
+    nullable: true
+    description: Min class.
+  - name: max_class
+    type: INT
+    nullable: true
+    description: Max class.
+  - name: pre_primary_flag
+    type: STRING
+    nullable: true
+    description: Pre primary flag.
+  - name: vocational_flag
+    type: STRING
+    nullable: true
+    description: Vocational flag.
+  - name: building_status
+    type: STRING
+    nullable: true
+    description: Building status.
+  - name: electricity_availability_flag
+    type: STRING
+    nullable: true
+    description: Electricity availability flag.
+  - name: drinking_water_availability_flag
+    type: STRING
+    nullable: true
+    description: Drinking water availability flag.
+  - name: toilet_boys_flag
+    type: STRING
+    nullable: true
+    description: Toilet boys flag.
+  - name: toilet_girls_flag
+    type: STRING
+    nullable: true
+    description: Toilet girls flag.
+  - name: ict_enabled_flag
+    type: STRING
+    nullable: true
+    description: Ict enabled flag.
+  - name: playground_flag
+    type: STRING
+    nullable: true
+    description: Playground flag.
+  - name: head_master_name
+    type: STRING
+    nullable: true
+    description: Head master name.
+  - name: head_master_mobile
+    type: STRING
+    nullable: true
+    description: Head master mobile.
+  - name: school_contact_no
+    type: STRING
+    nullable: true
+    description: School contact no.
+  - name: school_email_id
+    type: STRING
+    nullable: true
+    description: School email identifier.
+  - name: noc_required_flag
+    type: STRING
+    nullable: true
+    description: Noc required flag.
+  - name: noc_available_flag
+    type: STRING
+    nullable: true
+    description: Noc available flag.
+  - name: fire_safety_flag
+    type: STRING
+    nullable: true
+    description: Fire safety flag.
+  - name: health_safety_flag
+    type: STRING
+    nullable: true
+    description: Health safety flag.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - citizen_school_id_pk
+  relationships:
+  - citizen_school.school_medium_id_fk is a foreign-key-style reference to school_medium_id.
+  - citizen_school.school_teacher_id_fk is a foreign-key-style reference to school_teacher_id.
+  - citizen_school.school_category_id_fk is a foreign-key-style reference to school_category_id.
+  - citizen_school.school_management_id_fk is a foreign-key-style reference to school_management_id.
+  business_terms:
+  - school analytics
+  common_operations:
+  - profile records in citizen_school
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_category
+# -----------------------------------------------------------------------------
+- table: school_category
+  description: Curated table containing school category attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_category/
+  partitioned_by: bucket(32, school_category_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_category\n\
+    (\n    school_category_id_pk    BIGINT,\n    category_code            STRING,\n\
+    \    category_name            STRING,\n    category_type            STRING\n)\n\
+    USING ICEBERG\nPARTITIONED BY (bucket(32, school_category_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_category/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_category_id_pk
+    type: BIGINT
+    nullable: true
+    description: School category identifier primary key.
+  - name: category_code
+    type: STRING
+    nullable: true
+    description: Category code.
+  - name: category_name
+    type: STRING
+    nullable: true
+    description: Category name.
+  - name: category_type
+    type: STRING
+    nullable: true
+    description: Category type.
+  primary_key:
+  - school_category_id_pk
+  relationships: []
+  business_terms:
+  - school analytics
+  common_operations:
+  - profile records in school_category
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: citizen_school_teacher
+# -----------------------------------------------------------------------------
+- table: citizen_school_teacher
+  description: Curated table containing citizen school teacher attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school_teacher/
+  partitioned_by: bucket(32, citizen_school_teacher_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_school_teacher\n\
+    (\n    citizen_school_teacher_id_pk   BIGINT,\n    treasury_id               \
+    \     STRING,\n    cfms_id                        STRING,\n    national_teacher_code\
+    \          STRING,\n    teacher_citizen_master_fk      BIGINT,\n    teacher_emp_id\
+    \                 STRING,\n    teacher_name                   STRING,\n    gender\
+    \                         STRING,\n    date_of_birth                  DATE,\n\
+    \    joining_date                   DATE,\n    qualification                 \
+    \ STRING,\n    employment_type                STRING,\n    teacher_designation\
+    \            STRING,\n    subject_specialization_key     BIGINT,\n    father_name\
+    \                    STRING,\n    father_citizen_master_id       BIGINT,\n   \
+    \ mother_name                    STRING,\n    mother_citizen_master_id       BIGINT,\n\
+    \    spouse_name                    STRING,\n    spouse_citizen_master_id    \
+    \   BIGINT,\n    caste_id_fk                    BIGINT,\n    is_single_parent\
+    \               STRING,\n    disability_category            STRING,\n    academic_qualification\
+    \         STRING,\n    professional_qualification     STRING,\n    tet_passed_flag\
+    \                STRING,\n    tet_year_of_passing            INT,\n    service_status\
+    \                 STRING,\n    date_of_first_appointment      DATE,\n    present_designation_teaching_type\
+    \ STRING,\n    effective_start_date           DATE,\n    effective_end_date  \
+    \           DATE,\n    is_current                     STRING,\n    created_date\
+    \                   TIMESTAMP,\n    created_by                     STRING,\n \
+    \   updated_date                   TIMESTAMP,\n    updated_by                \
+    \     STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, citizen_school_teacher_id_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school_teacher/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: citizen_school_teacher_id_pk
+    type: BIGINT
+    nullable: true
+    description: Citizen school teacher identifier primary key.
+  - name: treasury_id
+    type: STRING
+    nullable: true
+    description: Treasury identifier.
+  - name: cfms_id
+    type: STRING
+    nullable: true
+    description: Cfms identifier.
+  - name: national_teacher_code
+    type: STRING
+    nullable: true
+    description: National teacher code.
+  - name: teacher_citizen_master_fk
+    type: BIGINT
+    nullable: true
+    description: Teacher citizen master foreign key.
+  - name: teacher_emp_id
+    type: STRING
+    nullable: true
+    description: Teacher emp identifier.
+  - name: teacher_name
+    type: STRING
+    nullable: true
+    description: Teacher name.
+  - name: gender
+    type: STRING
+    nullable: true
+    description: Gender.
+  - name: date_of_birth
+    type: DATE
+    nullable: true
+    description: Date of birth.
+  - name: joining_date
+    type: DATE
+    nullable: true
+    description: Joining date.
+  - name: qualification
+    type: STRING
+    nullable: true
+    description: Qualification.
+  - name: employment_type
+    type: STRING
+    nullable: true
+    description: Employment type.
+  - name: teacher_designation
+    type: STRING
+    nullable: true
+    description: Teacher designation.
+  - name: subject_specialization_key
+    type: BIGINT
+    nullable: true
+    description: Subject specialization key.
+  - name: father_name
+    type: STRING
+    nullable: true
+    description: Father name.
+  - name: father_citizen_master_id
+    type: BIGINT
+    nullable: true
+    description: Father citizen master identifier.
+  - name: mother_name
+    type: STRING
+    nullable: true
+    description: Mother name.
+  - name: mother_citizen_master_id
+    type: BIGINT
+    nullable: true
+    description: Mother citizen master identifier.
+  - name: spouse_name
+    type: STRING
+    nullable: true
+    description: Spouse name.
+  - name: spouse_citizen_master_id
+    type: BIGINT
+    nullable: true
+    description: Spouse citizen master identifier.
+  - name: caste_id_fk
+    type: BIGINT
+    nullable: true
+    description: Caste identifier foreign key.
+  - name: is_single_parent
+    type: STRING
+    nullable: true
+    description: Is single parent.
+  - name: disability_category
+    type: STRING
+    nullable: true
+    description: Disability category.
+  - name: academic_qualification
+    type: STRING
+    nullable: true
+    description: Academic qualification.
+  - name: professional_qualification
+    type: STRING
+    nullable: true
+    description: Professional qualification.
+  - name: tet_passed_flag
+    type: STRING
+    nullable: true
+    description: Tet passed flag.
+  - name: tet_year_of_passing
+    type: INT
+    nullable: true
+    description: Tet year of passing.
+  - name: service_status
+    type: STRING
+    nullable: true
+    description: Service status.
+  - name: date_of_first_appointment
+    type: DATE
+    nullable: true
+    description: Date of first appointment.
+  - name: present_designation_teaching_type
+    type: STRING
+    nullable: true
+    description: Present designation teaching type.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - citizen_school_teacher_id_pk
+  relationships:
+  - citizen_school_teacher.teacher_citizen_master_fk is a foreign-key-style reference
+    to teacher_citizen_master.
+  - citizen_school_teacher.caste_id_fk is a foreign-key-style reference to caste_id.
+  business_terms:
+  - school analytics
+  common_operations:
+  - profile records in citizen_school_teacher
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_scheme_master
+# -----------------------------------------------------------------------------
+- table: school_scheme_master
+  description: Dimension/master table for school scheme reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_scheme_master/
+  partitioned_by: bucket(32, school_scheme_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_scheme_master\n\
+    (\n    school_scheme_dim_id_pk    BIGINT,\n    scheme_code                STRING,\n\
+    \    scheme_name                STRING,\n    scheme_category             STRING,\n\
+    \    applicable_level            STRING,\n    delivery_mode               STRING,\n\
+    \    funding_dept                STRING,\n    start_date                  DATE,\n\
+    \    end_date                    DATE,\n    scheme_status               STRING,\n\
+    \    effective_from              DATE,\n    effective_to                DATE,\n\
+    \    is_current                  STRING,\n    is_active                   STRING,\n\
+    \    created_date                TIMESTAMP,\n    created_by                  STRING,\n\
+    \    updated_date                TIMESTAMP,\n    updated_by                  STRING\n\
+    )\nUSING ICEBERG\nPARTITIONED BY (bucket(32, school_scheme_dim_id_pk))\nLOCATION\
+    \ 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_scheme_master/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_scheme_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: School scheme dim identifier primary key.
+  - name: scheme_code
+    type: STRING
+    nullable: true
+    description: Scheme code.
+  - name: scheme_name
+    type: STRING
+    nullable: true
+    description: Scheme name.
+  - name: scheme_category
+    type: STRING
+    nullable: true
+    description: Scheme category.
+  - name: applicable_level
+    type: STRING
+    nullable: true
+    description: Applicable level.
+  - name: delivery_mode
+    type: STRING
+    nullable: true
+    description: Delivery mode.
+  - name: funding_dept
+    type: STRING
+    nullable: true
+    description: Funding dept.
+  - name: start_date
+    type: DATE
+    nullable: true
+    description: Start date.
+  - name: end_date
+    type: DATE
+    nullable: true
+    description: End date.
+  - name: scheme_status
+    type: STRING
+    nullable: true
+    description: Scheme status.
+  - name: effective_from
+    type: DATE
+    nullable: true
+    description: Effective from.
+  - name: effective_to
+    type: DATE
+    nullable: true
+    description: Effective to.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - school_scheme_dim_id_pk
+  relationships: []
+  business_terms:
+  - school analytics
+  - scheme benefit delivery
+  common_operations:
+  - profile records in school_scheme_master
+  - join with related school and citizen dimensions
+  - track eligibility, sanction, delivery, and payment status
+
+# -----------------------------------------------------------------------------
+# Table: student_class_dim
+# -----------------------------------------------------------------------------
+- table: student_class_dim
+  description: Dimension/master table for student class reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/student_class_dim/
+  partitioned_by: bucket(32, student_class_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.student_class_dim\n\
+    (\n    student_class_dim_id_pk   BIGINT,\n    class_code                STRING,\n\
+    \    class_name                STRING,\n    education_stage           STRING,\n\
+    \    min_age                   INT,\n    max_age                   INT,\n    is_active\
+    \                 STRING,\n    effective_start_date      DATE,\n    effective_end_date\
+    \        DATE,\n    created_date              TIMESTAMP,\n    created_by     \
+    \           STRING,\n    updated_date              TIMESTAMP,\n    updated_by\
+    \                STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, student_class_dim_id_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/student_class_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: student_class_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Student class dim identifier primary key.
+  - name: class_code
+    type: STRING
+    nullable: true
+    description: Class code.
+  - name: class_name
+    type: STRING
+    nullable: true
+    description: Class name.
+  - name: education_stage
+    type: STRING
+    nullable: true
+    description: Education stage.
+  - name: min_age
+    type: INT
+    nullable: true
+    description: Min age.
+  - name: max_age
+    type: INT
+    nullable: true
+    description: Max age.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - student_class_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  - student analytics
+  common_operations:
+  - profile records in student_class_dim
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: absent_reason_dim
+# -----------------------------------------------------------------------------
+- table: absent_reason_dim
+  description: Dimension/master table for absent reason reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/absent_reason_dim/
+  partitioned_by: bucket(32, absent_reason_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.absent_reason_dim\n\
+    (\n    absent_reason_dim_id_pk   BIGINT,\n    reason_code               STRING,\n\
+    \    reason_name               STRING,\n    reason_category           STRING,\n\
+    \    is_govt_approved           STRING,\n    is_active                  STRING,\n\
+    \    effective_start_date       DATE,\n    effective_end_date         DATE,\n\
+    \    is_current                 STRING,\n    created_date               TIMESTAMP,\n\
+    \    created_by                 STRING,\n    updated_date               TIMESTAMP,\n\
+    \    updated_by                 STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ absent_reason_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/absent_reason_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: absent_reason_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Absent reason dim identifier primary key.
+  - name: reason_code
+    type: STRING
+    nullable: true
+    description: Reason code.
+  - name: reason_name
+    type: STRING
+    nullable: true
+    description: Reason name.
+  - name: reason_category
+    type: STRING
+    nullable: true
+    description: Reason category.
+  - name: is_govt_approved
+    type: STRING
+    nullable: true
+    description: Is govt approved.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - absent_reason_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in absent_reason_dim
+
+# -----------------------------------------------------------------------------
+# Table: assessment_dim
+# -----------------------------------------------------------------------------
+- table: assessment_dim
+  description: Dimension/master table for assessment reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/assessment_dim/
+  partitioned_by: bucket(32, assessment_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.assessment_dim\n\
+    (\n    assessment_dim_id_pk      BIGINT,\n    assessment_code           STRING,\n\
+    \    assessment_type           STRING,\n    assessment_name           STRING,\n\
+    \    board_code                STRING,\n    grade_scheme              STRING,\n\
+    \    is_summative              STRING,\n    is_active                 STRING,\n\
+    \    effective_start_date      DATE,\n    effective_end_date        DATE,\n  \
+    \  is_current                STRING,\n    created_date              TIMESTAMP,\n\
+    \    created_by                STRING,\n    updated_date              TIMESTAMP,\n\
+    \    updated_by                STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ assessment_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/assessment_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: assessment_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Assessment dim identifier primary key.
+  - name: assessment_code
+    type: STRING
+    nullable: true
+    description: Assessment code.
+  - name: assessment_type
+    type: STRING
+    nullable: true
+    description: Assessment type.
+  - name: assessment_name
+    type: STRING
+    nullable: true
+    description: Assessment name.
+  - name: board_code
+    type: STRING
+    nullable: true
+    description: Board code.
+  - name: grade_scheme
+    type: STRING
+    nullable: true
+    description: Grade scheme.
+  - name: is_summative
+    type: STRING
+    nullable: true
+    description: Is summative.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - assessment_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in assessment_dim
+
+# -----------------------------------------------------------------------------
+# Table: meal_type_dim
+# -----------------------------------------------------------------------------
+- table: meal_type_dim
+  description: Dimension/master table for meal type reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/meal_type_dim/
+  partitioned_by: bucket(32, meal_type_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.meal_type_dim\n\
+    (\n    meal_type_dim_id_pk        BIGINT,\n    meal_type_code             STRING,\n\
+    \    meal_type_name             STRING,\n    is_compulsory              STRING,\n\
+    \    is_active                  STRING,\n    is_current                 STRING,\n\
+    \    effective_start_date       DATE,\n    effective_end_date         DATE,\n\
+    \    created_date               TIMESTAMP,\n    created_by                 STRING,\n\
+    \    updated_date               TIMESTAMP,\n    updated_by                 STRING\n\
+    )\nUSING ICEBERG\nPARTITIONED BY (bucket(32, meal_type_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/meal_type_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: meal_type_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Meal type dim identifier primary key.
+  - name: meal_type_code
+    type: STRING
+    nullable: true
+    description: Meal type code.
+  - name: meal_type_name
+    type: STRING
+    nullable: true
+    description: Meal type name.
+  - name: is_compulsory
+    type: STRING
+    nullable: true
+    description: Is compulsory.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - meal_type_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  - mid-day meal operations
+  common_operations:
+  - profile records in meal_type_dim
+
+# -----------------------------------------------------------------------------
+# Table: nutrition_item_dim
+# -----------------------------------------------------------------------------
+- table: nutrition_item_dim
+  description: Dimension/master table for nutrition item reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/nutrition_item_dim/
+  partitioned_by: bucket(32, nutrition_item_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.nutrition_item_dim\n\
+    (\n    nutrition_item_dim_id_pk     BIGINT,\n    item_code                   \
+    \ STRING,\n    item_name                    STRING,\n    nutrition_category  \
+    \         STRING,\n    unit_of_measure              STRING,\n    default_quantity\
+    \             DECIMAL(10,2),\n    is_active                    STRING,\n    effective_start_date\
+    \         DATE,\n    effective_end_date           DATE,\n    is_current      \
+    \             STRING,\n    created_date                 TIMESTAMP,\n    created_by\
+    \                   STRING,\n    updated_date                 TIMESTAMP,\n   \
+    \ updated_by                   STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ nutrition_item_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/nutrition_item_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: nutrition_item_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Nutrition item dim identifier primary key.
+  - name: item_code
+    type: STRING
+    nullable: true
+    description: Item code.
+  - name: item_name
+    type: STRING
+    nullable: true
+    description: Item name.
+  - name: nutrition_category
+    type: STRING
+    nullable: true
+    description: Nutrition category.
+  - name: unit_of_measure
+    type: STRING
+    nullable: true
+    description: Unit of measure.
+  - name: default_quantity
+    type: DECIMAL(10,2)
+    nullable: true
+    description: Default quantity.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - nutrition_item_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in nutrition_item_dim
+
+# -----------------------------------------------------------------------------
+# Table: infrastructure_category_dim
+# -----------------------------------------------------------------------------
+- table: infrastructure_category_dim
+  description: Dimension/master table for infrastructure category reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_category_dim/
+  partitioned_by: bucket(32, infra_category_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.infrastructure_category_dim\n\
+    (\n    infra_category_dim_id_pk     BIGINT,\n    infra_category_code         \
+    \ STRING,\n    infra_category_name          STRING,\n    is_active           \
+    \         STRING,\n    effective_start_date         DATE,\n    effective_end_date\
+    \           DATE,\n    is_current                   STRING,\n    created_date\
+    \                 TIMESTAMP,\n    created_by                   STRING,\n    updated_date\
+    \                 TIMESTAMP,\n    updated_by                   STRING\n)\nUSING\
+    \ ICEBERG\nPARTITIONED BY (bucket(32, infra_category_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_category_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: infra_category_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Infra category dim identifier primary key.
+  - name: infra_category_code
+    type: STRING
+    nullable: true
+    description: Infra category code.
+  - name: infra_category_name
+    type: STRING
+    nullable: true
+    description: Infra category name.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - infra_category_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in infrastructure_category_dim
+
+# -----------------------------------------------------------------------------
+# Table: infrastructure_component_dim
+# -----------------------------------------------------------------------------
+- table: infrastructure_component_dim
+  description: Dimension/master table for infrastructure component reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_component_dim/
+  partitioned_by: bucket(32, infrastructure_component_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.infrastructure_component_dim\n\
+    (\n    infrastructure_component_dim_id_pk   BIGINT,\n    infra_category_dim_id_fk\
+    \             BIGINT,\n    infra_component_code                 STRING,\n    infra_component_name\
+    \                 STRING,\n    unit_type                            STRING,\n\
+    \    is_functional_track                  STRING,\n    is_active             \
+    \               STRING,\n    effective_start_date                 DATE,\n    effective_end_date\
+    \                   DATE,\n    is_current                           STRING,\n\
+    \    created_date                         TIMESTAMP,\n    created_by         \
+    \                  STRING,\n    updated_date                         TIMESTAMP,\n\
+    \    updated_by                           STRING\n)\nUSING ICEBERG\nPARTITIONED\
+    \ BY (bucket(32, infrastructure_component_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_component_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: infrastructure_component_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Infrastructure component dim identifier primary key.
+  - name: infra_category_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Infra category dim identifier foreign key.
+  - name: infra_component_code
+    type: STRING
+    nullable: true
+    description: Infra component code.
+  - name: infra_component_name
+    type: STRING
+    nullable: true
+    description: Infra component name.
+  - name: unit_type
+    type: STRING
+    nullable: true
+    description: Unit type.
+  - name: is_functional_track
+    type: STRING
+    nullable: true
+    description: Is functional track.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - infrastructure_component_dim_id_pk
+  relationships:
+  - infrastructure_component_dim.infra_category_dim_id_fk is a foreign-key-style reference
+    to infra_category_dim_id.
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in infrastructure_component_dim
+
+# -----------------------------------------------------------------------------
+# Table: benefit_type_dim
+# -----------------------------------------------------------------------------
+- table: benefit_type_dim
+  description: Dimension/master table for benefit type reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/benefit_type_dim/
+  partitioned_by: bucket(32, benefit_type_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.benefit_type_dim\n\
+    (\n    benefit_type_dim_id_pk     BIGINT,\n    benefit_type_code          STRING,\n\
+    \    benefit_type_name          STRING,\n    delivery_mode              STRING,\n\
+    \    is_monetary                STRING,\n    is_active                  STRING,\n\
+    \    effective_start_date       DATE,\n    effective_end_date         DATE,\n\
+    \    is_current                 STRING,\n    created_date               TIMESTAMP,\n\
+    \    created_by                 STRING,\n    updated_date               TIMESTAMP,\n\
+    \    updated_by                 STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ benefit_type_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/benefit_type_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: benefit_type_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Benefit type dim identifier primary key.
+  - name: benefit_type_code
+    type: STRING
+    nullable: true
+    description: Benefit type code.
+  - name: benefit_type_name
+    type: STRING
+    nullable: true
+    description: Benefit type name.
+  - name: delivery_mode
+    type: STRING
+    nullable: true
+    description: Delivery mode.
+  - name: is_monetary
+    type: STRING
+    nullable: true
+    description: Is monetary.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - benefit_type_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  - scheme benefit delivery
+  common_operations:
+  - profile records in benefit_type_dim
+  - track eligibility, sanction, delivery, and payment status
+
+# -----------------------------------------------------------------------------
+# Table: school_meal_menu_dim
+# -----------------------------------------------------------------------------
+- table: school_meal_menu_dim
+  description: Dimension/master table for school meal menu reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_meal_menu_dim/
+  partitioned_by: bucket(32, school_meal_menu_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_meal_menu_dim\n\
+    (\n    school_meal_menu_dim_id_pk    BIGINT,\n    meal_type_dim_id_fk        \
+    \   BIGINT,\n    nutrition_item_dim_id_fk      BIGINT,\n    weekday_code     \
+    \            STRING,\n    academic_year                STRING,\n    is_planned\
+    \                   STRING,\n    is_active                    STRING,\n    effective_start_date\
+    \          DATE,\n    effective_end_date            DATE,\n    is_current    \
+    \               STRING,\n    created_date                 TIMESTAMP,\n    created_by\
+    \                   STRING,\n    updated_date                 TIMESTAMP,\n   \
+    \ updated_by                   STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ school_meal_menu_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_meal_menu_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_meal_menu_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: School meal menu dim identifier primary key.
+  - name: meal_type_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Meal type dim identifier foreign key.
+  - name: nutrition_item_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Nutrition item dim identifier foreign key.
+  - name: weekday_code
+    type: STRING
+    nullable: true
+    description: Weekday code.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: is_planned
+    type: STRING
+    nullable: true
+    description: Is planned.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - school_meal_menu_dim_id_pk
+  relationships:
+  - school_meal_menu_dim.meal_type_dim_id_fk is a foreign-key-style reference to meal_type_dim_id.
+  - school_meal_menu_dim.nutrition_item_dim_id_fk is a foreign-key-style reference
+    to nutrition_item_dim_id.
+  business_terms:
+  - dimension table
+  - reference lookup
+  - school analytics
+  - mid-day meal operations
+  common_operations:
+  - profile records in school_meal_menu_dim
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: beneficiary_type_dim
+# -----------------------------------------------------------------------------
+- table: beneficiary_type_dim
+  description: Dimension/master table for beneficiary type reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/beneficiary_type_dim/
+  partitioned_by: bucket(32, beneficiary_type_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.beneficiary_type_dim\n\
+    (\n    beneficiary_type_dim_id_pk     BIGINT,\n    beneficiary_type_code     \
+    \     STRING,\n    beneficiary_type_name          STRING,\n    is_active     \
+    \                 STRING,\n    effective_start_date           DATE,\n    effective_end_date\
+    \             DATE,\n    is_current                     STRING,\n    created_date\
+    \                   TIMESTAMP,\n    created_by                     STRING,\n \
+    \   updated_date                   TIMESTAMP,\n    updated_by                \
+    \     STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32, beneficiary_type_dim_id_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/beneficiary_type_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: beneficiary_type_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: Beneficiary type dim identifier primary key.
+  - name: beneficiary_type_code
+    type: STRING
+    nullable: true
+    description: Beneficiary type code.
+  - name: beneficiary_type_name
+    type: STRING
+    nullable: true
+    description: Beneficiary type name.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - beneficiary_type_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  common_operations:
+  - profile records in beneficiary_type_dim
+
+# -----------------------------------------------------------------------------
+# Table: school_infra_category_dim
+# -----------------------------------------------------------------------------
+- table: school_infra_category_dim
+  description: Dimension/master table for school infra category reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infra_category_dim/
+  partitioned_by: bucket(32, school_infra_category_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_infra_category_dim\n\
+    (\n    school_infra_category_dim_id_pk   BIGINT,\n    school_infra_category_code\
+    \        STRING,\n    school_infra_category_name        STRING,\n    is_active\
+    \                         STRING,\n    effective_start_date              DATE,\n\
+    \    effective_end_date                DATE,\n    is_current                 \
+    \       STRING,\n    created_date                      TIMESTAMP,\n    created_by\
+    \                        STRING,\n    updated_date                      TIMESTAMP,\n\
+    \    updated_by                        STRING\n)\nUSING ICEBERG\nPARTITIONED BY\
+    \ (bucket(32, school_infra_category_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infra_category_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_infra_category_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: School infra category dim identifier primary key.
+  - name: school_infra_category_code
+    type: STRING
+    nullable: true
+    description: School infra category code.
+  - name: school_infra_category_name
+    type: STRING
+    nullable: true
+    description: School infra category name.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - school_infra_category_dim_id_pk
+  relationships: []
+  business_terms:
+  - dimension table
+  - reference lookup
+  - school analytics
+  common_operations:
+  - profile records in school_infra_category_dim
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_infra_component_dim
+# -----------------------------------------------------------------------------
+- table: school_infra_component_dim
+  description: Dimension/master table for school infra component reference attributes.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infra_component_dim/
+  partitioned_by: bucket(32, school_infra_component_dim_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_infra_component_dim\n\
+    (\n    school_infra_component_dim_id_pk     BIGINT,\n    infrastructure_component_dim_id_fk\
+    \   BIGINT,\n    component_code                       STRING,\n    component_name\
+    \                       STRING,\n    measurement_type                     STRING,\n\
+    \    is_digital                           STRING,\n    is_active             \
+    \               STRING,\n    effective_start_date                 DATE,\n    effective_end_date\
+    \                   DATE,\n    is_current                           STRING,\n\
+    \    created_date                         TIMESTAMP,\n    created_by         \
+    \                  STRING,\n    updated_date                         TIMESTAMP,\n\
+    \    updated_by                           STRING\n)\nUSING ICEBERG\nPARTITIONED\
+    \ BY (bucket(32, school_infra_component_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infra_component_dim/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_infra_component_dim_id_pk
+    type: BIGINT
+    nullable: true
+    description: School infra component dim identifier primary key.
+  - name: infrastructure_component_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Infrastructure component dim identifier foreign key.
+  - name: component_code
+    type: STRING
+    nullable: true
+    description: Component code.
+  - name: component_name
+    type: STRING
+    nullable: true
+    description: Component name.
+  - name: measurement_type
+    type: STRING
+    nullable: true
+    description: Measurement type.
+  - name: is_digital
+    type: STRING
+    nullable: true
+    description: Is digital.
+  - name: is_active
+    type: STRING
+    nullable: true
+    description: Is active.
+  - name: effective_start_date
+    type: DATE
+    nullable: true
+    description: Effective start date.
+  - name: effective_end_date
+    type: DATE
+    nullable: true
+    description: Effective end date.
+  - name: is_current
+    type: STRING
+    nullable: true
+    description: Is current.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - school_infra_component_dim_id_pk
+  relationships:
+  - school_infra_component_dim.infrastructure_component_dim_id_fk is a foreign-key-style
+    reference to infrastructure_component_dim_id.
+  business_terms:
+  - dimension table
+  - reference lookup
+  - school analytics
+  common_operations:
+  - profile records in school_infra_component_dim
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: school_student_attendance_fact
+# -----------------------------------------------------------------------------
+- table: school_student_attendance_fact
+  description: Fact table for school student attendance measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_student_attendance_fact/
+  partitioned_by: bucket(32, school_student_attendance_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_student_attendance_fact\n\
+    (\n    school_student_attendance_fact_id_pk   BIGINT,\n    citizen_student_id_fk\
+    \                  BIGINT,\n    school_medium_id_fk                    BIGINT,\n\
+    \    student_class_dim_id_fk                BIGINT,\n    student_school_id_fk\
+    \                   BIGINT,\n    academic_year                          STRING,\n\
+    \    attendance_date_id_fk                  BIGINT,\n    present_flag        \
+    \                   STRING,\n    absent_flag                            STRING,\n\
+    \    half_day_flag                          STRING,\n    attendance_weight   \
+    \                   DECIMAL(5,2),\n    attendance_status_code                \
+    \ STRING,\n    attendance_reason_code                 STRING,\n    marked_by_role\
+    \                         STRING,\n    attendance_capture_method             \
+    \ STRING,\n    mdm_eligible_flag                      STRING,\n    meals_consumed_flag\
+    \                    STRING,\n    eggs_eligible_flag                     STRING,\n\
+    \    chikki_eligible_flag                   STRING,\n    ragi_java_eligible_flag\
+    \                STRING,\n    capture_source                         STRING,\n\
+    \    hm_approval_flag                       STRING,\n    hm_approval_date    \
+    \                   DATE,\n    absence_reason_dim_id_fk               BIGINT,\n\
+    \    image_available_flag                   STRING,\n    latitude            \
+    \                   DECIMAL(9,6),\n    longitude                             \
+    \ DECIMAL(9,6),\n    created_date                           TIMESTAMP,\n    created_by\
+    \                             STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ school_student_attendance_fact_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_student_attendance_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_student_attendance_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: School student attendance fact identifier primary key.
+  - name: citizen_student_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen student identifier foreign key.
+  - name: school_medium_id_fk
+    type: BIGINT
+    nullable: true
+    description: School medium identifier foreign key.
+  - name: student_class_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Student class dim identifier foreign key.
+  - name: student_school_id_fk
+    type: BIGINT
+    nullable: true
+    description: Student school identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: attendance_date_id_fk
+    type: BIGINT
+    nullable: true
+    description: Attendance date identifier foreign key.
+  - name: present_flag
+    type: STRING
+    nullable: true
+    description: Present flag.
+  - name: absent_flag
+    type: STRING
+    nullable: true
+    description: Absent flag.
+  - name: half_day_flag
+    type: STRING
+    nullable: true
+    description: Half day flag.
+  - name: attendance_weight
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Attendance weight.
+  - name: attendance_status_code
+    type: STRING
+    nullable: true
+    description: Attendance status code.
+  - name: attendance_reason_code
+    type: STRING
+    nullable: true
+    description: Attendance reason code.
+  - name: marked_by_role
+    type: STRING
+    nullable: true
+    description: Marked by role.
+  - name: attendance_capture_method
+    type: STRING
+    nullable: true
+    description: Attendance capture method.
+  - name: mdm_eligible_flag
+    type: STRING
+    nullable: true
+    description: Mid-day meal eligible flag.
+  - name: meals_consumed_flag
+    type: STRING
+    nullable: true
+    description: Meals consumed flag.
+  - name: eggs_eligible_flag
+    type: STRING
+    nullable: true
+    description: Eggs eligible flag.
+  - name: chikki_eligible_flag
+    type: STRING
+    nullable: true
+    description: Chikki eligible flag.
+  - name: ragi_java_eligible_flag
+    type: STRING
+    nullable: true
+    description: Ragi java eligible flag.
+  - name: capture_source
+    type: STRING
+    nullable: true
+    description: Capture source.
+  - name: hm_approval_flag
+    type: STRING
+    nullable: true
+    description: Hm approval flag.
+  - name: hm_approval_date
+    type: DATE
+    nullable: true
+    description: Hm approval date.
+  - name: absence_reason_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Absence reason dim identifier foreign key.
+  - name: image_available_flag
+    type: STRING
+    nullable: true
+    description: Image available flag.
+  - name: latitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Latitude.
+  - name: longitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Longitude.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  primary_key:
+  - school_student_attendance_fact_id_pk
+  relationships:
+  - school_student_attendance_fact.citizen_student_id_fk is a foreign-key-style reference
+    to citizen_student_id.
+  - school_student_attendance_fact.school_medium_id_fk is a foreign-key-style reference
+    to school_medium_id.
+  - school_student_attendance_fact.student_class_dim_id_fk is a foreign-key-style
+    reference to student_class_dim_id.
+  - school_student_attendance_fact.student_school_id_fk is a foreign-key-style reference
+    to student_school_id.
+  - school_student_attendance_fact.attendance_date_id_fk is a foreign-key-style reference
+    to attendance_date_id.
+  - school_student_attendance_fact.absence_reason_dim_id_fk is a foreign-key-style
+    reference to absence_reason_dim_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - student analytics
+  - school analytics
+  - attendance tracking
+  common_operations:
+  - profile records in school_student_attendance_fact
+  - aggregate measures by academic year and linked dimensions
+  - join with related school and citizen dimensions
+  - analyze present, absent, and attendance status trends
+
+# -----------------------------------------------------------------------------
+# Table: school_teacher_attendance_fact
+# -----------------------------------------------------------------------------
+- table: school_teacher_attendance_fact
+  description: Fact table for school teacher attendance measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_teacher_attendance_fact/
+  partitioned_by: bucket(32, school_teacher_attendance_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_teacher_attendance_fact\n\
+    (\n    school_teacher_attendance_fact_id_pk   BIGINT,\n    citizen_school_teacher_id_fk\
+    \            BIGINT,\n    citizen_student_id_fk                   BIGINT,\n  \
+    \  attendance_date_key_id_fk               BIGINT,\n    academic_year        \
+    \                   STRING,\n    present_flag                            STRING,\n\
+    \    attendance_count                        INT,\n    on_leave_flag         \
+    \                  STRING,\n    on_duty_flag                            STRING,\n\
+    \    late_flag                               STRING,\n    leave_type         \
+    \                     STRING,\n    approved_leave_flag                     STRING,\n\
+    \    attendance_source                       STRING,\n    capture_timestamp  \
+    \                     TIMESTAMP,\n    attendance_status_code                 \
+    \ STRING,\n    capture_source                          STRING,\n    image_available_flag\
+    \                   STRING,\n    approval_status_code                   STRING,\n\
+    \    approval_role                           STRING,\n    approval_timestamp \
+    \                     TIMESTAMP,\n    created_date                           \
+    \ TIMESTAMP,\n    created_by                              STRING\n)\nUSING ICEBERG\n\
+    PARTITIONED BY (bucket(32, school_teacher_attendance_fact_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_teacher_attendance_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_teacher_attendance_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: School teacher attendance fact identifier primary key.
+  - name: citizen_school_teacher_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen school teacher identifier foreign key.
+  - name: citizen_student_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen student identifier foreign key.
+  - name: attendance_date_key_id_fk
+    type: BIGINT
+    nullable: true
+    description: Attendance date key identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: present_flag
+    type: STRING
+    nullable: true
+    description: Present flag.
+  - name: attendance_count
+    type: INT
+    nullable: true
+    description: Attendance count.
+  - name: on_leave_flag
+    type: STRING
+    nullable: true
+    description: On leave flag.
+  - name: on_duty_flag
+    type: STRING
+    nullable: true
+    description: On duty flag.
+  - name: late_flag
+    type: STRING
+    nullable: true
+    description: Late flag.
+  - name: leave_type
+    type: STRING
+    nullable: true
+    description: Leave type.
+  - name: approved_leave_flag
+    type: STRING
+    nullable: true
+    description: Approved leave flag.
+  - name: attendance_source
+    type: STRING
+    nullable: true
+    description: Attendance source.
+  - name: capture_timestamp
+    type: TIMESTAMP
+    nullable: true
+    description: Capture timestamp.
+  - name: attendance_status_code
+    type: STRING
+    nullable: true
+    description: Attendance status code.
+  - name: capture_source
+    type: STRING
+    nullable: true
+    description: Capture source.
+  - name: image_available_flag
+    type: STRING
+    nullable: true
+    description: Image available flag.
+  - name: approval_status_code
+    type: STRING
+    nullable: true
+    description: Approval status code.
+  - name: approval_role
+    type: STRING
+    nullable: true
+    description: Approval role.
+  - name: approval_timestamp
+    type: TIMESTAMP
+    nullable: true
+    description: Approval timestamp.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  primary_key:
+  - school_teacher_attendance_fact_id_pk
+  relationships:
+  - school_teacher_attendance_fact.citizen_school_teacher_id_fk is a foreign-key-style
+    reference to citizen_school_teacher_id.
+  - school_teacher_attendance_fact.citizen_student_id_fk is a foreign-key-style reference
+    to citizen_student_id.
+  - school_teacher_attendance_fact.attendance_date_key_id_fk is a foreign-key-style
+    reference to attendance_date_key_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - school analytics
+  - attendance tracking
+  common_operations:
+  - profile records in school_teacher_attendance_fact
+  - aggregate measures by academic year and linked dimensions
+  - join with related school and citizen dimensions
+  - analyze present, absent, and attendance status trends
+
+# -----------------------------------------------------------------------------
+# Table: school_academic_performance_fact
+# -----------------------------------------------------------------------------
+- table: school_academic_performance_fact
+  description: Fact table for school academic performance measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_academic_performance_fact/
+  partitioned_by: bucket(32, school_academic_performance_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_academic_performance_fact\n\
+    (\n    school_academic_performance_fact_id_pk   BIGINT,\n    citizen_student_id_fk\
+    \                    BIGINT,\n    citizen_school_id_fk                     BIGINT,\n\
+    \    student_subject_id_fk                    BIGINT,\n    exam_date_key_id_fk\
+    \                      BIGINT,\n    student_class_dim_id_fk                  BIGINT,\n\
+    \    assessment_dim_id_fk                     BIGINT,\n    school_medium_id_fk\
+    \                      BIGINT,\n    academic_year                            STRING,\n\
+    \    student_exam_id_fk                       BIGINT,\n    student_roll_number\
+    \                      STRING,\n    exam_registration_number                 STRING,\n\
+    \    hall_ticket_number                       STRING,\n    assessment_cycle  \
+    \                       STRING,\n    marks_obtained                          \
+    \ DECIMAL(5,2),\n    maximum_marks                            DECIMAL(5,2),\n\
+    \    percentage_score                         DECIMAL(5,2),\n    pass_flag   \
+    \                             STRING,\n    fail_flag                         \
+    \       STRING,\n    absent_flag                              STRING,\n    withheld_flag\
+    \                            STRING,\n    grade_point                        \
+    \      DECIMAL(4,2),\n    exam_type                                STRING,\n \
+    \   evaluation_type                          STRING,\n    medium_of_exam     \
+    \                      STRING,\n    instruction_language                     STRING,\n\
+    \    score                                    DECIMAL(5,2),\n    performance_band\
+    \                         STRING,\n    year_on_year_improvement_flag         \
+    \   STRING,\n    created_date                             TIMESTAMP,\n    created_by\
+    \                               STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+    \ school_academic_performance_fact_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_academic_performance_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_academic_performance_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: School academic performance fact identifier primary key.
+  - name: citizen_student_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen student identifier foreign key.
+  - name: citizen_school_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen school identifier foreign key.
+  - name: student_subject_id_fk
+    type: BIGINT
+    nullable: true
+    description: Student subject identifier foreign key.
+  - name: exam_date_key_id_fk
+    type: BIGINT
+    nullable: true
+    description: Exam date key identifier foreign key.
+  - name: student_class_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Student class dim identifier foreign key.
+  - name: assessment_dim_id_fk
+    type: BIGINT
+    nullable: true
+    description: Assessment dim identifier foreign key.
+  - name: school_medium_id_fk
+    type: BIGINT
+    nullable: true
+    description: School medium identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: student_exam_id_fk
+    type: BIGINT
+    nullable: true
+    description: Student exam identifier foreign key.
+  - name: student_roll_number
+    type: STRING
+    nullable: true
+    description: Student roll number.
+  - name: exam_registration_number
+    type: STRING
+    nullable: true
+    description: Exam registration number.
+  - name: hall_ticket_number
+    type: STRING
+    nullable: true
+    description: Hall ticket number.
+  - name: assessment_cycle
+    type: STRING
+    nullable: true
+    description: Assessment cycle.
+  - name: marks_obtained
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Marks obtained.
+  - name: maximum_marks
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Maximum marks.
+  - name: percentage_score
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Percentage score.
+  - name: pass_flag
+    type: STRING
+    nullable: true
+    description: Pass flag.
+  - name: fail_flag
+    type: STRING
+    nullable: true
+    description: Fail flag.
+  - name: absent_flag
+    type: STRING
+    nullable: true
+    description: Absent flag.
+  - name: withheld_flag
+    type: STRING
+    nullable: true
+    description: Withheld flag.
+  - name: grade_point
+    type: DECIMAL(4,2)
+    nullable: true
+    description: Grade point.
+  - name: exam_type
+    type: STRING
+    nullable: true
+    description: Exam type.
+  - name: evaluation_type
+    type: STRING
+    nullable: true
+    description: Evaluation type.
+  - name: medium_of_exam
+    type: STRING
+    nullable: true
+    description: Medium of exam.
+  - name: instruction_language
+    type: STRING
+    nullable: true
+    description: Instruction language.
+  - name: score
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Score.
+  - name: performance_band
+    type: STRING
+    nullable: true
+    description: Performance band.
+  - name: year_on_year_improvement_flag
+    type: STRING
+    nullable: true
+    description: Year on year improvement flag.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  primary_key:
+  - school_academic_performance_fact_id_pk
+  relationships:
+  - school_academic_performance_fact.citizen_student_id_fk is a foreign-key-style
+    reference to citizen_student_id.
+  - school_academic_performance_fact.citizen_school_id_fk is a foreign-key-style reference
+    to citizen_school_id.
+  - school_academic_performance_fact.student_subject_id_fk is a foreign-key-style
+    reference to student_subject_id.
+  - school_academic_performance_fact.exam_date_key_id_fk is a foreign-key-style reference
+    to exam_date_key_id.
+  - school_academic_performance_fact.student_class_dim_id_fk is a foreign-key-style
+    reference to student_class_dim_id.
+  - school_academic_performance_fact.assessment_dim_id_fk is a foreign-key-style reference
+    to assessment_dim_id.
+  - school_academic_performance_fact.school_medium_id_fk is a foreign-key-style reference
+    to school_medium_id.
+  - school_academic_performance_fact.student_exam_id_fk is a foreign-key-style reference
+    to student_exam_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - school analytics
+  common_operations:
+  - profile records in school_academic_performance_fact
+  - aggregate measures by academic year and linked dimensions
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Table: mid_day_meal_serving_fact
+# -----------------------------------------------------------------------------
+- table: mid_day_meal_serving_fact
+  description: Fact table for mid day meal serving measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/
+  partitioned_by: bucket(32, mid_day_meal_serving_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.mid_day_meal_serving_fact\n\
+    (\n    mid_day_meal_serving_fact_id_pk   BIGINT,\n    citizen_school_id_fk   \
+    \           BIGINT,\n    date_key_id_fk                    BIGINT,\n    meal_type_id_fk\
+    \                   BIGINT,\n    nutrition_item_dim_key_fk         BIGINT,\n \
+    \   scheme_key_id_fk                  BIGINT,\n    academic_year             \
+    \        STRING,\n    mid_day_meal_serving_factor       DECIMAL(5,2),\n    vendor_id_fk\
+    \                      BIGINT,\n    indent_reference_number           STRING,\n\
+    \    inspection_reference_id           STRING,\n    students_enrolled_count  \
+    \         INT,\n    students_present_count            INT,\n    students_served_count\
+    \             INT,\n    students_not_served_count         INT,\n    students_eligible_count\
+    \           INT,\n    meal_served_flag                  STRING,\n    menu_item_count\
+    \                   INT,\n    calories_served                   DECIMAL(8,2),\n\
+    \    protein_grams_served              DECIMAL(8,2),\n    egg_served_count   \
+    \               INT,\n    milk_served_quantity_ml           INT,\n    meal_serving_start_time\
+    \           TIMESTAMP,\n    mid_day_meal_serving_factcol2     STRING,\n    cooked_on_site_flag\
+    \               STRING,\n    centralized_kitchen_flag          STRING,\n    fuel_type\
+    \                         STRING,\n    hygiene_compliant_flag            STRING,\n\
+    \    food_tasted_flag                  STRING,\n    teacher_supervised_flag  \
+    \         STRING,\n    medical_incident_reported_flag    STRING,\n    last_inspection_date\
+    \              DATE,\n    inspection_score                  DECIMAL(5,2),\n  \
+    \  inspection_remarks_code           STRING,\n    geo_tagged_flag            \
+    \       STRING,\n    photo_captured_flag               STRING,\n    meal_not_served_reason_code\
+    \       STRING,\n    supply_shortage_flag              STRING,\n    created_date\
+    \                      TIMESTAMP,\n    created_by                        STRING\n\
+    )\nUSING ICEBERG\nPARTITIONED BY (bucket(32, mid_day_meal_serving_fact_id_pk))\n\
+    LOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: mid_day_meal_serving_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: Mid day meal serving fact identifier primary key.
+  - name: citizen_school_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen school identifier foreign key.
+  - name: date_key_id_fk
+    type: BIGINT
+    nullable: true
+    description: Date key identifier foreign key.
+  - name: meal_type_id_fk
+    type: BIGINT
+    nullable: true
+    description: Meal type identifier foreign key.
+  - name: nutrition_item_dim_key_fk
+    type: BIGINT
+    nullable: true
+    description: Nutrition item dim key foreign key.
+  - name: scheme_key_id_fk
+    type: BIGINT
+    nullable: true
+    description: Scheme key identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: mid_day_meal_serving_factor
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Mid day meal serving factor.
+  - name: vendor_id_fk
+    type: BIGINT
+    nullable: true
+    description: Vendor identifier foreign key.
+  - name: indent_reference_number
+    type: STRING
+    nullable: true
+    description: Indent reference number.
+  - name: inspection_reference_id
+    type: STRING
+    nullable: true
+    description: Inspection reference identifier.
+  - name: students_enrolled_count
+    type: INT
+    nullable: true
+    description: Students enrolled count.
+  - name: students_present_count
+    type: INT
+    nullable: true
+    description: Students present count.
+  - name: students_served_count
+    type: INT
+    nullable: true
+    description: Students served count.
+  - name: students_not_served_count
+    type: INT
+    nullable: true
+    description: Students not served count.
+  - name: students_eligible_count
+    type: INT
+    nullable: true
+    description: Students eligible count.
+  - name: meal_served_flag
+    type: STRING
+    nullable: true
+    description: Meal served flag.
+  - name: menu_item_count
+    type: INT
+    nullable: true
+    description: Menu item count.
+  - name: calories_served
+    type: DECIMAL(8,2)
+    nullable: true
+    description: Calories served.
+  - name: protein_grams_served
+    type: DECIMAL(8,2)
+    nullable: true
+    description: Protein grams served.
+  - name: egg_served_count
+    type: INT
+    nullable: true
+    description: Egg served count.
+  - name: milk_served_quantity_ml
+    type: INT
+    nullable: true
+    description: Milk served quantity ml.
+  - name: meal_serving_start_time
+    type: TIMESTAMP
+    nullable: true
+    description: Meal serving start time.
+  - name: mid_day_meal_serving_factcol2
+    type: STRING
+    nullable: true
+    description: Mid day meal serving factcol2.
+  - name: cooked_on_site_flag
+    type: STRING
+    nullable: true
+    description: Cooked on site flag.
+  - name: centralized_kitchen_flag
+    type: STRING
+    nullable: true
+    description: Centralized kitchen flag.
+  - name: fuel_type
+    type: STRING
+    nullable: true
+    description: Fuel type.
+  - name: hygiene_compliant_flag
+    type: STRING
+    nullable: true
+    description: Hygiene compliant flag.
+  - name: food_tasted_flag
+    type: STRING
+    nullable: true
+    description: Food tasted flag.
+  - name: teacher_supervised_flag
+    type: STRING
+    nullable: true
+    description: Teacher supervised flag.
+  - name: medical_incident_reported_flag
+    type: STRING
+    nullable: true
+    description: Medical incident reported flag.
+  - name: last_inspection_date
+    type: DATE
+    nullable: true
+    description: Last inspection date.
+  - name: inspection_score
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Inspection score.
+  - name: inspection_remarks_code
+    type: STRING
+    nullable: true
+    description: Inspection remarks code.
+  - name: geo_tagged_flag
+    type: STRING
+    nullable: true
+    description: Geographic tagged flag.
+  - name: photo_captured_flag
+    type: STRING
+    nullable: true
+    description: Photo captured flag.
+  - name: meal_not_served_reason_code
+    type: STRING
+    nullable: true
+    description: Meal not served reason code.
+  - name: supply_shortage_flag
+    type: STRING
+    nullable: true
+    description: Supply shortage flag.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  primary_key:
+  - mid_day_meal_serving_fact_id_pk
+  relationships:
+  - mid_day_meal_serving_fact.citizen_school_id_fk is a foreign-key-style reference
+    to citizen_school_id.
+  - mid_day_meal_serving_fact.date_key_id_fk is a foreign-key-style reference to date_key_id.
+  - mid_day_meal_serving_fact.meal_type_id_fk is a foreign-key-style reference to
+    meal_type_id.
+  - mid_day_meal_serving_fact.nutrition_item_dim_key_fk is a foreign-key-style reference
+    to nutrition_item_dim_key.
+  - mid_day_meal_serving_fact.scheme_key_id_fk is a foreign-key-style reference to
+    scheme_key_id.
+  - mid_day_meal_serving_fact.vendor_id_fk is a foreign-key-style reference to vendor_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - mid-day meal operations
+  common_operations:
+  - profile records in mid_day_meal_serving_fact
+  - aggregate measures by academic year and linked dimensions
+
+# -----------------------------------------------------------------------------
+# Table: scheme_benefits_fact
+# -----------------------------------------------------------------------------
+- table: scheme_benefits_fact
+  description: Fact table for scheme benefits measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/scheme_benefits_fact/
+  partitioned_by: bucket(32, scheme_benefits_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.scheme_benefits_fact\n\
+    (\n    scheme_benefits_fact_id_pk      BIGINT,\n    citizen_school_id_fk     \
+    \       BIGINT,\n    school_scheme_master_id_fk      BIGINT,\n    academic_year\
+    \                   STRING,\n    benefit_type_id_fk              BIGINT,\n   \
+    \ beneficiary_type_id_fk          BIGINT,\n    citizen_student_id_fk         \
+    \  BIGINT,\n    school_teacher_id_fk            BIGINT,\n    scheme_application_id\
+    \           STRING,\n    social_category                 STRING,\n    eligible_flag\
+    \                   STRING,\n    attendance_eligible_flag        STRING,\n   \
+    \ benefit_delivered_flag          STRING,\n    delivery_mode                 \
+    \  STRING,\n    sanction_order_number           STRING,\n    eligible_beneficiary_flag\
+    \       STRING,\n    benefit_sanctioned_flag         STRING,\n    benefit_disbursed_flag\
+    \          STRING,\n    scheme_benefits_factcol         STRING,\n    benefit_rejected_flag\
+    \           STRING,\n    benefit_withheld_flag           STRING,\n    benefit_amount_sanctioned\
+    \       DECIMAL(12,2),\n    benefit_amount_disbursed        DECIMAL(12,2),\n \
+    \   benefit_amount_pending          DECIMAL(12,2),\n    central_share_amount \
+    \           DECIMAL(12,2),\n    state_share_amount              DECIMAL(12,2),\n\
+    \    benefit_quantity                DECIMAL(10,2),\n    benefit_event_count \
+    \            INT,\n    benefit_amount                  DECIMAL(12,2),\n    beneficiary_count\
+    \               INT,\n    application_date                DATE,\n    sanction_date\
+    \                   DATE,\n    disbursement_date               DATE,\n    expected_disbursement_date\
+    \      DATE,\n    delay_days                      INT,\n    rejection_reason_code\
+    \           STRING,\n    payment_failure_reason_code     STRING,\n    aadhaar_seeded_flag\
+    \             STRING,\n    bank_account_verified_flag      STRING,\n    kyc_completed_flag\
+    \              STRING,\n    girl_child_flag                 STRING,\n    sc_st_minority_flag\
+    \             STRING,\n    cwsn_flag                       STRING,\n    bgm_eligible_flag\
+    \               STRING,\n    below_poverty_line_flag         STRING,\n    scheme_uptake_rate\
+    \              DECIMAL(5,2),\n    created_date                    TIMESTAMP,\n\
+    \    created_by                      STRING,\n    updated_date               \
+    \     TIMESTAMP,\n    updated_by                      STRING\n)\nUSING ICEBERG\n\
+    PARTITIONED BY (bucket(32, scheme_benefits_fact_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/scheme_benefits_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: scheme_benefits_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: Scheme benefits fact identifier primary key.
+  - name: citizen_school_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen school identifier foreign key.
+  - name: school_scheme_master_id_fk
+    type: BIGINT
+    nullable: true
+    description: School scheme master identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: benefit_type_id_fk
+    type: BIGINT
+    nullable: true
+    description: Benefit type identifier foreign key.
+  - name: beneficiary_type_id_fk
+    type: BIGINT
+    nullable: true
+    description: Beneficiary type identifier foreign key.
+  - name: citizen_student_id_fk
+    type: BIGINT
+    nullable: true
+    description: Citizen student identifier foreign key.
+  - name: school_teacher_id_fk
+    type: BIGINT
+    nullable: true
+    description: School teacher identifier foreign key.
+  - name: scheme_application_id
+    type: STRING
+    nullable: true
+    description: Scheme application identifier.
+  - name: social_category
+    type: STRING
+    nullable: true
+    description: Social category.
+  - name: eligible_flag
+    type: STRING
+    nullable: true
+    description: Eligible flag.
+  - name: attendance_eligible_flag
+    type: STRING
+    nullable: true
+    description: Attendance eligible flag.
+  - name: benefit_delivered_flag
+    type: STRING
+    nullable: true
+    description: Benefit delivered flag.
+  - name: delivery_mode
+    type: STRING
+    nullable: true
+    description: Delivery mode.
+  - name: sanction_order_number
+    type: STRING
+    nullable: true
+    description: Sanction order number.
+  - name: eligible_beneficiary_flag
+    type: STRING
+    nullable: true
+    description: Eligible beneficiary flag.
+  - name: benefit_sanctioned_flag
+    type: STRING
+    nullable: true
+    description: Benefit sanctioned flag.
+  - name: benefit_disbursed_flag
+    type: STRING
+    nullable: true
+    description: Benefit disbursed flag.
+  - name: scheme_benefits_factcol
+    type: STRING
+    nullable: true
+    description: Scheme benefits factcol.
+  - name: benefit_rejected_flag
+    type: STRING
+    nullable: true
+    description: Benefit rejected flag.
+  - name: benefit_withheld_flag
+    type: STRING
+    nullable: true
+    description: Benefit withheld flag.
+  - name: benefit_amount_sanctioned
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Benefit amount sanctioned.
+  - name: benefit_amount_disbursed
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Benefit amount disbursed.
+  - name: benefit_amount_pending
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Benefit amount pending.
+  - name: central_share_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Central share amount.
+  - name: state_share_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: State share amount.
+  - name: benefit_quantity
+    type: DECIMAL(10,2)
+    nullable: true
+    description: Benefit quantity.
+  - name: benefit_event_count
+    type: INT
+    nullable: true
+    description: Benefit event count.
+  - name: benefit_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Benefit amount.
+  - name: beneficiary_count
+    type: INT
+    nullable: true
+    description: Beneficiary count.
+  - name: application_date
+    type: DATE
+    nullable: true
+    description: Application date.
+  - name: sanction_date
+    type: DATE
+    nullable: true
+    description: Sanction date.
+  - name: disbursement_date
+    type: DATE
+    nullable: true
+    description: Disbursement date.
+  - name: expected_disbursement_date
+    type: DATE
+    nullable: true
+    description: Expected disbursement date.
+  - name: delay_days
+    type: INT
+    nullable: true
+    description: Delay days.
+  - name: rejection_reason_code
+    type: STRING
+    nullable: true
+    description: Rejection reason code.
+  - name: payment_failure_reason_code
+    type: STRING
+    nullable: true
+    description: Payment failure reason code.
+  - name: aadhaar_seeded_flag
+    type: STRING
+    nullable: true
+    description: Aadhaar seeded flag.
+  - name: bank_account_verified_flag
+    type: STRING
+    nullable: true
+    description: Bank account verified flag.
+  - name: kyc_completed_flag
+    type: STRING
+    nullable: true
+    description: Kyc completed flag.
+  - name: girl_child_flag
+    type: STRING
+    nullable: true
+    description: Girl child flag.
+  - name: sc_st_minority_flag
+    type: STRING
+    nullable: true
+    description: Sc st minority flag.
+  - name: cwsn_flag
+    type: STRING
+    nullable: true
+    description: Cwsn flag.
+  - name: bgm_eligible_flag
+    type: STRING
+    nullable: true
+    description: Bgm eligible flag.
+  - name: below_poverty_line_flag
+    type: STRING
+    nullable: true
+    description: Below poverty line flag.
+  - name: scheme_uptake_rate
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Scheme uptake rate.
+  - name: created_date
+    type: TIMESTAMP
+    nullable: true
+    description: Created date.
+  - name: created_by
+    type: STRING
+    nullable: true
+    description: Created by.
+  - name: updated_date
+    type: TIMESTAMP
+    nullable: true
+    description: Updated date.
+  - name: updated_by
+    type: STRING
+    nullable: true
+    description: Updated by.
+  primary_key:
+  - scheme_benefits_fact_id_pk
+  relationships:
+  - scheme_benefits_fact.citizen_school_id_fk is a foreign-key-style reference to
+    citizen_school_id.
+  - scheme_benefits_fact.school_scheme_master_id_fk is a foreign-key-style reference
+    to school_scheme_master_id.
+  - scheme_benefits_fact.benefit_type_id_fk is a foreign-key-style reference to benefit_type_id.
+  - scheme_benefits_fact.beneficiary_type_id_fk is a foreign-key-style reference to
+    beneficiary_type_id.
+  - scheme_benefits_fact.citizen_student_id_fk is a foreign-key-style reference to
+    citizen_student_id.
+  - scheme_benefits_fact.school_teacher_id_fk is a foreign-key-style reference to
+    school_teacher_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - scheme benefit delivery
+  common_operations:
+  - profile records in scheme_benefits_fact
+  - aggregate measures by academic year and linked dimensions
+  - track eligibility, sanction, delivery, and payment status
+
+# -----------------------------------------------------------------------------
+# Table: school_infrastructure_progress_fact
+# -----------------------------------------------------------------------------
+- table: school_infrastructure_progress_fact
+  description: Fact table for school infrastructure progress measures and events.
+  table_format: ICEBERG
+  location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infrastructure_progress_fact/
+  partitioned_by: bucket(32, school_infrastructure_progress_fact_id_pk)
+  tblproperties:
+    engine.hive.enabled: 'true'
+    format-version: '2'
+    write.format.default: parquet
+    parquet.compression: SNAPPY
+  raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_infrastructure_progress_fact\n\
+    (\n    school_infrastructure_progress_fact_id_pk   BIGINT,\n    citizen_school_id_pk\
+    \                         BIGINT,\n    reporting_date_key_fk                 \
+    \       BIGINT,\n    infrastructure_component_id_fk               BIGINT,\n  \
+    \  infrastructure_category_id_fk                BIGINT,\n    reporting_period_id_fk\
+    \                       BIGINT,\n    academic_year                           \
+    \     STRING,\n    scheme_id_fk                                 BIGINT,\n    work_order_no\
+    \                                STRING,\n    estimate_id                    \
+    \              STRING,\n    total_units                                  INT,\n\
+    \    functional_units                             INT,\n    non_functional_units\
+    \                         INT,\n    under_construction_units                 \
+    \    INT,\n    planned_unit_count                           INT,\n    completed_unit_count\
+    \                         INT,\n    in_progress_unit_count                   \
+    \    INT,\n    pending_unit_count                           INT,\n    physical_progress_percentage\
+    \                 DECIMAL(5,2),\n    financial_progress_percentage           \
+    \     DECIMAL(5,2),\n    estimated_cost_amount                        DECIMAL(12,2),\n\
+    \    sanctioned_amount                            DECIMAL(12,2),\n    released_amount\
+    \                              DECIMAL(12,2),\n    utilized_amount           \
+    \                   DECIMAL(12,2),\n    balance_amount                       \
+    \        DECIMAL(12,2),\n    work_status                                  STRING,\n\
+    \    start_date                                   DATE,\n    expected_completion_date\
+    \                     DATE,\n    actual_completion_date                      \
+    \ DATE,\n    delay_days                                   INT,\n    delay_reason_code\
+    \                            STRING,\n    school_infrastructure_progress_factcol2\
+    \      STRING,\n    is_structurally_certified_flag               STRING,\n   \
+    \ is_safety_compliant_flag                     STRING,\n    is_functional_flag\
+    \                           STRING,\n    maintenance_required_flag           \
+    \         STRING,\n    geo_tagged_flag                              STRING,\n\
+    \    geo_latitude                                 DECIMAL(9,6),\n    geo_longitude\
+    \                                DECIMAL(9,6),\n    last_inspection_date     \
+    \                    DATE,\n    inspection_score                             DECIMAL(5,2),\n\
+    \    inspection_remarks_code                      STRING\n)\nUSING ICEBERG\nPARTITIONED\
+    \ BY (bucket(32, school_infrastructure_progress_fact_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_infrastructure_progress_fact/'\n\
+    TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+    \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+  columns:
+  - name: school_infrastructure_progress_fact_id_pk
+    type: BIGINT
+    nullable: true
+    description: School infrastructure progress fact identifier primary key.
+  - name: citizen_school_id_pk
+    type: BIGINT
+    nullable: true
+    description: Citizen school identifier primary key.
+  - name: reporting_date_key_fk
+    type: BIGINT
+    nullable: true
+    description: Reporting date key foreign key.
+  - name: infrastructure_component_id_fk
+    type: BIGINT
+    nullable: true
+    description: Infrastructure component identifier foreign key.
+  - name: infrastructure_category_id_fk
+    type: BIGINT
+    nullable: true
+    description: Infrastructure category identifier foreign key.
+  - name: reporting_period_id_fk
+    type: BIGINT
+    nullable: true
+    description: Reporting period identifier foreign key.
+  - name: academic_year
+    type: STRING
+    nullable: true
+    description: Academic year.
+  - name: scheme_id_fk
+    type: BIGINT
+    nullable: true
+    description: Scheme identifier foreign key.
+  - name: work_order_no
+    type: STRING
+    nullable: true
+    description: Work order no.
+  - name: estimate_id
+    type: STRING
+    nullable: true
+    description: Estimate identifier.
+  - name: total_units
+    type: INT
+    nullable: true
+    description: Total units.
+  - name: functional_units
+    type: INT
+    nullable: true
+    description: Functional units.
+  - name: non_functional_units
+    type: INT
+    nullable: true
+    description: Non functional units.
+  - name: under_construction_units
+    type: INT
+    nullable: true
+    description: Under construction units.
+  - name: planned_unit_count
+    type: INT
+    nullable: true
+    description: Planned unit count.
+  - name: completed_unit_count
+    type: INT
+    nullable: true
+    description: Completed unit count.
+  - name: in_progress_unit_count
+    type: INT
+    nullable: true
+    description: In progress unit count.
+  - name: pending_unit_count
+    type: INT
+    nullable: true
+    description: Pending unit count.
+  - name: physical_progress_percentage
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Physical progress percentage.
+  - name: financial_progress_percentage
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Financial progress percentage.
+  - name: estimated_cost_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Estimated cost amount.
+  - name: sanctioned_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Sanctioned amount.
+  - name: released_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Released amount.
+  - name: utilized_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Utilized amount.
+  - name: balance_amount
+    type: DECIMAL(12,2)
+    nullable: true
+    description: Balance amount.
+  - name: work_status
+    type: STRING
+    nullable: true
+    description: Work status.
+  - name: start_date
+    type: DATE
+    nullable: true
+    description: Start date.
+  - name: expected_completion_date
+    type: DATE
+    nullable: true
+    description: Expected completion date.
+  - name: actual_completion_date
+    type: DATE
+    nullable: true
+    description: Actual completion date.
+  - name: delay_days
+    type: INT
+    nullable: true
+    description: Delay days.
+  - name: delay_reason_code
+    type: STRING
+    nullable: true
+    description: Delay reason code.
+  - name: school_infrastructure_progress_factcol2
+    type: STRING
+    nullable: true
+    description: School infrastructure progress factcol2.
+  - name: is_structurally_certified_flag
+    type: STRING
+    nullable: true
+    description: Is structurally certified flag.
+  - name: is_safety_compliant_flag
+    type: STRING
+    nullable: true
+    description: Is safety compliant flag.
+  - name: is_functional_flag
+    type: STRING
+    nullable: true
+    description: Is functional flag.
+  - name: maintenance_required_flag
+    type: STRING
+    nullable: true
+    description: Maintenance required flag.
+  - name: geo_tagged_flag
+    type: STRING
+    nullable: true
+    description: Geographic tagged flag.
+  - name: geo_latitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Geographic latitude.
+  - name: geo_longitude
+    type: DECIMAL(9,6)
+    nullable: true
+    description: Geographic longitude.
+  - name: last_inspection_date
+    type: DATE
+    nullable: true
+    description: Last inspection date.
+  - name: inspection_score
+    type: DECIMAL(5,2)
+    nullable: true
+    description: Inspection score.
+  - name: inspection_remarks_code
+    type: STRING
+    nullable: true
+    description: Inspection remarks code.
+  primary_key:
+  - school_infrastructure_progress_fact_id_pk
+  - citizen_school_id_pk
+  relationships:
+  - school_infrastructure_progress_fact.reporting_date_key_fk is a foreign-key-style
+    reference to reporting_date_key.
+  - school_infrastructure_progress_fact.infrastructure_component_id_fk is a foreign-key-style
+    reference to infrastructure_component_id.
+  - school_infrastructure_progress_fact.infrastructure_category_id_fk is a foreign-key-style
+    reference to infrastructure_category_id.
+  - school_infrastructure_progress_fact.reporting_period_id_fk is a foreign-key-style
+    reference to reporting_period_id.
+  - school_infrastructure_progress_fact.scheme_id_fk is a foreign-key-style reference
+    to scheme_id.
+  business_terms:
+  - fact table
+  - event and metric analysis
+  - school analytics
+  common_operations:
+  - profile records in school_infrastructure_progress_fact
+  - aggregate measures by academic year and linked dimensions
+  - join with related school and citizen dimensions
+
+# -----------------------------------------------------------------------------
+# Relationship Summary (Inferred from *_fk columns)
+# -----------------------------------------------------------------------------
+relationships:
+- citizen_student.citizen_school_fk is a foreign-key-style reference to citizen_school.
+- citizen_student.citizen_master_fk is a foreign-key-style reference to citizen_master.
+- citizen_student.student_subject_fk is a foreign-key-style reference to student_subject.
+- citizen_school.school_medium_id_fk is a foreign-key-style reference to school_medium_id.
+- citizen_school.school_teacher_id_fk is a foreign-key-style reference to school_teacher_id.
+- citizen_school.school_category_id_fk is a foreign-key-style reference to school_category_id.
+- citizen_school.school_management_id_fk is a foreign-key-style reference to school_management_id.
+- citizen_school_teacher.teacher_citizen_master_fk is a foreign-key-style reference
+  to teacher_citizen_master.
+- citizen_school_teacher.caste_id_fk is a foreign-key-style reference to caste_id.
+- infrastructure_component_dim.infra_category_dim_id_fk is a foreign-key-style reference
+  to infra_category_dim_id.
+- school_meal_menu_dim.meal_type_dim_id_fk is a foreign-key-style reference to meal_type_dim_id.
+- school_meal_menu_dim.nutrition_item_dim_id_fk is a foreign-key-style reference to
+  nutrition_item_dim_id.
+- school_infra_component_dim.infrastructure_component_dim_id_fk is a foreign-key-style
+  reference to infrastructure_component_dim_id.
+- school_student_attendance_fact.citizen_student_id_fk is a foreign-key-style reference
+  to citizen_student_id.
+- school_student_attendance_fact.school_medium_id_fk is a foreign-key-style reference
+  to school_medium_id.
+- school_student_attendance_fact.student_class_dim_id_fk is a foreign-key-style reference
+  to student_class_dim_id.
+- school_student_attendance_fact.student_school_id_fk is a foreign-key-style reference
+  to student_school_id.
+- school_student_attendance_fact.attendance_date_id_fk is a foreign-key-style reference
+  to attendance_date_id.
+- school_student_attendance_fact.absence_reason_dim_id_fk is a foreign-key-style reference
+  to absence_reason_dim_id.
+- school_teacher_attendance_fact.citizen_school_teacher_id_fk is a foreign-key-style
+  reference to citizen_school_teacher_id.
+- school_teacher_attendance_fact.citizen_student_id_fk is a foreign-key-style reference
+  to citizen_student_id.
+- school_teacher_attendance_fact.attendance_date_key_id_fk is a foreign-key-style
+  reference to attendance_date_key_id.
+- school_academic_performance_fact.citizen_student_id_fk is a foreign-key-style reference
+  to citizen_student_id.
+- school_academic_performance_fact.citizen_school_id_fk is a foreign-key-style reference
+  to citizen_school_id.
+- school_academic_performance_fact.student_subject_id_fk is a foreign-key-style reference
+  to student_subject_id.
+- school_academic_performance_fact.exam_date_key_id_fk is a foreign-key-style reference
+  to exam_date_key_id.
+- school_academic_performance_fact.student_class_dim_id_fk is a foreign-key-style
+  reference to student_class_dim_id.
+- school_academic_performance_fact.assessment_dim_id_fk is a foreign-key-style reference
+  to assessment_dim_id.
+- school_academic_performance_fact.school_medium_id_fk is a foreign-key-style reference
+  to school_medium_id.
+- school_academic_performance_fact.student_exam_id_fk is a foreign-key-style reference
+  to student_exam_id.
+- mid_day_meal_serving_fact.citizen_school_id_fk is a foreign-key-style reference
+  to citizen_school_id.
+- mid_day_meal_serving_fact.date_key_id_fk is a foreign-key-style reference to date_key_id.
+- mid_day_meal_serving_fact.meal_type_id_fk is a foreign-key-style reference to meal_type_id.
+- mid_day_meal_serving_fact.nutrition_item_dim_key_fk is a foreign-key-style reference
+  to nutrition_item_dim_key.
+- mid_day_meal_serving_fact.scheme_key_id_fk is a foreign-key-style reference to scheme_key_id.
+- mid_day_meal_serving_fact.vendor_id_fk is a foreign-key-style reference to vendor_id.
+- scheme_benefits_fact.citizen_school_id_fk is a foreign-key-style reference to citizen_school_id.
+- scheme_benefits_fact.school_scheme_master_id_fk is a foreign-key-style reference
+  to school_scheme_master_id.
+- scheme_benefits_fact.benefit_type_id_fk is a foreign-key-style reference to benefit_type_id.
+- scheme_benefits_fact.beneficiary_type_id_fk is a foreign-key-style reference to
+  beneficiary_type_id.
+- scheme_benefits_fact.citizen_student_id_fk is a foreign-key-style reference to citizen_student_id.
+- scheme_benefits_fact.school_teacher_id_fk is a foreign-key-style reference to school_teacher_id.
+- school_infrastructure_progress_fact.reporting_date_key_fk is a foreign-key-style
+  reference to reporting_date_key.
+- school_infrastructure_progress_fact.infrastructure_component_id_fk is a foreign-key-style
+  reference to infrastructure_component_id.
+- school_infrastructure_progress_fact.infrastructure_category_id_fk is a foreign-key-style
+  reference to infrastructure_category_id.
+- school_infrastructure_progress_fact.reporting_period_id_fk is a foreign-key-style
+  reference to reporting_period_id.
+- school_infrastructure_progress_fact.scheme_id_fk is a foreign-key-style reference
+  to scheme_id.

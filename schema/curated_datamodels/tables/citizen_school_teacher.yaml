@@ -1,0 +1,195 @@
+database: curated_datamodels
+table: citizen_school_teacher
+description: Curated table containing citizen school teacher attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school_teacher/
+partitioned_by: bucket(32, citizen_school_teacher_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_school_teacher\n\
+  (\n    citizen_school_teacher_id_pk   BIGINT,\n    treasury_id                 \
+  \   STRING,\n    cfms_id                        STRING,\n    national_teacher_code\
+  \          STRING,\n    teacher_citizen_master_fk      BIGINT,\n    teacher_emp_id\
+  \                 STRING,\n    teacher_name                   STRING,\n    gender\
+  \                         STRING,\n    date_of_birth                  DATE,\n  \
+  \  joining_date                   DATE,\n    qualification                  STRING,\n\
+  \    employment_type                STRING,\n    teacher_designation           \
+  \ STRING,\n    subject_specialization_key     BIGINT,\n    father_name         \
+  \           STRING,\n    father_citizen_master_id       BIGINT,\n    mother_name\
+  \                    STRING,\n    mother_citizen_master_id       BIGINT,\n    spouse_name\
+  \                    STRING,\n    spouse_citizen_master_id       BIGINT,\n    caste_id_fk\
+  \                    BIGINT,\n    is_single_parent               STRING,\n    disability_category\
+  \            STRING,\n    academic_qualification         STRING,\n    professional_qualification\
+  \     STRING,\n    tet_passed_flag                STRING,\n    tet_year_of_passing\
+  \            INT,\n    service_status                 STRING,\n    date_of_first_appointment\
+  \      DATE,\n    present_designation_teaching_type STRING,\n    effective_start_date\
+  \           DATE,\n    effective_end_date             DATE,\n    is_current    \
+  \                 STRING,\n    created_date                   TIMESTAMP,\n    created_by\
+  \                     STRING,\n    updated_date                   TIMESTAMP,\n \
+  \   updated_by                     STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+  \ citizen_school_teacher_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school_teacher/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: citizen_school_teacher_id_pk
+  type: BIGINT
+  nullable: true
+  description: Citizen school teacher identifier primary key.
+- name: treasury_id
+  type: STRING
+  nullable: true
+  description: Treasury identifier.
+- name: cfms_id
+  type: STRING
+  nullable: true
+  description: Cfms identifier.
+- name: national_teacher_code
+  type: STRING
+  nullable: true
+  description: National teacher code.
+- name: teacher_citizen_master_fk
+  type: BIGINT
+  nullable: true
+  description: Teacher citizen master foreign key.
+- name: teacher_emp_id
+  type: STRING
+  nullable: true
+  description: Teacher emp identifier.
+- name: teacher_name
+  type: STRING
+  nullable: true
+  description: Teacher name.
+- name: gender
+  type: STRING
+  nullable: true
+  description: Gender.
+- name: date_of_birth
+  type: DATE
+  nullable: true
+  description: Date of birth.
+- name: joining_date
+  type: DATE
+  nullable: true
+  description: Joining date.
+- name: qualification
+  type: STRING
+  nullable: true
+  description: Qualification.
+- name: employment_type
+  type: STRING
+  nullable: true
+  description: Employment type.
+- name: teacher_designation
+  type: STRING
+  nullable: true
+  description: Teacher designation.
+- name: subject_specialization_key
+  type: BIGINT
+  nullable: true
+  description: Subject specialization key.
+- name: father_name
+  type: STRING
+  nullable: true
+  description: Father name.
+- name: father_citizen_master_id
+  type: BIGINT
+  nullable: true
+  description: Father citizen master identifier.
+- name: mother_name
+  type: STRING
+  nullable: true
+  description: Mother name.
+- name: mother_citizen_master_id
+  type: BIGINT
+  nullable: true
+  description: Mother citizen master identifier.
+- name: spouse_name
+  type: STRING
+  nullable: true
+  description: Spouse name.
+- name: spouse_citizen_master_id
+  type: BIGINT
+  nullable: true
+  description: Spouse citizen master identifier.
+- name: caste_id_fk
+  type: BIGINT
+  nullable: true
+  description: Caste identifier foreign key.
+- name: is_single_parent
+  type: STRING
+  nullable: true
+  description: Is single parent.
+- name: disability_category
+  type: STRING
+  nullable: true
+  description: Disability category.
+- name: academic_qualification
+  type: STRING
+  nullable: true
+  description: Academic qualification.
+- name: professional_qualification
+  type: STRING
+  nullable: true
+  description: Professional qualification.
+- name: tet_passed_flag
+  type: STRING
+  nullable: true
+  description: Tet passed flag.
+- name: tet_year_of_passing
+  type: INT
+  nullable: true
+  description: Tet year of passing.
+- name: service_status
+  type: STRING
+  nullable: true
+  description: Service status.
+- name: date_of_first_appointment
+  type: DATE
+  nullable: true
+  description: Date of first appointment.
+- name: present_designation_teaching_type
+  type: STRING
+  nullable: true
+  description: Present designation teaching type.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- citizen_school_teacher_id_pk
+relationships:
+- citizen_school_teacher.teacher_citizen_master_fk is a foreign-key-style reference
+  to teacher_citizen_master.
+- citizen_school_teacher.caste_id_fk is a foreign-key-style reference to caste_id.
+business_terms:
+- school analytics
+common_operations:
+- profile records in citizen_school_teacher
+- join with related school and citizen dimensions

@@ -1,0 +1,42 @@
+database: curated_datamodels
+table: school_category
+description: Curated table containing school category attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_category/
+partitioned_by: bucket(32, school_category_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.school_category\n\
+  (\n    school_category_id_pk    BIGINT,\n    category_code            STRING,\n\
+  \    category_name            STRING,\n    category_type            STRING\n)\n\
+  USING ICEBERG\nPARTITIONED BY (bucket(32, school_category_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_category/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: school_category_id_pk
+  type: BIGINT
+  nullable: true
+  description: School category identifier primary key.
+- name: category_code
+  type: STRING
+  nullable: true
+  description: Category code.
+- name: category_name
+  type: STRING
+  nullable: true
+  description: Category name.
+- name: category_type
+  type: STRING
+  nullable: true
+  description: Category type.
+primary_key:
+- school_category_id_pk
+relationships: []
+business_terms:
+- school analytics
+common_operations:
+- profile records in school_category
+- join with related school and citizen dimensions

@@ -1,0 +1,42 @@
+# Curated School Datamodel Agent — Architecture & Explanation
+
+This document serves as an overview for any future AI developer or agent working on this codebase.
+
+## 1. Project Purpose
+The project is a natural-language-to-SQL (NL2SQL) system that allows users to query a curated school database schema (focusing on student demographics, risk metrics, attendance, academic performance, meals, schemes, and infrastructure). It serves both a dashboard frontend (via APIs) and an interactive AI agent chat.
+
+## 2. Core Stack
+*   **Web Framework**: FastAPI (in `app.py`) serves the dashboard web pages, statistics endpoints (`/api/stats`), list endpoints (`/api/students`), and the agent chat endpoints (`/api/chat/*`, `/ask`).
+*   **Agent Logic**: LangGraph (in `my_agent/agent.py` and `my_agent/utils/nodes.py`) implements a stateful agent.
+*   **Local LLM Integration**: Ollama (via `langchain-ollama`) runs the chat model (e.g., `qwen3.5:2b` for lightweight memory setups or `qwen3.5:9b`) and the embedding model (`nomic-embed-text`).
+*   **MCP Subprocesses**: Two Model Context Protocol (MCP) servers run in the background (managed via `my_agent/utils/tools.py`):
+    1.  **RAG Server** (`MCP/mcp_rag.py`): Semantic retrieval of schema DDLs from a local Milvus Lite collection (`MCP/milvus_schemas.db`).
+    2.  **SQL Server**: Handles SQL execution. Depending on configuration, it loads either `mcp_sql_execution.py` (for SQLite) or `mcp_hive_execution.py` (for Hive).
+
+## 3. SQLite vs Hive Configuration (`.env`)
+The database backend is controlled via the `HIVE_MCP_ENABLED` environment variable:
+
+*   **SQLite Mode (`HIVE_MCP_ENABLED=false`)**:
+    *   **Registry**: Loads `MCP/mcp_sql_execution.py` exposing the `execute_sql` tool. Connects to `database/schema.db`.
+    *   **Prompt**: The system prompt instructs the LLM that the database is SQLite and all queries must omit database prefixes (e.g. `SELECT * FROM citizen_student` instead of `SELECT * FROM curated_datamodels.citizen_student`).
+    *   **RAG Preprocessing**: When `retrive_schema_rag` returns DDL, it strips out the `curated_datamodels.` prefix, removes Iceberg keywords (`USING ICEBERG`, location, table properties), and replaces Big Data types (`STRING` -> `TEXT`, `BIGINT` -> `INTEGER`) to prevent the LLM from writing invalid/unsupported syntax.
+
+*   **Hive Mode (`HIVE_MCP_ENABLED=true`)**:
+    *   **Registry**: Loads `MCP/mcp_hive_execution.py`. The tool inside is named `execute_sql` to maintain signature parity with the frontend/agent, but connects to Hive.
+    *   **Prompt**: The system prompt instructs the LLM that the database is Hive/Apache Spark and queries must include table prefixes (e.g. `curated_datamodels.citizen_student`).
+    *   **RAG Preprocessing**: Schema DDLs and table prefixes are returned exactly as-is from the vector index.
+
+## 4. Agent Graph & Reasoning Nudges
+The graph uses a standard loop: `START -> llm_node <-> tool_node -> END`. 
+
+The LLM determines whether it needs to fetch context (`retrive_schema_rag`) and when to execute queries (`execute_sql`). To ensure reliability with smaller models (like `2b`), `llm_node` in `my_agent/utils/nodes.py` implements reasoning nudges:
+1.  **Nudge 1 (No Tool Call)**: If the user asks a database question but the LLM responds with a conversational answer on its first attempt, the agent appends a nudge message reminding it that it MUST use the tools, forcing a retry.
+2.  **Nudge 2 (RAG but no SQL)**: If the LLM successfully calls the RAG tool but tries to describe the schema in text instead of running a SQL query, the agent appends a second nudge, instructing the model to immediately call `execute_sql`.
+
+## 5. Main Files Reference
+*   [app.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/app.py): Dashboard routes, database seeding hooks, and agent REST API wrapper.
+*   [create_schema.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/create_schema.py): Parses table YAML files from `schema/curated_datamodels/tables/` and generates the SQLite sample database with 1000 seeded student records.
+*   [my_agent/utils/nodes.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/my_agent/utils/nodes.py): Holds the graph node execution logic, dynamic system prompts, and nudges.
+*   [my_agent/utils/tools.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/my_agent/utils/tools.py): Configures and spawns MCP subprocesses.
+*   [MCP/mcp_rag.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/MCP/mcp_rag.py): MCP server for RAG schema lookup and SQLite normalization logic.
+*   [MCP/build_milvus_index.py](file:///Users/prakhar/Downloads/Student%20Dropout_v1.0/MCP/build_milvus_index.py): Vectorizes table schemas and join relations to build the Milvus Lite index.

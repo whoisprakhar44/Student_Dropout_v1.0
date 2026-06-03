@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────
+#  Schema Injection Pipeline — Config
+# ─────────────────────────────────────────────
+
+# embedding:
+#   provider: openai                  # openai | sentence_transformers
+#   model: text-embedding-3-small     # openai: text-embedding-3-small / text-embedding-3-large
+#   # model: BAAI/bge-large-en-v1.5   # sentence_transformers option
+#   batch_size: 32
+  
+embedding:
+  provider: ollama
+  model: nomic-embed-text     # or mxbai-embed-large
+  ollama_url: http://localhost:11434/api/embeddings
+  batch_size: 32
+
+vector_db:
+  # provider: chromadb                # chromadb | milvus
+  # # --- ChromaDB (lite, local .db file) ---
+  # chromadb:
+  #   mode: persistent                # persistent | in_memory
+  #   path: ./chroma_store            # local .db folder path
+  #   collection: schema_chunks
+  # --- Milvus (server via URL) ---
+  provider: milvus
+  milvus:
+    # uri: http://localhost:19530     # swap to your Milvus server URL
+    uri: "./milvus_schemas.db"
+    collection: schema_chunks
+    dim: 768                       # must match embedding model output dim
+    metric_type: COSINE
+
+# Per-table schema YAMLs (one Milvus vector per file)
+yaml_dir: ../schema/curated_datamodels/tables
+full_schema: ../schema/curated_datamodels/full_schema.yaml
+database_meta: ../schema/curated_datamodels/database.yaml
+
+logging:
+  level: INFO

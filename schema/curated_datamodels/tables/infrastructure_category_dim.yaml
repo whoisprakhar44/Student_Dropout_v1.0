@@ -1,0 +1,74 @@
+database: curated_datamodels
+table: infrastructure_category_dim
+description: Dimension/master table for infrastructure category reference attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_category_dim/
+partitioned_by: bucket(32, infra_category_dim_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.infrastructure_category_dim\n\
+  (\n    infra_category_dim_id_pk     BIGINT,\n    infra_category_code          STRING,\n\
+  \    infra_category_name          STRING,\n    is_active                    STRING,\n\
+  \    effective_start_date         DATE,\n    effective_end_date           DATE,\n\
+  \    is_current                   STRING,\n    created_date                 TIMESTAMP,\n\
+  \    created_by                   STRING,\n    updated_date                 TIMESTAMP,\n\
+  \    updated_by                   STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+  \ infra_category_dim_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_category_dim/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: infra_category_dim_id_pk
+  type: BIGINT
+  nullable: true
+  description: Infra category dim identifier primary key.
+- name: infra_category_code
+  type: STRING
+  nullable: true
+  description: Infra category code.
+- name: infra_category_name
+  type: STRING
+  nullable: true
+  description: Infra category name.
+- name: is_active
+  type: STRING
+  nullable: true
+  description: Is active.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- infra_category_dim_id_pk
+relationships: []
+business_terms:
+- dimension table
+- reference lookup
+common_operations:
+- profile records in infrastructure_category_dim

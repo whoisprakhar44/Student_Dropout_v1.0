@@ -1,0 +1,241 @@
+database: curated_datamodels
+table: citizen_school
+description: Curated table containing citizen school attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school/
+partitioned_by: bucket(32, citizen_school_id_pk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_school\n\
+  (\n    citizen_school_id_pk           BIGINT,\n    school_medium_id_fk         \
+  \   BIGINT,\n    school_teacher_id_fk           BIGINT,\n    school_category_id_fk\
+  \          BIGINT,\n    school_management_id_fk        BIGINT,\n    school_dept_code\
+  \               STRING,\n    school_udise_code              STRING,\n    school_name\
+  \                    STRING,\n    school_address                 STRING,\n    district_name\
+  \                  STRING,\n    district_lgd_code              STRING,\n    mandal_name\
+  \                    STRING,\n    mandal_lgd_code                STRING,\n    village_name\
+  \                   STRING,\n    village_lgd_code               STRING,\n    urban_rural_flag\
+  \               STRING,\n    latitude                       DECIMAL(9,6),\n    longitude\
+  \                      DECIMAL(9,6),\n    school_pincode                 STRING,\n\
+  \    functional_status              STRING,\n    academic_year_opened          \
+  \ STRING,\n    min_class                      INT,\n    max_class              \
+  \        INT,\n    pre_primary_flag               STRING,\n    vocational_flag \
+  \               STRING,\n    building_status                STRING,\n    electricity_availability_flag\
+  \  STRING,\n    drinking_water_availability_flag STRING,\n    toilet_boys_flag \
+  \              STRING,\n    toilet_girls_flag              STRING,\n    ict_enabled_flag\
+  \               STRING,\n    playground_flag                STRING,\n    head_master_name\
+  \               STRING,\n    head_master_mobile             STRING,\n    school_contact_no\
+  \              STRING,\n    school_email_id                STRING,\n    noc_required_flag\
+  \              STRING,\n    noc_available_flag             STRING,\n    fire_safety_flag\
+  \               STRING,\n    health_safety_flag             STRING,\n    effective_start_date\
+  \           DATE,\n    effective_end_date             DATE,\n    is_current    \
+  \                 STRING,\n    created_date                   TIMESTAMP,\n    created_by\
+  \                     STRING,\n    updated_date                   TIMESTAMP,\n \
+  \   updated_by                     STRING\n)\nUSING ICEBERG\nPARTITIONED BY (bucket(32,\
+  \ citizen_school_id_pk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: citizen_school_id_pk
+  type: BIGINT
+  nullable: true
+  description: Citizen school identifier primary key.
+- name: school_medium_id_fk
+  type: BIGINT
+  nullable: true
+  description: School medium identifier foreign key.
+- name: school_teacher_id_fk
+  type: BIGINT
+  nullable: true
+  description: School teacher identifier foreign key.
+- name: school_category_id_fk
+  type: BIGINT
+  nullable: true
+  description: School category identifier foreign key.
+- name: school_management_id_fk
+  type: BIGINT
+  nullable: true
+  description: School management identifier foreign key.
+- name: school_dept_code
+  type: STRING
+  nullable: true
+  description: School dept code.
+- name: school_udise_code
+  type: STRING
+  nullable: true
+  description: School udise code.
+- name: school_name
+  type: STRING
+  nullable: true
+  description: School name.
+- name: school_address
+  type: STRING
+  nullable: true
+  description: School address.
+- name: district_name
+  type: STRING
+  nullable: true
+  description: District name.
+- name: district_lgd_code
+  type: STRING
+  nullable: true
+  description: District lgd code.
+- name: mandal_name
+  type: STRING
+  nullable: true
+  description: Mandal name.
+- name: mandal_lgd_code
+  type: STRING
+  nullable: true
+  description: Mandal lgd code.
+- name: village_name
+  type: STRING
+  nullable: true
+  description: Village name.
+- name: village_lgd_code
+  type: STRING
+  nullable: true
+  description: Village lgd code.
+- name: urban_rural_flag
+  type: STRING
+  nullable: true
+  description: Urban rural flag.
+- name: latitude
+  type: DECIMAL(9,6)
+  nullable: true
+  description: Latitude.
+- name: longitude
+  type: DECIMAL(9,6)
+  nullable: true
+  description: Longitude.
+- name: school_pincode
+  type: STRING
+  nullable: true
+  description: School pincode.
+- name: functional_status
+  type: STRING
+  nullable: true
+  description: Functional status.
+- name: academic_year_opened
+  type: STRING
+  nullable: true
+  description: Academic year opened.
+- name: min_class
+  type: INT
+  nullable: true
+  description: Min class.
+- name: max_class
+  type: INT
+  nullable: true
+  description: Max class.
+- name: pre_primary_flag
+  type: STRING
+  nullable: true
+  description: Pre primary flag.
+- name: vocational_flag
+  type: STRING
+  nullable: true
+  description: Vocational flag.
+- name: building_status
+  type: STRING
+  nullable: true
+  description: Building status.
+- name: electricity_availability_flag
+  type: STRING
+  nullable: true
+  description: Electricity availability flag.
+- name: drinking_water_availability_flag
+  type: STRING
+  nullable: true
+  description: Drinking water availability flag.
+- name: toilet_boys_flag
+  type: STRING
+  nullable: true
+  description: Toilet boys flag.
+- name: toilet_girls_flag
+  type: STRING
+  nullable: true
+  description: Toilet girls flag.
+- name: ict_enabled_flag
+  type: STRING
+  nullable: true
+  description: Ict enabled flag.
+- name: playground_flag
+  type: STRING
+  nullable: true
+  description: Playground flag.
+- name: head_master_name
+  type: STRING
+  nullable: true
+  description: Head master name.
+- name: head_master_mobile
+  type: STRING
+  nullable: true
+  description: Head master mobile.
+- name: school_contact_no
+  type: STRING
+  nullable: true
+  description: School contact no.
+- name: school_email_id
+  type: STRING
+  nullable: true
+  description: School email identifier.
+- name: noc_required_flag
+  type: STRING
+  nullable: true
+  description: Noc required flag.
+- name: noc_available_flag
+  type: STRING
+  nullable: true
+  description: Noc available flag.
+- name: fire_safety_flag
+  type: STRING
+  nullable: true
+  description: Fire safety flag.
+- name: health_safety_flag
+  type: STRING
+  nullable: true
+  description: Health safety flag.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- citizen_school_id_pk
+relationships:
+- citizen_school.school_medium_id_fk is a foreign-key-style reference to school_medium_id.
+- citizen_school.school_teacher_id_fk is a foreign-key-style reference to school_teacher_id.
+- citizen_school.school_category_id_fk is a foreign-key-style reference to school_category_id.
+- citizen_school.school_management_id_fk is a foreign-key-style reference to school_management_id.
+business_terms:
+- school analytics
+common_operations:
+- profile records in citizen_school
+- join with related school and citizen dimensions

@@ -1,0 +1,33 @@
+database: curated_datamodels
+title: Curated School Data Models
+description: Curated Iceberg data model for school, student, teacher, attendance,
+  assessment, meals, infrastructure, schemes, and benefits analytics.
+source_ddl: c:\Users\2797779\Downloads\Database Related Files\Database Related Files\School_PySpark_DDL's.txt
+full_schema: full_schema.yaml
+tables_dir: tables
+tables:
+- citizen_student
+- school_subject_master
+- school_medium
+- citizen_school
+- school_category
+- citizen_school_teacher
+- school_scheme_master
+- student_class_dim
+- absent_reason_dim
+- assessment_dim
+- meal_type_dim
+- nutrition_item_dim
+- infrastructure_category_dim
+- infrastructure_component_dim
+- benefit_type_dim
+- school_meal_menu_dim
+- beneficiary_type_dim
+- school_infra_category_dim
+- school_infra_component_dim
+- school_student_attendance_fact
+- school_teacher_attendance_fact
+- school_academic_performance_fact
+- mid_day_meal_serving_fact
+- scheme_benefits_fact
+- school_infrastructure_progress_fact

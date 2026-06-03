@@ -1,0 +1,157 @@
+database: curated_datamodels
+description: Explicit join relations for the curated school data model.
+joins:
+- name: student_to_school
+  from_table: citizen_student
+  from_column: citizen_school_fk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Join student profile records to school location, category, and infrastructure attributes.
+- name: student_attendance_to_student
+  from_table: school_student_attendance_fact
+  from_column: citizen_student_id_fk
+  to_table: citizen_student
+  to_column: citizen_student_pk
+  cardinality: many_to_one
+  usage: Join attendance events to student demographics and identifiers.
+- name: student_attendance_to_school
+  from_table: school_student_attendance_fact
+  from_column: student_school_id_fk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Aggregate student attendance by school, district, mandal, village, or school category.
+- name: student_attendance_to_class
+  from_table: school_student_attendance_fact
+  from_column: student_class_dim_id_fk
+  to_table: student_class_dim
+  to_column: student_class_dim_id_pk
+  cardinality: many_to_one
+  usage: Analyze attendance by class, grade, and education stage.
+- name: student_attendance_to_absent_reason
+  from_table: school_student_attendance_fact
+  from_column: absence_reason_dim_id_fk
+  to_table: absent_reason_dim
+  to_column: absent_reason_dim_id_pk
+  cardinality: many_to_one
+  usage: Explain absence counts by reason code and reason category.
+- name: academic_performance_to_student
+  from_table: school_academic_performance_fact
+  from_column: citizen_student_id_fk
+  to_table: citizen_student
+  to_column: citizen_student_pk
+  cardinality: many_to_one
+  usage: Join marks and scores to student demographics.
+- name: academic_performance_to_school
+  from_table: school_academic_performance_fact
+  from_column: citizen_school_id_fk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Aggregate academic performance by school and geography.
+- name: academic_performance_to_subject
+  from_table: school_academic_performance_fact
+  from_column: student_subject_id_fk
+  to_table: school_subject_master
+  to_column: subject_pk
+  cardinality: many_to_one
+  usage: Analyze marks by subject and subject category.
+- name: academic_performance_to_assessment
+  from_table: school_academic_performance_fact
+  from_column: assessment_dim_id_fk
+  to_table: assessment_dim
+  to_column: assessment_dim_id_pk
+  cardinality: many_to_one
+  usage: Filter performance by exam, assessment type, and board.
+- name: school_to_medium
+  from_table: citizen_school
+  from_column: school_medium_id_fk
+  to_table: school_medium
+  to_column: school_medium_pk
+  cardinality: many_to_one
+  usage: Group schools and students by instruction medium.
+- name: school_to_category
+  from_table: citizen_school
+  from_column: school_category_id_fk
+  to_table: school_category
+  to_column: school_category_id_pk
+  cardinality: many_to_one
+  usage: Group schools by category and category type.
+- name: teacher_attendance_to_teacher
+  from_table: school_teacher_attendance_fact
+  from_column: citizen_school_teacher_id_fk
+  to_table: citizen_school_teacher
+  to_column: citizen_school_teacher_id_pk
+  cardinality: many_to_one
+  usage: Join teacher attendance facts to teacher profile attributes.
+- name: meal_serving_to_school
+  from_table: mid_day_meal_serving_fact
+  from_column: citizen_school_id_fk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Aggregate mid-day meal serving metrics by school and geography.
+- name: meal_serving_to_meal_type
+  from_table: mid_day_meal_serving_fact
+  from_column: meal_type_id_fk
+  to_table: meal_type_dim
+  to_column: meal_type_dim_id_pk
+  cardinality: many_to_one
+  usage: Analyze meal serving by breakfast, lunch, or other meal type.
+- name: meal_serving_to_nutrition_item
+  from_table: mid_day_meal_serving_fact
+  from_column: nutrition_item_dim_key_fk
+  to_table: nutrition_item_dim
+  to_column: nutrition_item_dim_id_pk
+  cardinality: many_to_one
+  usage: Analyze served nutrition items and quantities.
+- name: scheme_benefits_to_student
+  from_table: scheme_benefits_fact
+  from_column: citizen_student_id_fk
+  to_table: citizen_student
+  to_column: citizen_student_pk
+  cardinality: many_to_one
+  usage: Link student benefit eligibility, sanction, and disbursement to student profile.
+- name: scheme_benefits_to_school
+  from_table: scheme_benefits_fact
+  from_column: citizen_school_id_fk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Aggregate scheme benefits by school and location.
+- name: scheme_benefits_to_scheme
+  from_table: scheme_benefits_fact
+  from_column: school_scheme_master_id_fk
+  to_table: school_scheme_master
+  to_column: school_scheme_dim_id_pk
+  cardinality: many_to_one
+  usage: Analyze benefit delivery by scheme.
+- name: scheme_benefits_to_benefit_type
+  from_table: scheme_benefits_fact
+  from_column: benefit_type_id_fk
+  to_table: benefit_type_dim
+  to_column: benefit_type_dim_id_pk
+  cardinality: many_to_one
+  usage: Group benefit delivery by monetary or non-monetary benefit type.
+- name: infrastructure_progress_to_school
+  from_table: school_infrastructure_progress_fact
+  from_column: citizen_school_id_pk
+  to_table: citizen_school
+  to_column: citizen_school_id_pk
+  cardinality: many_to_one
+  usage: Join infrastructure progress to school attributes and location.
+- name: infrastructure_progress_to_component
+  from_table: school_infrastructure_progress_fact
+  from_column: infrastructure_component_id_fk
+  to_table: infrastructure_component_dim
+  to_column: infrastructure_component_dim_id_pk
+  cardinality: many_to_one
+  usage: Analyze planned, completed, and functional units by infrastructure component.
+- name: infrastructure_component_to_category
+  from_table: infrastructure_component_dim
+  from_column: infra_category_dim_id_fk
+  to_table: infrastructure_category_dim
+  to_column: infra_category_dim_id_pk
+  cardinality: many_to_one
+  usage: Roll infrastructure components up to category.

@@ -1,0 +1,171 @@
+database: curated_datamodels
+table: citizen_student
+description: Curated table containing citizen student attributes.
+table_format: ICEBERG
+location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_student/
+partitioned_by: bucket(32, citizen_master_fk)
+tblproperties:
+  engine.hive.enabled: 'true'
+  format-version: '2'
+  write.format.default: parquet
+  parquet.compression: SNAPPY
+raw_ddl: "CREATE EXTERNAL TABLE IF NOT EXISTS curated_datamodels.citizen_student\n\
+  (\n    citizen_student_pk        BIGINT,\n    citizen_school_fk         BIGINT,\n\
+  \    citizen_master_fk         BIGINT,\n    student_subject_fk        BIGINT,\n\
+  \    student_aadhaar_id        STRING,\n    student_name              STRING,\n\
+  \    gender                    STRING,\n    surname                   STRING,\n\
+  \    mother_tongue             STRING,\n    date_of_birth             DATE,\n  \
+  \  social_category           STRING,\n    minority_status           STRING,\n  \
+  \  disability_flag           STRING,\n    disability_percentage     DECIMAL(5,2),\n\
+  \    admission_flag            STRING,\n    current_grade             STRING,\n\
+  \    medium_key                STRING,\n    is_current                STRING,\n\
+  \    mother_aadhaar_id         STRING,\n    father_aadhaar_id         STRING,\n\
+  \    is_current_flag           STRING,\n    primary_mobile_no         STRING,\n\
+  \    secondary_mobile_no       STRING,\n    email_id                  STRING,\n\
+  \    address                   STRING,\n    pincode                   STRING,\n\
+  \    effective_start_date      DATE,\n    effective_end_date        DATE,\n    created_date\
+  \              TIMESTAMP,\n    created_by                STRING,\n    updated_date\
+  \              TIMESTAMP,\n    updated_by                STRING\n)\nUSING ICEBERG\n\
+  PARTITIONED BY (bucket(32, citizen_master_fk))\nLOCATION 'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_student/'\n\
+  TBLPROPERTIES (\n    'engine.hive.enabled'='true',\n    'format-version'='2',\n\
+  \    'write.format.default'='parquet',\n    'parquet.compression'='SNAPPY'\n);"
+columns:
+- name: citizen_student_pk
+  type: BIGINT
+  nullable: true
+  description: Citizen student primary key.
+- name: citizen_school_fk
+  type: BIGINT
+  nullable: true
+  description: Citizen school foreign key.
+- name: citizen_master_fk
+  type: BIGINT
+  nullable: true
+  description: Citizen master foreign key.
+- name: student_subject_fk
+  type: BIGINT
+  nullable: true
+  description: Student subject foreign key.
+- name: student_aadhaar_id
+  type: STRING
+  nullable: true
+  description: Student aadhaar identifier.
+- name: student_name
+  type: STRING
+  nullable: true
+  description: Student name.
+- name: gender
+  type: STRING
+  nullable: true
+  description: Gender.
+- name: surname
+  type: STRING
+  nullable: true
+  description: Surname.
+- name: mother_tongue
+  type: STRING
+  nullable: true
+  description: Mother tongue.
+- name: date_of_birth
+  type: DATE
+  nullable: true
+  description: Date of birth.
+- name: social_category
+  type: STRING
+  nullable: true
+  description: Social category.
+- name: minority_status
+  type: STRING
+  nullable: true
+  description: Minority status.
+- name: disability_flag
+  type: STRING
+  nullable: true
+  description: Disability flag.
+- name: disability_percentage
+  type: DECIMAL(5,2)
+  nullable: true
+  description: Disability percentage.
+- name: admission_flag
+  type: STRING
+  nullable: true
+  description: Admission flag.
+- name: current_grade
+  type: STRING
+  nullable: true
+  description: Current grade.
+- name: medium_key
+  type: STRING
+  nullable: true
+  description: Medium key.
+- name: is_current
+  type: STRING
+  nullable: true
+  description: Is current.
+- name: mother_aadhaar_id
+  type: STRING
+  nullable: true
+  description: Mother aadhaar identifier.
+- name: father_aadhaar_id
+  type: STRING
+  nullable: true
+  description: Father aadhaar identifier.
+- name: is_current_flag
+  type: STRING
+  nullable: true
+  description: Is current flag.
+- name: primary_mobile_no
+  type: STRING
+  nullable: true
+  description: Primary mobile no.
+- name: secondary_mobile_no
+  type: STRING
+  nullable: true
+  description: Secondary mobile no.
+- name: email_id
+  type: STRING
+  nullable: true
+  description: Email identifier.
+- name: address
+  type: STRING
+  nullable: true
+  description: Address.
+- name: pincode
+  type: STRING
+  nullable: true
+  description: Pincode.
+- name: effective_start_date
+  type: DATE
+  nullable: true
+  description: Effective start date.
+- name: effective_end_date
+  type: DATE
+  nullable: true
+  description: Effective end date.
+- name: created_date
+  type: TIMESTAMP
+  nullable: true
+  description: Created date.
+- name: created_by
+  type: STRING
+  nullable: true
+  description: Created by.
+- name: updated_date
+  type: TIMESTAMP
+  nullable: true
+  description: Updated date.
+- name: updated_by
+  type: STRING
+  nullable: true
+  description: Updated by.
+primary_key:
+- citizen_student_pk
+relationships:
+- citizen_student.citizen_school_fk is a foreign-key-style reference to citizen_school.
+- citizen_student.citizen_master_fk is a foreign-key-style reference to citizen_master.
+- citizen_student.student_subject_fk is a foreign-key-style reference to student_subject.
+business_terms:
+- student analytics
+common_operations:
+- profile records in citizen_student
+- join with related school and citizen dimensions
