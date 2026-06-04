@@ -113,6 +113,9 @@ def load_join_chunks() -> list[dict]:
     }]
 
 
+_MAX_EMBED_CHARS = 4096  # ~1024 tokens; keeps Ollama context safe
+
+
 def embed_text(text: str, cfg: dict) -> list[float]:
     emb_cfg = cfg["embedding"]
     if emb_cfg["provider"] != "ollama":
@@ -120,7 +123,9 @@ def embed_text(text: str, cfg: dict) -> list[float]:
 
     url = emb_cfg.get("ollama_url", "http://localhost:11434/api/embeddings")
     model = emb_cfg["model"]
-    res = requests.post(url, json={"model": model, "prompt": text}, timeout=120)
+    # Truncate to avoid Ollama 500s on huge DDLs
+    prompt = text[:_MAX_EMBED_CHARS]
+    res = requests.post(url, json={"model": model, "prompt": prompt}, timeout=120)
     res.raise_for_status()
     return res.json()["embedding"]
 
@@ -138,8 +143,17 @@ def build_index():
         sys.exit(1)
 
     rows = []
+    skipped = 0
     for i, chunk in enumerate(chunks):
-        vector = embed_text(chunk["embedding_text"], cfg)
+        try:
+            vector = embed_text(chunk["embedding_text"], cfg)
+        except Exception as exc:
+            print(
+                f"  [SKIP] {chunk['table_name']}: embedding failed — {exc}",
+                file=sys.stderr,
+            )
+            skipped += 1
+            continue
         rows.append({
             "id": i,
             "vector": vector,
@@ -148,6 +162,8 @@ def build_index():
             "raw_ddl": chunk["raw_ddl"][:65000],
             "embedding_text": chunk["embedding_text"][:65000],
         })
+    if skipped:
+        print(f"  Warning: {skipped} chunk(s) skipped due to embedding errors.", file=sys.stderr)
 
     from pymilvus import MilvusClient
 

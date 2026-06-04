@@ -1,4 +1,4 @@
-﻿from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 import asyncio
@@ -68,11 +68,34 @@ def _http_error_from_exc(exc: Exception) -> HTTPException:
     return HTTPException(status_code=500, detail=msg)
 
 
+def _extract_tool_content(message: Any) -> str | None:
+    """Extract plain-text content from a ToolMessage.
+
+    MCP adapters may deliver content as a plain string OR as a list of
+    content blocks (e.g. [{"type": "text", "text": "..."}]).  Handle both.
+    """
+    raw = getattr(message, "content", None)
+    if raw is None:
+        return None
+    if isinstance(raw, str):
+        return raw
+    if isinstance(raw, list):
+        for item in raw:
+            if isinstance(item, str):
+                return item
+            if isinstance(item, dict) and item.get("type") == "text":
+                return item.get("text")
+    return str(raw)
+
+
 def _extract_sql_and_result(messages: list[Any]) -> AskResponse:
+    from langchain_core.messages import ToolMessage as LCToolMessage
+
     sql = None
     result: list[dict[str, Any]] | None = None
 
     for message in messages:
+        # ── extract SQL from any AIMessage tool call ──────────────────────────
         for tool_call in getattr(message, "tool_calls", None) or []:
             args = tool_call.get("args") or {}
             if isinstance(args, str):
@@ -83,14 +106,24 @@ def _extract_sql_and_result(messages: list[Any]) -> AskResponse:
             if tool_call.get("name") == "execute_sql" and args.get("query"):
                 sql = args["query"]
 
-        if message.__class__.__name__ != "ToolMessage":
+        # ── extract rows from any execute_sql ToolMessage ─────────────────────
+        is_tool_msg = isinstance(message, LCToolMessage) or (
+            message.__class__.__name__ == "ToolMessage"
+        )
+        if not is_tool_msg:
             continue
-        if getattr(message, "name", None) != "execute_sql":
+
+        tool_name = getattr(message, "name", None)
+        if tool_name != "execute_sql":
+            continue
+
+        raw_content = _extract_tool_content(message)
+        if not raw_content:
             continue
 
         try:
-            payload = json.loads(message.content)
-        except (json.JSONDecodeError, TypeError):
+            payload = json.loads(raw_content)
+        except (json.JSONDecodeError, TypeError, ValueError):
             continue
 
         if payload.get("status") == "success":

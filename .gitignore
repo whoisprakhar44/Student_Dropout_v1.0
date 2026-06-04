@@ -1,5 +1,6 @@
-
 __pycache__/
 *.pyc
 .DS_Store
 *.zip
+MCP/milvus_schemas.db/
+database/schema.db
