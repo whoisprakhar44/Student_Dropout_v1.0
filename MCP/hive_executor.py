@@ -8,13 +8,46 @@ Features
   • Config-driven — all infra values come from hive_config.yaml
   • Kerberos authentication via PyHive
   • Lazy-connect + auto-reconnect on failure
+  • Session settings applied once per connection (and after every reconnect)
   • SQL validation (SELECT-only; blocks DML/DDL even inside CTEs)
-  • Transparent KeyError 22 (timestamptz) fix — two layers:
+  • Transparent KeyError 22 (timestamptz) fix — three layers:
       Layer 1: PyHive type-map patch at import (fixes SELECT * and all queries)
       Layer 2: SELECT-projection CAST rewrite for explicit column lists
                (only touches the SELECT list — WHERE/GROUP BY/ORDER BY untouched)
+      Layer 3: post-fetch safety cast on result rows
   • Timeout with cursor.cancel() — cancels the server-side query, not just the thread
   • Structured JSON results matching the existing MCP contract
+  • health_check() method for startup validation (Kerberos + TCP + database)
+
+CDP / Cloudera Iceberg Vectorized Reader Incompatibility
+────────────────────────────────────────────────────────
+The CDP cluster contains a runtime incompatibility in the Hive vectorized
+execution path for Iceberg tables.  Every SELECT against an Iceberg table
+fails with:
+
+    java.lang.NoSuchMethodError:
+        org.apache.iceberg.parquet.ParquetSchemaUtil.hasIds(
+            org.apache.parquet.schema.MessageType)
+
+Root cause: version skew between the cluster's Iceberg JAR and Parquet JAR
+in the vectorized reader code path.  This is a cluster-side issue that
+cannot be fixed from the client.
+
+Workaround: disable Hive vectorized execution for every session by sending
+
+    SET hive.vectorized.execution.enabled=false
+
+immediately after connection establishment.  HiveExecutor does this
+automatically for every new connection (and every auto-reconnect) via
+_apply_session_settings().  The statements to execute are configured in
+hive_config.yaml under execution.session_settings.
+
+PyHive type-id 22 / timestamp with local time zone
+────────────────────────────────────────────────────
+Hive type code 22 (TIMESTAMPTZ / timestamp with local time zone) is absent
+from PyHive's TTypeId._VALUES_TO_NAMES dict.  PyHive raises KeyError: 22
+when parsing cursor.description — *before* any rows are returned.
+This is handled by three defensive layers (see Features above).
 
 JSON result contract (matches mcp_sql_execution.py)
 ────────────────────────────────────────────────────
@@ -26,6 +59,9 @@ import json
 import logging
 import os
 import re
+import shutil
+import socket
+import subprocess
 import threading
 from pathlib import Path
 from typing import Any
@@ -297,13 +333,23 @@ class HiveExecutor:
         self._conn      = None
         self._lock      = threading.Lock()
 
+        # Session settings are applied once per connection (and on reconnect).
+        # Default ensures vectorized execution is disabled to work around the
+        # CDP Iceberg/Parquet NoSuchMethodError (see module docstring).
+        _default_session_settings = ["SET hive.vectorized.execution.enabled=false"]
+        self._session_settings: list[str] = (
+            self._exec_cfg.get("session_settings") or _default_session_settings
+        )
+
         logger.info(
-            "HiveExecutor init — host=%s port=%s auth=%s timeout=%ss tz_cols=%s",
+            "HiveExecutor init — host=%s port=%s auth=%s timeout=%ss "
+            "tz_cols=%s session_settings=%s",
             self._hive_cfg["host"],
             self._hive_cfg["port"],
             self._hive_cfg["auth"],
             self._timeout,
             self._tz_cols,
+            self._session_settings,
         )
 
     # ── Connection management ─────────────────────────────────────────────────
@@ -312,7 +358,7 @@ class HiveExecutor:
         from pyhive import hive  # type: ignore[import]
 
         logger.info(
-            "Connecting to HiveServer2 %s:%s (auth=%s service=%s)",
+            "[connect] Connecting to HiveServer2 %s:%s (auth=%s service=%s)",
             self._hive_cfg["host"],
             self._hive_cfg["port"],
             self._hive_cfg["auth"],
@@ -324,7 +370,48 @@ class HiveExecutor:
             auth=self._hive_cfg["auth"],
             kerberos_service_name=self._hive_cfg.get("kerberos_service_name", "hive"),
         )
-        logger.info("HiveServer2 connection established")
+        logger.info("[connect] HiveServer2 connection established")
+
+        # Apply session-scoped settings immediately after every new connection.
+        # This is the sole place they are sent — NOT before every query.
+        self._apply_session_settings()
+
+    def _apply_session_settings(self) -> None:
+        """
+        Execute all configured session_settings statements on the current
+        connection.  Called once after _connect() — including after every
+        auto-reconnect — so settings are always active for the lifetime of
+        the connection.
+
+        Critically, this is where vectorized execution is disabled to work
+        around the CDP Iceberg/Parquet NoSuchMethodError (see module docstring).
+
+        Errors are logged as WARNING rather than raised so that a mis-typed
+        SET statement does not crash the server — queries will still execute,
+        just without that particular setting applied.
+        """
+        if not self._session_settings or self._conn is None:
+            return
+
+        cursor = self._conn.cursor()
+        try:
+            for stmt in self._session_settings:
+                try:
+                    logger.info("[session] Applying: %s", stmt)
+                    cursor.execute(stmt)
+                    logger.info("[session] Applied:  %s", stmt)
+                except Exception as exc:
+                    logger.warning(
+                        "[session] Failed to apply %r: %s — "
+                        "queries will still execute but setting may be inactive",
+                        stmt,
+                        exc,
+                    )
+        finally:
+            try:
+                cursor.close()
+            except Exception:
+                pass
 
     def _get_connection(self):
         if self._conn is None:
@@ -332,12 +419,161 @@ class HiveExecutor:
         return self._conn
 
     def _reset_connection(self):
+        """Close the current connection and mark it as gone so the next call
+        to _get_connection() triggers a fresh _connect() — which will also
+        re-apply all session settings automatically."""
+        logger.info("[reconnect] Resetting Hive connection")
         try:
             if self._conn is not None:
                 self._conn.close()
         except Exception:
             pass
         self._conn = None
+        logger.info("[reconnect] Connection reset complete — will reconnect on next query")
+
+    # ── Health check ──────────────────────────────────────────────────────────
+
+    def health_check(self) -> dict:
+        """
+        Run three diagnostic checks and return a structured result dict.
+
+        Returns
+        ───────
+        {
+            "kerberos":   {"ok": bool, "detail": str},
+            "hiveserver": {"ok": bool, "detail": str},
+            "database":   {"ok": bool, "detail": str},
+            "all_ok":     bool,
+        }
+
+        Sub-checks
+        ──────────
+        kerberos   — runs `klist`, parses the default principal line
+        hiveserver — TCP socket-connect to host:port (no PyHive dependency)
+        database   — opens a fresh cursor, runs SHOW DATABASES, also validates
+                     that session settings can be applied on the connection
+        """
+        result: dict[str, Any] = {}
+
+        # ── 1. Kerberos ticket ────────────────────────────────────────────────
+        logger.info("[health] Checking Kerberos ticket")
+        kerberos_ok, kerberos_detail = self._check_kerberos()
+        result["kerberos"] = {"ok": kerberos_ok, "detail": kerberos_detail}
+        if kerberos_ok:
+            logger.info("[health] Kerberos OK — %s", kerberos_detail)
+        else:
+            logger.warning("[health] Kerberos FAILED — %s", kerberos_detail)
+
+        # ── 2. HiveServer2 TCP ────────────────────────────────────────────────
+        logger.info("[health] Checking HiveServer2 TCP connectivity")
+        hs2_ok, hs2_detail = self._check_hiveserver_tcp()
+        result["hiveserver"] = {"ok": hs2_ok, "detail": hs2_detail}
+        if hs2_ok:
+            logger.info("[health] HiveServer2 TCP OK — %s", hs2_detail)
+        else:
+            logger.warning("[health] HiveServer2 TCP FAILED — %s", hs2_detail)
+
+        # ── 3. Database query (SHOW DATABASES) ────────────────────────────────
+        logger.info("[health] Checking Hive database access")
+        db_ok, db_detail = self._check_database()
+        result["database"] = {"ok": db_ok, "detail": db_detail}
+        if db_ok:
+            logger.info("[health] Database OK — %s", db_detail)
+        else:
+            logger.error("[health] Database FAILED — %s", db_detail)
+
+        result["all_ok"] = all(
+            result[k]["ok"] for k in ("kerberos", "hiveserver", "database")
+        )
+        logger.info("[health] Health check complete — all_ok=%s", result["all_ok"])
+        return result
+
+    def _check_kerberos(self) -> tuple[bool, str]:
+        """Validate Kerberos ticket via klist subprocess."""
+        klist = shutil.which("klist")
+        if not klist:
+            return False, "klist not found on PATH — krb5-workstation not installed"
+        try:
+            proc = subprocess.run(
+                [klist],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+        except subprocess.TimeoutExpired:
+            return False, "klist timed out after 10s"
+        except Exception as exc:
+            return False, f"klist failed to run: {exc}"
+
+        if proc.returncode != 0:
+            return (
+                False,
+                f"No valid Kerberos ticket (klist exit {proc.returncode}). "
+                f"Run: kinit <principal>. stderr: {proc.stderr.strip()}",
+            )
+
+        # Extract principal for display
+        principal = ""
+        for line in proc.stdout.splitlines():
+            if "principal" in line.lower():
+                principal = line.strip()
+                break
+        return True, principal or "ticket present"
+
+    def _check_hiveserver_tcp(self) -> tuple[bool, str]:
+        """TCP socket connect to HiveServer2 — no PyHive dependency."""
+        host = self._hive_cfg["host"]
+        port = int(self._hive_cfg["port"])
+        try:
+            with socket.create_connection((host, port), timeout=10):
+                pass
+        except OSError as exc:
+            return False, f"Cannot reach {host}:{port} — {exc}"
+        return True, f"TCP {host}:{port} reachable"
+
+    def _check_database(self) -> tuple[bool, str]:
+        """Open a fresh Hive connection, apply session settings, run SHOW DATABASES."""
+        try:
+            from pyhive import hive  # type: ignore[import]
+        except ImportError:
+            return False, "PyHive not installed — run: pip install 'pyhive[hive]' thrift-sasl"
+
+        host = self._hive_cfg["host"]
+        port = int(self._hive_cfg["port"])
+        auth = self._hive_cfg["auth"]
+        ks   = self._hive_cfg.get("kerberos_service_name", "hive")
+
+        try:
+            conn = hive.Connection(
+                host=host, port=port, auth=auth, kerberos_service_name=ks,
+            )
+        except Exception as exc:
+            return False, f"Connection failed: {exc}"
+
+        try:
+            # Apply session settings on this health-check connection too so
+            # we validate that path (e.g. the vectorized execution SET).
+            cur = conn.cursor()
+            for stmt in self._session_settings:
+                try:
+                    cur.execute(stmt)
+                    logger.info("[health/session] Applied: %s", stmt)
+                except Exception as exc:
+                    logger.warning("[health/session] Failed to apply %r: %s", stmt, exc)
+
+            cur.execute("SHOW DATABASES")
+            dbs = [row[0] for row in cur.fetchall()]
+            cur.close()
+            conn.close()
+        except Exception as exc:
+            try:
+                conn.close()
+            except Exception:
+                pass
+            return False, f"SHOW DATABASES failed: {exc}"
+
+        sample = ", ".join(dbs[:5]) + (" …" if len(dbs) > 5 else "")
+        return True, f"SHOW DATABASES OK — [{sample}]"
 
     # ── Query execution ───────────────────────────────────────────────────────
 

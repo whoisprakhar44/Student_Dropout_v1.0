@@ -11,16 +11,17 @@ Or import and call from app startup:
     run_all_checks()   # raises RuntimeError on first failure
 
 Checks performed (in order):
-  1. JAVA_HOME   — env var set and directory exists
-  2. HADOOP_HOME — env var set, directory exists, hadoop binary present
+  1. JAVA_HOME       — env var set and directory exists
+  2. HADOOP_HOME     — env var set, directory exists, hadoop binary present
   3. HADOOP_CONF_DIR — contains core-site.xml and hdfs-site.xml
-  4. Kerberos ticket — `klist` exits 0
+  4. Kerberos ticket — `klist` exits 0  (also validated via HiveExecutor)
   5. HDFS reachable  — `hdfs dfs -ls /` exits 0
   6. HiveServer2 TCP — socket connect to host:port
-  7. Hive query      — SHOW DATABASES succeeds via PyHive
+  7. Hive query      — SHOW DATABASES succeeds via HiveExecutor.health_check()
+                        (also validates session settings, e.g. vectorized=false)
 
-Checks 1-6 use only stdlib (no PyHive import needed).
-Check 7 requires PyHive and a valid Kerberos ticket.
+Checks 1–6 use only stdlib.  Check 7 delegates entirely to HiveExecutor so
+that the startup script and the live executor share the same diagnostic path.
 """
 
 import os
@@ -164,33 +165,46 @@ def check_hiveserver2_tcp(host: str, port: int) -> str:
 
 
 def check_hive_query(host: str, port: int, auth: str, kerberos_service_name: str) -> str:
-    """Check 7: Execute SHOW DATABASES via PyHive with Kerberos."""
+    """
+    Check 7: Delegate to HiveExecutor.health_check() for Hive connectivity.
+
+    This reuses the live executor's diagnostic logic (Kerberos, TCP, SHOW
+    DATABASES, session settings) rather than duplicating it here.  Any fix
+    applied to HiveExecutor._check_database() is automatically reflected in
+    this startup check.
+    """
     try:
-        from pyhive import hive
+        # Import relative to the MCP directory where this script lives
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent))
+        from hive_executor import HiveExecutor  # type: ignore[import]
     except ImportError as exc:
         raise RuntimeError(
-            "PyHive not installed. Run: pip install 'pyhive[hive]' thrift-sasl"
+            f"Cannot import HiveExecutor: {exc}\n"
+            "Ensure hive_executor.py is in the same directory as this script "
+            "and all dependencies are installed (pyhive, thrift-sasl, kerberos)."
         ) from exc
 
     try:
-        conn = hive.Connection(
-            host=host,
-            port=port,
-            auth=auth,
-            kerberos_service_name=kerberos_service_name,
-        )
-        cursor = conn.cursor()
-        cursor.execute("SHOW DATABASES")
-        dbs = [row[0] for row in cursor.fetchall()]
-        cursor.close()
-        conn.close()
+        executor = HiveExecutor()
+        result   = executor.health_check()
     except Exception as exc:
-        raise RuntimeError(
-            f"Hive query failed: {exc}\n"
-            "Check Kerberos ticket, network access, and HiveServer2 logs."
-        ) from exc
+        raise RuntimeError(f"HiveExecutor.health_check() raised: {exc}") from exc
 
-    return f"SHOW DATABASES OK — found: {', '.join(dbs[:5])}"
+    # Surface sub-check failures as a single RuntimeError so run_all_checks
+    # can catch and display them the same way as the other checks.
+    failures = [
+        f"{key}: {result[key]['detail']}"
+        for key in ("kerberos", "hiveserver", "database")
+        if not result[key]["ok"]
+    ]
+    if failures:
+        raise RuntimeError(
+            "Hive health check failed:\n  " + "\n  ".join(failures)
+        )
+
+    db_detail = result["database"]["detail"]
+    return db_detail
 
 
 # ─────────────────────────────────────────────────────────────────────────────

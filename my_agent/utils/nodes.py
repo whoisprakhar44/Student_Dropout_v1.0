@@ -216,7 +216,8 @@ def llm_node(state: AgentState) -> dict:
 
     # Hard cap on LLM calls to prevent infinite loops
     current_calls = state.get("llm_calls", 0)
-    if current_calls >= 6:
+    max_llm_calls = int(os.getenv("MAX_LLM_CALLS", "15"))
+    if current_calls >= max_llm_calls:
         # Collect the last SQL error message (if any) to include in the fallback.
         last_sql_error: str | None = None
         for m in reversed(_tool_messages(history, "execute_sql")):
@@ -339,7 +340,7 @@ def build_tool_node() -> ToolNode:
 # ---------------------------------------------------------------------------
 # Verification node
 # ---------------------------------------------------------------------------
-_MAX_VERIFY_LOOPS = 5
+_MAX_VERIFY_LOOPS = int(os.getenv("MAX_VERIFY_LOOPS", "10"))
 
 _VERIFY_PROMPT = """You are a strict SQL result verifier.
 

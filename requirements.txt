@@ -14,6 +14,6 @@ sqlalchemy
 mcp
 mysql-connector-python
 pysqlite3-binary; sys_platform == 'linux'
-# ── Hive execution (required on server only, when HIVE_MCP_ENABLED=true) ──
-pyhive[hive]
-thrift-sasl        # Kerberos SASL transport for PyHive
+pyhive[hive_pure_sasl]
+thrift-sasl>=0.4.3        # Kerberos SASL transport for PyHive
+kerberos                  # Required for pure-sasl to support Kerberos (GSSAPI)

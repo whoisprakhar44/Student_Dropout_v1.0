@@ -17,6 +17,30 @@ hadoop:
 execution:
   query_timeout_seconds: 300
 
+  # ── Session settings (applied once per Hive connection) ─────────────────────
+  #
+  # CDP/Cloudera Iceberg vectorized reader incompatibility
+  # ──────────────────────────────────────────────────────
+  # The CDP cluster contains a runtime incompatibility in the Iceberg vectorized
+  # reader path that manifests as:
+  #
+  #   java.lang.NoSuchMethodError:
+  #       org.apache.iceberg.parquet.ParquetSchemaUtil.hasIds(
+  #           org.apache.parquet.schema.MessageType)
+  #
+  # Root cause: version skew between the cluster's Iceberg JAR and Parquet JAR
+  # in the vectorized code path.  This is a cluster-side issue that cannot be
+  # fixed from the client.
+  #
+  # Workaround: disable Hive vectorized execution for this session.
+  # HiveExecutor sends every statement below immediately after connection
+  # establishment (and after every automatic reconnect).
+  #
+  # Add additional session-scoped SET statements here as needed — no code
+  # changes required.
+  session_settings:
+    - "SET hive.vectorized.execution.enabled=false"
+
   # ── KeyError 22 workaround ──────────────────────────────────────────────────
   # PyHive cannot process Hive's internal type code 22 (timestamptz).
   # Any column listed here will have its fetched value cast to str in Python
