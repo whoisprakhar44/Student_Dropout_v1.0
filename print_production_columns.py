@@ -34,10 +34,14 @@ def main():
         print(f"Warning setting session parameter: {e}")
 
     tables = [
-        "curated_datamodels.mid_day_meal_serving_fact",
-        "curated_datamodels.ration_card_family",
-        "curated_datamodels.citizen_family_master",
-        "curated_datamodels.citizen_utility_connection"
+        "curated_datamodels.citizen_address_master",
+        "curated_datamodels.citizen_asset_electricity",
+        "curated_datamodels.citizen_land",
+        "curated_datamodels.citizen_property",
+        "curated_datamodels.citizen_bank_accounts",
+        "curated_datamodels.citizen_asset_vaahan",
+        "curated_datamodels.citizen_utility_connection",
+        "curated_datamodels.citizen_family_master"
     ]
 
     for table in tables:
