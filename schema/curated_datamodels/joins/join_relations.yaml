@@ -102,13 +102,6 @@ joins:
   to_column: meal_type_dim_id_pk
   cardinality: many_to_one
   usage: Analyze meal serving by breakfast, lunch, or other meal type.
-- name: meal_serving_to_nutrition_item
-  from_table: mid_day_meal_serving_fact
-  from_column: nutrition_item_dim_key_fk
-  to_table: nutrition_item_dim
-  to_column: nutrition_item_dim_id_pk
-  cardinality: many_to_one
-  usage: Analyze served nutrition items and quantities.
 - name: scheme_benefits_to_student
   from_table: scheme_benefits_fact
   from_column: citizen_student_id_fk
@@ -326,13 +319,6 @@ joins:
   to_column: citizen_master_pk
   cardinality: many_to_one
   usage: Join family relationship records to the base citizen profile.
-- name: citizen_family_to_related_citizen
-  from_table: citizen_family_master
-  from_column: relation_citizen_master_id
-  to_table: citizen_master
-  to_column: citizen_master_pk
-  cardinality: many_to_one
-  usage: Join family relationship records to the related citizen profile.
 - name: citizen_education_to_master
   from_table: citizen_education
   from_column: citizen_master_fk
