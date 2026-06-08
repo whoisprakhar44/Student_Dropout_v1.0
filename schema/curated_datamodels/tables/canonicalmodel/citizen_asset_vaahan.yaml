@@ -63,15 +63,15 @@ raw_ddl: "CREATE EXTERNAL TABLE `curated_datamodels`.`citizen_asset_vaahan`(\n  
   \ \n  'write.merge.mode'='merge-on-read', \n  'write.update.mode'='merge-on-read')"
 columns:
 - name: citizen_asset_vaahan_pk
-  type: INT
+  type: BIGINT
   nullable: true
   description: Citizen asset vaahan pk.
 - name: citizen_master_fk
-  type: INT
+  type: BIGINT
   nullable: true
   description: Citizen master fk.
 - name: citizen_asset_vaahan_type_fk
-  type: INT
+  type: BIGINT
   nullable: true
   description: Citizen asset vaahan type fk.
 - name: registration_no
@@ -79,7 +79,7 @@ columns:
   nullable: true
   description: Registration no.
 - name: date_of_registration
-  type: DATE
+  type: STRING
   nullable: true
   description: Date of registration.
 - name: make
@@ -106,22 +106,22 @@ columns:
   type: STRING
   nullable: true
   description: Engine no.
-- name: insurance_valid_to
+- name: regn_valid_to
   type: STRING
   nullable: true
-  description: Insurance valid to.
-- name: office
+  description: Registration valid to.
+- name: rto_office
   type: STRING
   nullable: true
-  description: Office.
+  description: RTO office.
 - name: color
   type: STRING
   nullable: true
   description: Color.
-- name: owner_type
+- name: owner_name
   type: STRING
   nullable: true
-  description: Owner type.
+  description: Owner name.
 - name: owner_seniority
   type: STRING
   nullable: true
