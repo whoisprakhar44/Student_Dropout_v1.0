@@ -7,48 +7,14 @@ partitioned_by: ''
 tblproperties:
   engine.hive.enabled: 'true'
   external: 'true'
-  metadata_location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_utility_connection/metadata/00000-07ea4c73-f39b-4b18-884a-9185ea856af1.metadata.json
-  parquet.compression: SNAPPY
-  snapshot-count: '0'
   table_type: ICEBERG
-  write.delete.mode: merge-on-read
-  write.format.default: parquet
-  write.merge.mode: merge-on-read
-  write.update.mode: merge-on-read
-source_file: C:\Users\2797779\Downloads\curated_datamodels_ddls.txt
-raw_ddl: "CREATE EXTERNAL TABLE `curated_datamodels`.`citizen_utility_connection`(\n\
-  \  `citizen_utility_connection_fk` int COMMENT 'from deserializer', \n  `citizen_master_fk`\
-  \ int COMMENT 'from deserializer', \n  `gas_connection_status` string COMMENT 'from\
-  \ deserializer', \n  `electricity_connection_status` string COMMENT 'from deserializer',\
-  \ \n  `avg_monthly_kwh` string COMMENT 'from deserializer', \n  `water_connection_status`\
-  \ string COMMENT 'from deserializer', \n  `created_at` string COMMENT 'from deserializer',\
-  \ \n  `created_by` string COMMENT 'from deserializer', \n  `updated_at` string COMMENT\
-  \ 'from deserializer', \n  `updated_by` string COMMENT 'from deserializer')\nROW\
-  \ FORMAT SERDE \n  'org.apache.iceberg.mr.hive.HiveIcebergSerDe' \nSTORED BY \n\
-  \  'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' \n\nLOCATION\n  'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_utility_connection'\n\
-  TBLPROPERTIES (\n  'current-schema'='{\"type\":\"struct\",\"schema-id\":0,\"fields\"\
-  :[{\"id\":1,\"name\":\"citizen_utility_connection_fk\",\"required\":false,\"type\"\
-  :\"int\"},{\"id\":2,\"name\":\"citizen_master_fk\",\"required\":false,\"type\":\"\
-  int\"},{\"id\":3,\"name\":\"gas_connection_status\",\"required\":false,\"type\"\
-  :\"string\"},{\"id\":4,\"name\":\"electricity_connection_status\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":5,\"name\":\"avg_monthly_kwh\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":6,\"name\":\"water_connection_status\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":7,\"name\":\"created_at\",\"required\":false,\"type\"\
-  :\"string\"},{\"id\":8,\"name\":\"created_by\",\"required\":false,\"type\":\"string\"\
-  },{\"id\":9,\"name\":\"updated_at\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":10,\"name\":\"updated_by\",\"required\":false,\"type\":\"string\"}]}', \n \
-  \ 'engine.hive.enabled'='true', \n  'external'='true', \n  'metadata_location'='hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_utility_connection/metadata/00000-07ea4c73-f39b-4b18-884a-9185ea856af1.metadata.json',\
-  \ \n  'owner'='srikanthu', \n  'parquet.compression'='SNAPPY', \n  'snapshot-count'='0',\
-  \ \n  'table_type'='ICEBERG', \n  'transient_lastDdlTime'='1776323393', \n  'uuid'='4cfef9f2-947b-446e-9376-c3f324a03760',\
-  \ \n  'write.delete.mode'='merge-on-read', \n  'write.format.default'='parquet',\
-  \ \n  'write.merge.mode'='merge-on-read', \n  'write.update.mode'='merge-on-read')"
 columns:
 - name: citizen_utility_connection_fk
-  type: INT
+  type: BIGINT
   nullable: true
   description: Citizen utility connection fk.
 - name: citizen_master_fk
-  type: INT
+  type: STRING
   nullable: true
   description: Citizen master fk.
 - name: gas_connection_status
@@ -68,7 +34,7 @@ columns:
   nullable: true
   description: Water connection status.
 - name: created_at
-  type: STRING
+  type: TIMESTAMP
   nullable: true
   description: Created at.
 - name: created_by
@@ -76,7 +42,7 @@ columns:
   nullable: true
   description: Created by.
 - name: updated_at
-  type: STRING
+  type: TIMESTAMP
   nullable: true
   description: Updated at.
 - name: updated_by
@@ -85,11 +51,3 @@ columns:
   description: Updated by.
 primary_key: []
 relationships: []
-business_terms:
-- curated datamodels
-- canonicalmodel
-- Hive
-- Iceberg
-- ICEBERG
-common_operations:
-- profile records in citizen_utility_connection

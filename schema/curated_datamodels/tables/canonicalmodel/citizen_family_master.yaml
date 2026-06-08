@@ -5,62 +5,9 @@ table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_family_master
 partitioned_by: ''
 tblproperties:
-  current-snapshot-id: '3539606291959677492'
-  current-snapshot-timestamp-ms: '1778497006957'
   engine.hive.enabled: 'true'
   external: 'true'
-  metadata_location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_family_master/metadata/00007-77005559-f64b-492d-bcd1-7ea795d5f30a.metadata.json
-  parquet.compression: SNAPPY
-  snapshot-count: '7'
   table_type: ICEBERG
-  write.delete.mode: merge-on-read
-  write.format.default: parquet
-  write.merge.mode: merge-on-read
-  write.update.mode: merge-on-read
-source_file: C:\Users\2797779\Downloads\curated_datamodels_ddls.txt
-raw_ddl: "CREATE EXTERNAL TABLE `curated_datamodels`.`citizen_family_master`(\n  `citizen_family_master_pk`\
-  \ bigint COMMENT 'from deserializer', \n  `citizen_master_fk` bigint COMMENT 'from\
-  \ deserializer', \n  `relation_citizen_master_id` string COMMENT 'from deserializer',\
-  \ \n  `relation_first_name` string COMMENT 'from deserializer', \n  `relation_middle_name`\
-  \ string COMMENT 'from deserializer', \n  `relation_last_name` string COMMENT 'from\
-  \ deserializer', \n  `relationship_type_code` string COMMENT 'from deserializer',\
-  \ \n  `gender` string COMMENT 'from deserializer', \n  `notes` string COMMENT 'from\
-  \ deserializer', \n  `effective_start_date` date COMMENT 'from deserializer', \n\
-  \  `effective_end_date` date COMMENT 'from deserializer', \n  `created_date` timestamp\
-  \ with local time zone COMMENT 'from deserializer', \n  `created_by` string COMMENT\
-  \ 'from deserializer', \n  `updated_date` timestamp with local time zone COMMENT\
-  \ 'from deserializer', \n  `updated_by` string COMMENT 'from deserializer')\nROW\
-  \ FORMAT SERDE \n  'org.apache.iceberg.mr.hive.HiveIcebergSerDe' \nSTORED BY \n\
-  \  'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' \n\nLOCATION\n  'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_family_master'\n\
-  TBLPROPERTIES (\n  'current-schema'='{\"type\":\"struct\",\"schema-id\":0,\"fields\"\
-  :[{\"id\":1,\"name\":\"citizen_family_master_pk\",\"required\":false,\"type\":\"\
-  long\"},{\"id\":2,\"name\":\"citizen_master_fk\",\"required\":false,\"type\":\"\
-  long\"},{\"id\":3,\"name\":\"relation_citizen_master_id\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":4,\"name\":\"relation_first_name\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":5,\"name\":\"relation_middle_name\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":6,\"name\":\"relation_last_name\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":7,\"name\":\"relationship_type_code\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":8,\"name\":\"gender\",\"required\":false,\"type\":\"\
-  string\"},{\"id\":9,\"name\":\"notes\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":10,\"name\":\"effective_start_date\",\"required\":false,\"type\":\"date\"},{\"\
-  id\":11,\"name\":\"effective_end_date\",\"required\":false,\"type\":\"date\"},{\"\
-  id\":12,\"name\":\"created_date\",\"required\":false,\"type\":\"timestamptz\"},{\"\
-  id\":13,\"name\":\"created_by\",\"required\":false,\"type\":\"string\"},{\"id\"\
-  :14,\"name\":\"updated_date\",\"required\":false,\"type\":\"timestamptz\"},{\"id\"\
-  :15,\"name\":\"updated_by\",\"required\":false,\"type\":\"string\"}]}', \n  'current-snapshot-id'='3539606291959677492',\
-  \ \n  'current-snapshot-summary'='{\"spark.app.id\":\"application_1775893506593_3130\"\
-  ,\"added-data-files\":\"3\",\"added-records\":\"43617644\",\"added-files-size\"\
-  :\"1521836837\",\"changed-partition-count\":\"1\",\"total-records\":\"43617644\"\
-  ,\"total-files-size\":\"1521836837\",\"total-data-files\":\"3\",\"total-delete-files\"\
-  :\"0\",\"total-position-deletes\":\"0\",\"total-equality-deletes\":\"0\"}', \n \
-  \ 'current-snapshot-timestamp-ms'='1778497006957', \n  'engine.hive.enabled'='true',\
-  \ \n  'external'='true', \n  'impala.events.catalogServiceId'='9776eab397964690:a6788b7b6e82cea7',\
-  \ \n  'impala.events.catalogVersion'='138414', \n  'metadata_location'='hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_family_master/metadata/00007-77005559-f64b-492d-bcd1-7ea795d5f30a.metadata.json',\
-  \ \n  'owner'='srikanthu', \n  'parquet.compression'='SNAPPY', \n  'previous_metadata_location'='hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_family_master/metadata/00006-22bed130-baee-4c45-9a50-b25a557e5c21.metadata.json',\
-  \ \n  'snapshot-count'='7', \n  'table_type'='ICEBERG', \n  'transient_lastDdlTime'='1778497007',\
-  \ \n  'uuid'='8efbd1e4-8e4d-499c-9ca5-7c43d36d3906', \n  'write.delete.mode'='merge-on-read',\
-  \ \n  'write.format.default'='parquet', \n  'write.merge.mode'='merge-on-read',\
-  \ \n  'write.update.mode'='merge-on-read')"
 columns:
 - name: citizen_family_master_pk
   type: BIGINT
@@ -70,34 +17,70 @@ columns:
   type: BIGINT
   nullable: true
   description: Citizen master fk.
-- name: relation_citizen_master_id
+- name: household_id
   type: STRING
   nullable: true
-  description: Relation citizen master id.
-- name: relation_first_name
+  description: Household id.
+- name: resident_id
   type: STRING
   nullable: true
-  description: Relation first name.
-- name: relation_middle_name
+  description: Resident id.
+- name: citizen_name
   type: STRING
   nullable: true
-  description: Relation middle name.
-- name: relation_last_name
+  description: Citizen name.
+- name: realtionship
   type: STRING
   nullable: true
-  description: Relation last name.
-- name: relationship_type_code
+  description: Relationship (with database spelling realtionship).
+- name: head_of_the_family
   type: STRING
   nullable: true
-  description: Relationship type code.
-- name: gender
+  description: Head of the family.
+- name: is_hofamily
   type: STRING
   nullable: true
-  description: Gender.
-- name: notes
+  description: Is head of the family.
+- name: is_memberadded
   type: STRING
   nullable: true
-  description: Notes.
+  description: Is member added.
+- name: is_memberdeleted
+  type: STRING
+  nullable: true
+  description: Is member deleted.
+- name: relation_withhof
+  type: STRING
+  nullable: true
+  description: Relation with HOF.
+- name: father_citizen_master_fk
+  type: STRING
+  nullable: true
+  description: Father citizen master fk.
+- name: mother_citizen_master_fk
+  type: STRING
+  nullable: true
+  description: Mother citizen master fk.
+- name: spouse_citizen_master_fk
+  type: STRING
+  nullable: true
+  description: Spouse citizen master fk.
+- name: is_married
+  type: STRING
+  nullable: true
+  description: Is married.
+- name: new_hh_id
+  type: STRING
+  nullable: true
+  description: New household id.
+- name: hh_update_status
+  type: STRING
+  nullable: true
+  description: Household update status.
+- name: careof
+  type: STRING
+  nullable: true
+  description: Care of.
 - name: effective_start_date
   type: DATE
   nullable: true
@@ -125,11 +108,3 @@ columns:
 primary_key:
 - citizen_family_master_pk
 relationships: []
-business_terms:
-- curated datamodels
-- canonicalmodel
-- Hive
-- Iceberg
-- ICEBERG
-common_operations:
-- profile records in citizen_family_master

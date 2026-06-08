@@ -7,97 +7,7 @@ partitioned_by: 'mid_day_meal_serving_fact_id_pk_bucket: bucket[32]'
 tblproperties:
   engine.hive.enabled: 'true'
   external: 'true'
-  metadata_location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/metadata/00000-4b6e665a-e770-4912-b344-713a3819aaf3.metadata.json
-  parquet.compression: SNAPPY
-  snapshot-count: '0'
   table_type: ICEBERG
-  write.delete.mode: merge-on-read
-  write.format.default: parquet
-  write.merge.mode: merge-on-read
-  write.update.mode: merge-on-read
-source_file: C:\Users\2797779\Downloads\curated_datamodels_ddls.txt
-raw_ddl: "CREATE EXTERNAL TABLE `curated_datamodels`.`mid_day_meal_serving_fact`(\n\
-  \  `mid_day_meal_serving_fact_id_pk` bigint COMMENT 'from deserializer', \n  `citizen_school_id_fk`\
-  \ bigint COMMENT 'from deserializer', \n  `date_key_id_fk` bigint COMMENT 'from\
-  \ deserializer', \n  `meal_type_id_fk` bigint COMMENT 'from deserializer', \n  `nutrition_item_dim_key_fk`\
-  \ bigint COMMENT 'from deserializer', \n  `scheme_key_id_fk` bigint COMMENT 'from\
-  \ deserializer', \n  `academic_year` string COMMENT 'from deserializer', \n  `mid_day_meal_serving_factor`\
-  \ decimal(5,2) COMMENT 'from deserializer', \n  `vendor_id_fk` bigint COMMENT 'from\
-  \ deserializer', \n  `indent_reference_number` string COMMENT 'from deserializer',\
-  \ \n  `inspection_reference_id` string COMMENT 'from deserializer', \n  `students_enrolled_count`\
-  \ int COMMENT 'from deserializer', \n  `students_present_count` int COMMENT 'from\
-  \ deserializer', \n  `students_served_count` int COMMENT 'from deserializer', \n\
-  \  `students_not_served_count` int COMMENT 'from deserializer', \n  `students_eligible_count`\
-  \ int COMMENT 'from deserializer', \n  `meal_served_flag` string COMMENT 'from deserializer',\
-  \ \n  `menu_item_count` int COMMENT 'from deserializer', \n  `calories_served` decimal(8,2)\
-  \ COMMENT 'from deserializer', \n  `protein_grams_served` decimal(8,2) COMMENT 'from\
-  \ deserializer', \n  `egg_served_count` int COMMENT 'from deserializer', \n  `milk_served_quantity_ml`\
-  \ int COMMENT 'from deserializer', \n  `meal_serving_start_time` timestamp with\
-  \ local time zone COMMENT 'from deserializer', \n  `mid_day_meal_serving_factcol2`\
-  \ string COMMENT 'from deserializer', \n  `cooked_on_site_flag` string COMMENT 'from\
-  \ deserializer', \n  `centralized_kitchen_flag` string COMMENT 'from deserializer',\
-  \ \n  `fuel_type` string COMMENT 'from deserializer', \n  `hygiene_compliant_flag`\
-  \ string COMMENT 'from deserializer', \n  `food_tasted_flag` string COMMENT 'from\
-  \ deserializer', \n  `teacher_supervised_flag` string COMMENT 'from deserializer',\
-  \ \n  `medical_incident_reported_flag` string COMMENT 'from deserializer', \n  `last_inspection_date`\
-  \ date COMMENT 'from deserializer', \n  `inspection_score` decimal(5,2) COMMENT\
-  \ 'from deserializer', \n  `inspection_remarks_code` string COMMENT 'from deserializer',\
-  \ \n  `geo_tagged_flag` string COMMENT 'from deserializer', \n  `photo_captured_flag`\
-  \ string COMMENT 'from deserializer', \n  `meal_not_served_reason_code` string COMMENT\
-  \ 'from deserializer', \n  `supply_shortage_flag` string COMMENT 'from deserializer',\
-  \ \n  `created_date` timestamp with local time zone COMMENT 'from deserializer',\
-  \ \n  `created_by` string COMMENT 'from deserializer')\nROW FORMAT SERDE \n  'org.apache.iceberg.mr.hive.HiveIcebergSerDe'\
-  \ \nSTORED BY \n  'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' \n\nLOCATION\n\
-  \  'hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact'\n\
-  TBLPROPERTIES (\n  'current-schema'='{\"type\":\"struct\",\"schema-id\":0,\"fields\"\
-  :[{\"id\":1,\"name\":\"mid_day_meal_serving_fact_id_pk\",\"required\":false,\"type\"\
-  :\"long\"},{\"id\":2,\"name\":\"citizen_school_id_fk\",\"required\":false,\"type\"\
-  :\"long\"},{\"id\":3,\"name\":\"date_key_id_fk\",\"required\":false,\"type\":\"\
-  long\"},{\"id\":4,\"name\":\"meal_type_id_fk\",\"required\":false,\"type\":\"long\"\
-  },{\"id\":5,\"name\":\"nutrition_item_dim_key_fk\",\"required\":false,\"type\":\"\
-  long\"},{\"id\":6,\"name\":\"scheme_key_id_fk\",\"required\":false,\"type\":\"long\"\
-  },{\"id\":7,\"name\":\"academic_year\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":8,\"name\":\"mid_day_meal_serving_factor\",\"required\":false,\"type\":\"decimal(5,\
-  \ 2)\"},{\"id\":9,\"name\":\"vendor_id_fk\",\"required\":false,\"type\":\"long\"\
-  },{\"id\":10,\"name\":\"indent_reference_number\",\"required\":false,\"type\":\"\
-  string\"},{\"id\":11,\"name\":\"inspection_reference_id\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":12,\"name\":\"students_enrolled_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":13,\"name\":\"students_present_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":14,\"name\":\"students_served_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":15,\"name\":\"students_not_served_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":16,\"name\":\"students_eligible_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":17,\"name\":\"meal_served_flag\",\"required\":false,\"\
-  type\":\"string\"},{\"id\":18,\"name\":\"menu_item_count\",\"required\":false,\"\
-  type\":\"int\"},{\"id\":19,\"name\":\"calories_served\",\"required\":false,\"type\"\
-  :\"decimal(8, 2)\"},{\"id\":20,\"name\":\"protein_grams_served\",\"required\":false,\"\
-  type\":\"decimal(8, 2)\"},{\"id\":21,\"name\":\"egg_served_count\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":22,\"name\":\"milk_served_quantity_ml\",\"required\"\
-  :false,\"type\":\"int\"},{\"id\":23,\"name\":\"meal_serving_start_time\",\"required\"\
-  :false,\"type\":\"timestamptz\"},{\"id\":24,\"name\":\"mid_day_meal_serving_factcol2\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":25,\"name\":\"cooked_on_site_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":26,\"name\":\"centralized_kitchen_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":27,\"name\":\"fuel_type\",\"required\"\
-  :false,\"type\":\"string\"},{\"id\":28,\"name\":\"hygiene_compliant_flag\",\"required\"\
-  :false,\"type\":\"string\"},{\"id\":29,\"name\":\"food_tasted_flag\",\"required\"\
-  :false,\"type\":\"string\"},{\"id\":30,\"name\":\"teacher_supervised_flag\",\"required\"\
-  :false,\"type\":\"string\"},{\"id\":31,\"name\":\"medical_incident_reported_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":32,\"name\":\"last_inspection_date\"\
-  ,\"required\":false,\"type\":\"date\"},{\"id\":33,\"name\":\"inspection_score\"\
-  ,\"required\":false,\"type\":\"decimal(5, 2)\"},{\"id\":34,\"name\":\"inspection_remarks_code\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":35,\"name\":\"geo_tagged_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":36,\"name\":\"photo_captured_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":37,\"name\":\"meal_not_served_reason_code\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":38,\"name\":\"supply_shortage_flag\"\
-  ,\"required\":false,\"type\":\"string\"},{\"id\":39,\"name\":\"created_date\",\"\
-  required\":false,\"type\":\"timestamptz\"},{\"id\":40,\"name\":\"created_by\",\"\
-  required\":false,\"type\":\"string\"}]}', \n  'default-partition-spec'='{\"spec-id\"\
-  :0,\"fields\":[{\"name\":\"mid_day_meal_serving_fact_id_pk_bucket\",\"transform\"\
-  :\"bucket[32]\",\"source-id\":1,\"field-id\":1000}]}', \n  'engine.hive.enabled'='true',\
-  \ \n  'external'='true', \n  'metadata_location'='hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact/metadata/00000-4b6e665a-e770-4912-b344-713a3819aaf3.metadata.json',\
-  \ \n  'owner'='srikanthu', \n  'parquet.compression'='SNAPPY', \n  'snapshot-count'='0',\
-  \ \n  'table_type'='ICEBERG', \n  'transient_lastDdlTime'='1777972239', \n  'uuid'='541daff0-1020-4b82-88dc-722c3cbadda9',\
-  \ \n  'write.delete.mode'='merge-on-read', \n  'write.format.default'='parquet',\
-  \ \n  'write.merge.mode'='merge-on-read', \n  'write.update.mode'='merge-on-read')"
 columns:
 - name: mid_day_meal_serving_fact_id_pk
   type: BIGINT
@@ -115,14 +25,6 @@ columns:
   type: BIGINT
   nullable: true
   description: Meal type identifier foreign key.
-- name: nutrition_item_dim_key_fk
-  type: BIGINT
-  nullable: true
-  description: Nutrition item dim key foreign key.
-- name: scheme_key_id_fk
-  type: BIGINT
-  nullable: true
-  description: Scheme key identifier foreign key.
 - name: academic_year
   type: STRING
   nullable: true
@@ -131,10 +33,6 @@ columns:
   type: DECIMAL(5,2)
   nullable: true
   description: Mid day meal serving factor.
-- name: vendor_id_fk
-  type: BIGINT
-  nullable: true
-  description: Vendor identifier foreign key.
 - name: indent_reference_number
   type: STRING
   nullable: true
@@ -143,34 +41,10 @@ columns:
   type: STRING
   nullable: true
   description: Inspection reference identifier.
-- name: students_enrolled_count
-  type: INT
-  nullable: true
-  description: Students enrolled count.
-- name: students_present_count
-  type: INT
-  nullable: true
-  description: Students present count.
-- name: students_served_count
-  type: INT
-  nullable: true
-  description: Students served count.
-- name: students_not_served_count
-  type: INT
-  nullable: true
-  description: Students not served count.
-- name: students_eligible_count
-  type: INT
-  nullable: true
-  description: Students eligible count.
 - name: meal_served_flag
   type: STRING
   nullable: true
   description: Meal served flag.
-- name: menu_item_count
-  type: INT
-  nullable: true
-  description: Menu item count.
 - name: calories_served
   type: DECIMAL(8,2)
   nullable: true
@@ -183,30 +57,10 @@ columns:
   type: INT
   nullable: true
   description: Egg served count.
-- name: milk_served_quantity_ml
-  type: INT
-  nullable: true
-  description: Milk served quantity ml.
 - name: meal_serving_start_time
   type: TIMESTAMP
   nullable: true
   description: Meal serving start time.
-- name: mid_day_meal_serving_factcol2
-  type: STRING
-  nullable: true
-  description: Mid day meal serving factcol2.
-- name: cooked_on_site_flag
-  type: STRING
-  nullable: true
-  description: Cooked on site flag.
-- name: centralized_kitchen_flag
-  type: STRING
-  nullable: true
-  description: Centralized kitchen flag.
-- name: fuel_type
-  type: STRING
-  nullable: true
-  description: Fuel type.
 - name: hygiene_compliant_flag
   type: STRING
   nullable: true
@@ -261,22 +115,4 @@ columns:
   description: Created by.
 primary_key:
 - mid_day_meal_serving_fact_id_pk
-relationships:
-- mid_day_meal_serving_fact.citizen_school_id_fk is a foreign-key-style reference
-  to citizen_school_id.
-- mid_day_meal_serving_fact.date_key_id_fk is a foreign-key-style reference to date_key_id.
-- mid_day_meal_serving_fact.meal_type_id_fk is a foreign-key-style reference to meal_type_id.
-- mid_day_meal_serving_fact.nutrition_item_dim_key_fk is a foreign-key-style reference
-  to nutrition_item_dim_key.
-- mid_day_meal_serving_fact.scheme_key_id_fk is a foreign-key-style reference to scheme_key_id.
-- mid_day_meal_serving_fact.vendor_id_fk is a foreign-key-style reference to vendor_id.
-business_terms:
-- fact table
-- event and metric analysis
-- mid-day meal operations
-- Hive
-- Iceberg
-- ICEBERG
-common_operations:
-- profile records in mid_day_meal_serving_fact
-- aggregate measures by academic year and linked dimensions
+relationships: []

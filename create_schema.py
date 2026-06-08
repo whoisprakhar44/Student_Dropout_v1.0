@@ -408,9 +408,7 @@ def _seed_facts(cursor: sqlite3.Cursor, table_columns: dict[str, list[str]]) -> 
             "nutrition_item_dim_key_fk": random.randint(1, 5),
             "scheme_key_id_fk": random.randint(1, 5),
             "academic_year": "2023-24",
-            "students_enrolled_count": random.randint(100, 900),
-            "students_served_count": random.randint(80, 850),
-            "meal_served_count": random.randint(80, 850),
+            "meal_served_flag": random.choice(["Y", "Y", "N"]),
             "created_date": _now_text(),
             "created_by": "sample_loader",
         })

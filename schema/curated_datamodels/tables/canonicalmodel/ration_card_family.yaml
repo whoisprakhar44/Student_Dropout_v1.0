@@ -7,64 +7,14 @@ partitioned_by: ''
 tblproperties:
   engine.hive.enabled: 'true'
   external: 'true'
-  metadata_location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/ration_card_family/metadata/00000-73d637b4-d7d4-4456-8760-6f751afa1ea5.metadata.json
-  parquet.compression: SNAPPY
-  snapshot-count: '0'
   table_type: ICEBERG
-  write.delete.mode: merge-on-read
-  write.format.default: parquet
-  write.merge.mode: merge-on-read
-  write.update.mode: merge-on-read
-source_file: C:\Users\2797779\Downloads\curated_datamodels_ddls.txt
-raw_ddl: "CREATE EXTERNAL TABLE `curated_datamodels`.`ration_card_family`(\n  `ration_card_family_pk`\
-  \ int COMMENT 'from deserializer', \n  `ration_card_type_id_fk` string COMMENT 'from\
-  \ deserializer', \n  `ration_card_no` string COMMENT 'from deserializer', \n  `card_type_code`\
-  \ string COMMENT 'from deserializer', \n  `scheme_code` string COMMENT 'from deserializer',\
-  \ \n  `issuing_district_code` string COMMENT 'from deserializer', \n  `issuing_mandal_code`\
-  \ string COMMENT 'from deserializer', \n  `ration_card_familycol` string COMMENT\
-  \ 'from deserializer', \n  `fps_code` string COMMENT 'from deserializer', \n  `head_person_citizen_master_id`\
-  \ int COMMENT 'from deserializer', \n  `income_band` string COMMENT 'from deserializer',\
-  \ \n  `status_code` string COMMENT 'from deserializer', \n  `status_reason_code`\
-  \ string COMMENT 'from deserializer', \n  `status_effective_from` string COMMENT\
-  \ 'from deserializer', \n  `status_remarks` string COMMENT 'from deserializer',\
-  \ \n  `created_at` timestamp with local time zone COMMENT 'from deserializer', \n\
-  \  `created_by` string COMMENT 'from deserializer', \n  `updated_at` timestamp with\
-  \ local time zone COMMENT 'from deserializer', \n  `updated_by` string COMMENT 'from\
-  \ deserializer')\nROW FORMAT SERDE \n  'org.apache.iceberg.mr.hive.HiveIcebergSerDe'\
-  \ \nSTORED BY \n  'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' \n\nLOCATION\n\
-  \  'hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/ration_card_family'\n\
-  TBLPROPERTIES (\n  'current-schema'='{\"type\":\"struct\",\"schema-id\":0,\"fields\"\
-  :[{\"id\":1,\"name\":\"ration_card_family_pk\",\"required\":false,\"type\":\"int\"\
-  },{\"id\":2,\"name\":\"ration_card_type_id_fk\",\"required\":false,\"type\":\"string\"\
-  },{\"id\":3,\"name\":\"ration_card_no\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":4,\"name\":\"card_type_code\",\"required\":false,\"type\":\"string\"},{\"id\"\
-  :5,\"name\":\"scheme_code\",\"required\":false,\"type\":\"string\"},{\"id\":6,\"\
-  name\":\"issuing_district_code\",\"required\":false,\"type\":\"string\"},{\"id\"\
-  :7,\"name\":\"issuing_mandal_code\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":8,\"name\":\"ration_card_familycol\",\"required\":false,\"type\":\"string\"\
-  },{\"id\":9,\"name\":\"fps_code\",\"required\":false,\"type\":\"string\"},{\"id\"\
-  :10,\"name\":\"head_person_citizen_master_id\",\"required\":false,\"type\":\"int\"\
-  },{\"id\":11,\"name\":\"income_band\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":12,\"name\":\"status_code\",\"required\":false,\"type\":\"string\"},{\"id\"\
-  :13,\"name\":\"status_reason_code\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":14,\"name\":\"status_effective_from\",\"required\":false,\"type\":\"string\"\
-  },{\"id\":15,\"name\":\"status_remarks\",\"required\":false,\"type\":\"string\"\
-  },{\"id\":16,\"name\":\"created_at\",\"required\":false,\"type\":\"timestamptz\"\
-  },{\"id\":17,\"name\":\"created_by\",\"required\":false,\"type\":\"string\"},{\"\
-  id\":18,\"name\":\"updated_at\",\"required\":false,\"type\":\"timestamptz\"},{\"\
-  id\":19,\"name\":\"updated_by\",\"required\":false,\"type\":\"string\"}]}', \n \
-  \ 'engine.hive.enabled'='true', \n  'external'='true', \n  'metadata_location'='hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/ration_card_family/metadata/00000-73d637b4-d7d4-4456-8760-6f751afa1ea5.metadata.json',\
-  \ \n  'owner'='srikanthu', \n  'parquet.compression'='SNAPPY', \n  'snapshot-count'='0',\
-  \ \n  'table_type'='ICEBERG', \n  'transient_lastDdlTime'='1776323391', \n  'uuid'='27858b79-01aa-4694-8d97-341c2a65e838',\
-  \ \n  'write.delete.mode'='merge-on-read', \n  'write.format.default'='parquet',\
-  \ \n  'write.merge.mode'='merge-on-read', \n  'write.update.mode'='merge-on-read')"
 columns:
 - name: ration_card_family_pk
-  type: INT
+  type: BIGINT
   nullable: true
   description: Ration card family pk.
 - name: ration_card_type_id_fk
-  type: STRING
+  type: BIGINT
   nullable: true
   description: Ration card type identifier fk.
 - name: ration_card_no
@@ -75,50 +25,30 @@ columns:
   type: STRING
   nullable: true
   description: Card type code.
-- name: scheme_code
-  type: STRING
-  nullable: true
-  description: Scheme code.
 - name: issuing_district_code
   type: STRING
   nullable: true
   description: Issuing district code.
-- name: issuing_mandal_code
-  type: STRING
-  nullable: true
-  description: Issuing mandal code.
-- name: ration_card_familycol
-  type: STRING
-  nullable: true
-  description: Ration card familycol.
 - name: fps_code
   type: STRING
   nullable: true
   description: Fps code.
-- name: head_person_citizen_master_id
-  type: INT
+- name: citizen_master_id_fk
+  type: BIGINT
   nullable: true
-  description: Head person citizen master id.
-- name: income_band
+  description: Citizen master identifier fk.
+- name: annual_income
   type: STRING
   nullable: true
-  description: Income band.
+  description: Annual income.
+- name: ration_card_id
+  type: STRING
+  nullable: true
+  description: Ration card id.
 - name: status_code
   type: STRING
   nullable: true
   description: Status code.
-- name: status_reason_code
-  type: STRING
-  nullable: true
-  description: Status reason code.
-- name: status_effective_from
-  type: STRING
-  nullable: true
-  description: Status effective from.
-- name: status_remarks
-  type: STRING
-  nullable: true
-  description: Status remarks.
 - name: created_at
   type: TIMESTAMP
   nullable: true
@@ -138,11 +68,3 @@ columns:
 primary_key:
 - ration_card_family_pk
 relationships: []
-business_terms:
-- curated datamodels
-- canonicalmodel
-- Hive
-- Iceberg
-- ICEBERG
-common_operations:
-- profile records in ration_card_family
