@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_address_master_test
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen address master test.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_address_master_test

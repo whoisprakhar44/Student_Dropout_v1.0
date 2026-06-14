@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: school_scheme_master
+department: canonicalmodel
 description: Dimension/master table for school scheme reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_scheme_master

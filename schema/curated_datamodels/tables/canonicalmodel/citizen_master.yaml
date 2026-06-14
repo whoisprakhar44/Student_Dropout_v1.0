@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_master
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen master.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_master

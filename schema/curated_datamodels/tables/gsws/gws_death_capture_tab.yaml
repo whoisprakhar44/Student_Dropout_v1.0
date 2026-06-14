@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_death_capture_tab
+department: gsws
 description: 'GSWS table: This is about death info which are given by pachayiti secretary.its
   a manual intervention.they are capturng the person death.they need to provide the
   death certficate. Imp: We are capturing the citizen death but we are not marking

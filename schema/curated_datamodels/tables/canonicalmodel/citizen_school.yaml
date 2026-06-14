@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_school
+department: canonicalmodel
 description: Curated table containing citizen school attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_school

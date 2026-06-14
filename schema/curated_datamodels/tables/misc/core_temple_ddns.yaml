@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: core_temple_ddns
+department: misc
 description: Curated Hive/Iceberg table for core temple ddns.
 table_format: ICEBERG
 location: hdfs://datalakedev/warehouse/tablespace/external/hive/curated_datamodels.db/core_temple_ddns

@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_citizen_bank_dtls_tab
+department: gsws
 description: 'GSWS table: Citizen bank dtls'
 table_format: ICEBERG
 source_schema: GSWSONLINE

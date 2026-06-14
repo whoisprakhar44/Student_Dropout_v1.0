@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_sec_sim_mobile_details
+department: gsws
 description: 'GSWS table: Sec Pin code and address'
 table_format: ICEBERG
 source_schema: GSWSONLINE

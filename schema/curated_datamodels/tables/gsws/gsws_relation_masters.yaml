@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_relation_masters
+department: gsws
 description: 'GSWS table: House hold Member relationship Master'
 table_format: ICEBERG
 source_schema: GSWSONLINE

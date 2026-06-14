@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: infrastructure_category_dim
+department: school
 description: Dimension/master table for infrastructure category reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/infrastructure_category_dim

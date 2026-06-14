@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_idty
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen idty.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_idty

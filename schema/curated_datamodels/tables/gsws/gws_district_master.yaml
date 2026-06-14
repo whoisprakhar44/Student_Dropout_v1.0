@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_district_master
+department: gsws
 description: 'GSWS table: Master table for Districts in Andhra Pradesh'
 table_format: ICEBERG
 source_schema: GSWSONLINE

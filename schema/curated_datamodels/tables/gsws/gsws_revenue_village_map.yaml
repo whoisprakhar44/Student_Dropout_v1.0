@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_revenue_village_map
+department: gsws
 description: 'GSWS table: Revenue Village Map'
 table_format: ICEBERG
 source_schema: GSWSONLINE

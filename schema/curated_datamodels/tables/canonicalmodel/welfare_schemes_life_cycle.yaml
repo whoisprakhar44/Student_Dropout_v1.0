@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: welfare_schemes_life_cycle
+department: canonicalmodel
 description: Curated Hive/Iceberg table for welfare schemes life cycle.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/welfare_schemes_life_cycle

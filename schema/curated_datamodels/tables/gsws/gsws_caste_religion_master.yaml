@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_caste_religion_master
+department: gsws
 description: 'GSWS table: Caste Religion Master'
 table_format: ICEBERG
 source_schema: GSWSONLINE

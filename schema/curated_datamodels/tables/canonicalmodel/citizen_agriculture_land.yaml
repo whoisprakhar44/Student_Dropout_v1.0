@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_agriculture_land
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen agriculture land.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_agriculture_land

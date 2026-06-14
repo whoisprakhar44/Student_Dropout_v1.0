@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_consent
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen consent.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_consent

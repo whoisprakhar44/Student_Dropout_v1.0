@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_constiuency_sec_master
+department: gsws
 description: 'GSWS table: Constiuency Sec Master
 
   By using this table which constituency and which division is mapping to the secretariat.there

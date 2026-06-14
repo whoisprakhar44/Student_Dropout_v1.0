@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: ration_card_type
+department: canonicalmodel
 description: Curated Hive/Iceberg table for ration card type.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/ration_card_type

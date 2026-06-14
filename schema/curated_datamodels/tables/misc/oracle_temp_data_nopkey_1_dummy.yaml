@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: oracle_temp_data_nopkey_1_dummy
+department: misc
 description: Curated Hive/Iceberg table for oracle temp data nopkey 1 dummy.
 table_format: HIVE_PARQUET
 location: hdfs://datalakedev/warehouse/tablespace/external/hive/curated_datamodels.db/oracle_temp_data_nopkey_1_dummy-__PLACEHOLDER__

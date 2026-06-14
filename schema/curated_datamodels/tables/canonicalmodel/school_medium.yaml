@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: school_medium
+department: canonicalmodel
 description: Curated table containing school medium attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/school_medium

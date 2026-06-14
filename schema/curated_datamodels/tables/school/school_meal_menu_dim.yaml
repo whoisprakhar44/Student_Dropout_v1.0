@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: school_meal_menu_dim
+department: school
 description: Dimension/master table for school meal menu reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_meal_menu_dim

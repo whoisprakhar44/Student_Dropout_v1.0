@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: core_temple_auvs_summary_tab_test_dummy
+department: misc
 description: Curated Hive table for core temple auvs summary tab test dummy.
 table_format: HIVE_PARQUET
 location: hdfs://datalakedev/warehouse/tablespace/managed/hive/curated_datamodels.db/core_temple_auvs_summary_tab_test_dummy

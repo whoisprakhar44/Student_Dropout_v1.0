@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_health_schemes
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen health schemes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_health_schemes

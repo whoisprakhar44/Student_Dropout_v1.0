@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: assessment_dim
+department: school
 description: Dimension/master table for assessment reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/assessment_dim

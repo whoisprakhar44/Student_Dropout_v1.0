@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: student_class_dim
+department: school
 description: Dimension/master table for student class reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/student_class_dim

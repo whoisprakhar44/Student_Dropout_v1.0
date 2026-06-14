@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_bank_accounts
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen bank accounts.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_bank_accounts

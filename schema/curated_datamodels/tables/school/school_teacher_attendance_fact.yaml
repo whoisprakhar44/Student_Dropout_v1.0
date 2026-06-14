@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: school_teacher_attendance_fact
+department: school
 description: Fact table for school teacher attendance measures and events.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_teacher_attendance_fact

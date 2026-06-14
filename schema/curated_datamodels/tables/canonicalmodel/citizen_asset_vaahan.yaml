@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_asset_vaahan
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen asset vaahan.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_asset_vaahan

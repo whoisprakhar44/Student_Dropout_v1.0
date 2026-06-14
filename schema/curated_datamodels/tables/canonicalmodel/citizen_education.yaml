@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_education
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen education.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_education

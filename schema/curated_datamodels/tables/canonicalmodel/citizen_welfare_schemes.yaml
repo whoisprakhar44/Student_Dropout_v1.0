@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_welfare_schemes
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen welfare schemes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_welfare_schemes

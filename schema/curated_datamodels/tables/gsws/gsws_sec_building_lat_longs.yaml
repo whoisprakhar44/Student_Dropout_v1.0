@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_sec_building_lat_longs
+department: gsws
 description: 'GSWS table: Longitude and latitude Transaction/Master table where Geo
   coordinates of Secretriats available'
 table_format: ICEBERG

@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: absent_reason_dim
+department: school
 description: Dimension/master table for absent reason reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/absent_reason_dim

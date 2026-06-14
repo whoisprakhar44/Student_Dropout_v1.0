@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_emp_hh_cap_geo_cor_tab
+department: gsws
 description: 'GSWS table: Household latitide and Longitude and Images path
 
   We are capturing the house image, longitude and latitude,door no of the person and

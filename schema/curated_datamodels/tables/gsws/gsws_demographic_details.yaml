@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_demographic_details
+department: gsws
 description: 'GSWS table: Citizen dempgraphic dtls. ekyc table and data is in telugu
   also utf-8 eng-tel'
 table_format: ICEBERG

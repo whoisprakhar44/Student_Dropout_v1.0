@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_lgd_mdl_rev_master
+department: gsws
 description: 'GSWS table: Mandal revenue master'
 table_format: ICEBERG
 source_schema: GSWSONLINE

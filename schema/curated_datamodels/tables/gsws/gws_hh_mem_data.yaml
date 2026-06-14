@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_hh_mem_data
+department: gsws
 description: 'GSWS table: They have implemented a caste servey in the month of 2024
   jan where they captured around 20-22 columns.total data is available in the normalized
   format.they have captured in the dynamic tables but after normalization and freezing

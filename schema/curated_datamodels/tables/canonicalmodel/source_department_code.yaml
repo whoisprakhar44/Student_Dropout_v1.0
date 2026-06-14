@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: source_department_code
+department: canonicalmodel
 description: Curated Hive/Iceberg table for source department code.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/source_department_code

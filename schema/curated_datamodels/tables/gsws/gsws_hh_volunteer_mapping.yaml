@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_hh_volunteer_mapping
+department: gsws
 description: 'GSWS table: Main Table of Citizen Details'
 table_format: ICEBERG
 source_schema: GSWSONLINE

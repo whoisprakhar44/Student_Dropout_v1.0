@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_cluster_map_tab
+department: gsws
 description: 'GSWS table: Cluster Map Tab'
 table_format: ICEBERG
 source_schema: GSWSONLINE

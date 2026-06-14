@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_hh_sixstep_cal
+department: gsws
 description: 'GSWS table: Six step Parameter Abstract Table. 5crore data is there.
   Entire citizens data in a. input to the six step calcilator'
 table_format: ICEBERG

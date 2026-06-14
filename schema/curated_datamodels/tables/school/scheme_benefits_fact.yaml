@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: scheme_benefits_fact
+department: school
 description: Fact table for scheme benefits measures and events.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/scheme_benefits_fact

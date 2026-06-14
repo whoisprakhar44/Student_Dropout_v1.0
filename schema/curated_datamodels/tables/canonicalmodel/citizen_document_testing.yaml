@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_document_testing
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen document testing.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_document_testing

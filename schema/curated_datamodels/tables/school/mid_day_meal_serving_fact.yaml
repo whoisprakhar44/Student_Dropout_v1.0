@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: mid_day_meal_serving_fact
+department: school
 description: Fact table for mid day meal serving measures and events.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/mid_day_meal_serving_fact

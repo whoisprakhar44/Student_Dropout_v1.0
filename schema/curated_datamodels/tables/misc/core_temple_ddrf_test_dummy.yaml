@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: core_temple_ddrf_test_dummy
+department: misc
 description: Curated Hive table for core temple ddrf test dummy.
 table_format: HIVE_PARQUET
 location: hdfs://datalakedev/warehouse/tablespace/managed/hive/curated_datamodels.db/core_temple_ddrf_test_dummy

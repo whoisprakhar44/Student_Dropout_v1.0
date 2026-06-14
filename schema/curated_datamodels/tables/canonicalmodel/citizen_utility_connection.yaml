@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: citizen_utility_connection
+department: canonicalmodel
 description: Curated Hive/Iceberg table for citizen utility connection.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/canonicalmodel/citizen_utility_connection

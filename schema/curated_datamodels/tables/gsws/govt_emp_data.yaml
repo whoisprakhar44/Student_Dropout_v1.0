@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: govt_emp_data
+department: gsws
 description: 'GSWS table: Emp Data from CFMS and other Sources'
 table_format: ICEBERG
 source_schema: GSWSONLINE

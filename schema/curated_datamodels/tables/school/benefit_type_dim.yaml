@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: benefit_type_dim
+department: school
 description: Dimension/master table for benefit type reference attributes.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/benefit_type_dim

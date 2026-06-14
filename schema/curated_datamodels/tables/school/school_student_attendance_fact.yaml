@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: school_student_attendance_fact
+department: school
 description: Fact table for school student attendance measures and events.
 table_format: ICEBERG
 location: hdfs://datalakedev/user/CURATED/curated_datamodels/school/school_student_attendance_fact

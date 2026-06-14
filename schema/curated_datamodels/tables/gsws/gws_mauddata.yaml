@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gws_mauddata
+department: gsws
 description: 'GSWS table: Gws Service Present Month mauddata'
 table_format: ICEBERG
 source_schema: GSWSONLINE

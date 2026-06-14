@@ -1,5 +1,6 @@
 database: curated_datamodels
 table: gsws_cluster_master
+department: gsws
 description: 'GSWS table: Main Cluster master 2.65 clusters all over state'
 table_format: ICEBERG
 source_schema: GSWSONLINE
